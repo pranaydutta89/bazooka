@@ -8,6 +8,7 @@ import * as io from 'socket.io-client';
 export default class Admin extends React.Component {
     private socket: SocketIOClient.Socket = io.connect(config.serverUrl);
     public state: IAdminState;
+    private gameOver = false;
     constructor(props: any) {
         super(props);
         this.state = {
@@ -19,7 +20,8 @@ export default class Admin extends React.Component {
             progress_b: 0,
             count_a: 0,
             count_b: 0,
-            tapCount: 1000
+            tapCount: 1000,
+            teamWon: ''
 
         }
         this.init();
@@ -32,21 +34,37 @@ export default class Admin extends React.Component {
 
     userTapped() {
         this.socket.on('userTapped', (data: IUser) => {
-            const { teams } = this.state;
-            let user = teams.a.find(r => r.userID === data.userID);
-            if (!user) {
-                user = teams.b.find(r => r.userID === data.userID);
-            }
+            if (!this.gameOver) {
+                const { teams } = this.state;
+                let user = teams.a.find(r => r.userID === data.userID);
+                if (!user) {
+                    user = teams.b.find(r => r.userID === data.userID);
+                }
 
-            if (user) {
-                user.tapCount += 1;
-                const count_a = teams.a.length !== 0 ? teams.a.map(r => r.tapCount).reduce((t, n) => t + n) : 0;
-                const count_b = teams.b.length !== 0 ? teams.b.map(r => r.tapCount).reduce((t, n) => t + n) : 0;
-                const progress_a = (count_a / this.state.tapCount) * 100;
-                const progress_b = (count_b / this.state.tapCount) * 100;
-                this.setState({ teams, progress_a, progress_b, count_a, count_b });
+                if (user) {
+                    user.tapCount += 1;
+                    const count_a = teams.a.length !== 0 ? teams.a.map(r => r.tapCount).reduce((t, n) => t + n) : 0;
+                    const count_b = teams.b.length !== 0 ? teams.b.map(r => r.tapCount).reduce((t, n) => t + n) : 0;
+                    const progress_a = (count_a / this.state.tapCount) * 100;
+                    const progress_b = (count_b / this.state.tapCount) * 100;
+                    this.setState({ teams, progress_a, progress_b, count_a, count_b });
+
+
+                    if (Math.floor(progress_a) >= 100) {
+                        this.setState({ teamWon: 'a' });
+                        this.gameOver = true;
+                        return;
+                    }
+
+                    if (Math.floor(progress_b) >= 100) {
+                        this.setState({ teamWon: 'b' });
+                        this.gameOver = true;
+                        return;
+                    }
+
+                }
             }
-        })
+        });
     }
 
     userJoined() {
@@ -65,6 +83,12 @@ export default class Admin extends React.Component {
     render() {
 
         return (<>
+            {this.state.teamWon === 'a' ? <div className="alert alert-success inputMar" role="alert">
+                Team A won !!!
+</div> : ''}
+            {this.state.teamWon === 'b' ? <div className="alert alert-warning inputMar" role="alert">
+                Team B won !!!
+</div> : ''}
             <div className="row inputMar" >
                 <div className="col-sm-2">Tap Count</div>
                 <div className="col-sm-10">

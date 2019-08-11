@@ -22,5 +22,6 @@ export interface IAdminState {
     progress_b: number,
     count_a: number,
     count_b: number,
-    tapCount: number
+    tapCount: number,
+    teamWon: string
 }
