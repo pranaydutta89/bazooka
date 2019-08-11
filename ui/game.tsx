@@ -13,10 +13,16 @@ export default class Game extends React.Component<{ name: string, team: string }
 
     init() {
         this.sendTeamDetails();
+        this.reset();
     }
 
     sendTeamDetails() {
         this.socket.emit('userJoined', { userID: this.userId, name: this.props.name, team: this.props.team })
+    }
+    reset() {
+        this.socket.on('reset', () => {
+            location.reload();
+        })
     }
 
     sendTap() {

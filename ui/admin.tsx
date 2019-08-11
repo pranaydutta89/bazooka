@@ -8,22 +8,23 @@ import * as io from 'socket.io-client';
 export default class Admin extends React.Component {
     private socket: SocketIOClient.Socket = io.connect(config.serverUrl);
     public state: IAdminState;
-    private gameOver = false;
+    private gameOver = true;
+    private initState = {
+        teams: {
+            a: [],
+            b: []
+        },
+        progress_a: 0,
+        progress_b: 0,
+        count_a: 0,
+        count_b: 0,
+        tapCount: 1000,
+        teamWon: ''
+
+    }
     constructor(props: any) {
         super(props);
-        this.state = {
-            teams: {
-                a: [],
-                b: []
-            },
-            progress_a: 0,
-            progress_b: 0,
-            count_a: 0,
-            count_b: 0,
-            tapCount: 1000,
-            teamWon: ''
-
-        }
+        this.state = JSON.parse(JSON.stringify(this.initState));
         this.init();
     }
 
@@ -79,6 +80,11 @@ export default class Admin extends React.Component {
         })
     }
 
+    reset() {
+        this.socket.emit('reset', true);
+        this.gameOver = true;
+        this.setState(JSON.parse(JSON.stringify(this.initState)));
+    }
 
     render() {
 
@@ -89,6 +95,19 @@ export default class Admin extends React.Component {
             {this.state.teamWon === 'b' ? <div className="alert alert-warning inputMar" role="alert">
                 Team B won !!!
 </div> : ''}
+            <div className="row inputMar">
+                <div className="col">
+                    <button type="button" className="btn btn-danger btn-lg btn-block" onClick={() => this.reset()} >
+                        Reset
+</button>
+                </div>
+
+                <div className="col">
+                    <button type="button" className="btn btn-success btn-lg btn-block" onClick={() => this.gameOver = false} >
+                        Start
+</button>
+                </div>
+            </div>
             <div className="row inputMar" >
                 <div className="col-sm-2">Tap Count</div>
                 <div className="col-sm-10">
