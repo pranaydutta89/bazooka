@@ -18,9 +18,9 @@ export interface IAdminState {
         a: Array<IUser>,
         b: Array<IUser>
     },
-    difference: {
-        timeStamp: number,
-        count_a: number,
-        count_b: number
-    }
+    progress_a: number,
+    progress_b: number,
+    count_a: number,
+    count_b: number,
+    tapCount: number
 }

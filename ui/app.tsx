@@ -28,21 +28,22 @@ class App extends React.Component {
 
     selectTeamRender() {
         return (<>
-            <div className="row">
-                <input className="form-control" value={this.state.name} onChange={(evt) => this.setState({ name: evt.target.value })}
-                    placeholder="Enter Name" />
+            <div className="row inputMar">
+                <div className="col-sm-12">
+                    <input className="form-control" value={this.state.name} onChange={(evt) => this.setState({ name: evt.target.value })}
+                        placeholder="Enter Name" />
+                </div>
             </div>
             <div className="row">
-                <div className="col-md-2 col-xs-12">Select Team</div>
-                <hr />
-                <div className="col-md-2 col-xs-12">
-                    <button type="button" className="btn btn-primary" onClick={() => this.selectedTeam('a')} >
+
+                <div className="col">
+                    <button type="button" className="btn btn-success btn-lg btn-block" onClick={() => this.selectedTeam('a')} >
                         Team A
 </button>
                 </div>
-                <hr />
-                <div className="col-md-2 col-xs-12">
-                    <button type="button" className="btn btn-secondary" onClick={() => this.selectedTeam('b')} >
+
+                <div className="col">
+                    <button type="button" className="btn btn-warning btn-lg btn-block" onClick={() => this.selectedTeam('b')} >
                         Team B
 </button>
                 </div>

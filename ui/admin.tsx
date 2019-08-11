@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IUser, IAdminState } from './interfaces';
 // @ts-ignore
-import RTChart from 'react-rt-chart';
+import { ProgressBar } from 'react-bootstrap';
 import config from './config';
 import * as io from 'socket.io-client';
 
@@ -15,11 +15,12 @@ export default class Admin extends React.Component {
                 a: [],
                 b: []
             },
-            difference: {
-                timeStamp: Date.now(),
-                count_a: 0,
-                count_b: 0
-            }
+            progress_a: 0,
+            progress_b: 0,
+            count_a: 0,
+            count_b: 0,
+            tapCount: 1000
+
         }
         this.init();
     }
@@ -39,14 +40,11 @@ export default class Admin extends React.Component {
 
             if (user) {
                 user.tapCount += 1;
-                const count_a = teams.a.map(r => r.tapCount).reduce(r => r);
-                const count_b = teams.b.map(r => r.tapCount).reduce(r => r);
-                const difference = {
-                    timeStamp: Date.now(),
-                    count_a,
-                    count_b
-                }
-                this.setState({ teams, difference });
+                const count_a = teams.a.length !== 0 ? teams.a.map(r => r.tapCount).reduce((t, n) => t + n) : 0;
+                const count_b = teams.b.length !== 0 ? teams.b.map(r => r.tapCount).reduce((t, n) => t + n) : 0;
+                const progress_a = (count_a / this.state.tapCount) * 100;
+                const progress_b = (count_b / this.state.tapCount) * 100;
+                this.setState({ teams, progress_a, progress_b, count_a, count_b });
             }
         })
     }
@@ -65,25 +63,43 @@ export default class Admin extends React.Component {
 
 
     render() {
+
         return (<>
+            <div className="row inputMar" >
+                <div className="col-sm-2">Tap Count</div>
+                <div className="col-sm-10">
+                    <input type="number" className="form-control" onChange={(evt) => this.setState({ tapCount: evt.target.value })} value={this.state.tapCount} />
+                </div>
+            </div>
             <div className="row">
-                <div className="col-xs-6">
+                <div className="col-sm-2">Team A -{this.state.count_a}</div>
+                <div className="col-sm-10">
+                    <ProgressBar variant="success" key={1} animated now={this.state.progress_a} />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm-2">Team B -{this.state.count_b}</div>
+                <div className="col-sm-10">
+                    <ProgressBar variant="warning" key={2} animated now={this.state.progress_b} />
+                </div>
+            </div>
+
+            <div className="row">
+                <div className="col-sm">
                     <h1>Team A</h1>
-                    <table className="tabel table-striped">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">User Id</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Tap Count</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                this.state.teams.a.map((element, idx) => {
+                                this.state.teams.a.sort((a, b) => b.tapCount - a.tapCount).map((element, idx) => {
                                     return (<tr key={idx}>
-                                        <th scope="row">{idx}</th>
-                                        <td>{element.userID}</td>
+                                        <th scope="row">{idx + 1}</th>
                                         <td>{element.name}</td>
                                         <td>{element.tapCount || 0}</td>
                                     </tr>);
@@ -93,23 +109,21 @@ export default class Admin extends React.Component {
                     </table>
                 </div>
 
-                <div className="col-xs-6">
+                <div className="col-sm">
                     <h1>Team B</h1>
-                    <table className="tabel table-striped">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">User Id</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Tap Count</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                this.state.teams.b.map((element, idx) => {
+                                this.state.teams.b.sort((a, b) => b.tapCount - a.tapCount).map((element, idx) => {
                                     return (<tr key={idx}>
-                                        <th scope="row">{idx}</th>
-                                        <td>{element.userID}</td>
+                                        <th scope="row">{idx + 1}</th>
                                         <td>{element.name}</td>
                                         <td>{element.tapCount || 0}</td>
                                     </tr>);
@@ -119,13 +133,7 @@ export default class Admin extends React.Component {
                     </table>
                 </div>
             </div>
-            <div className="row">
-                {/* <RTChart
-                    fields={['count_a', 'count_b']}
-                    data={this.state.difference} /> */}
-
-            </div>
-        </>)
+        </>);
     }
 
 }

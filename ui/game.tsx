@@ -24,10 +24,10 @@ export default class Game extends React.Component<{ name: string, team: string }
     }
 
     render() {
-        return (<div className="row">
-            <div className="col-xs-12" onClick={() => this.sendTap()}>
-                Tap Here
-           </div>
+        return (<div className="row fullHeight">
+            <div className="col-sm fullHeight tapHere" onClick={() => this.sendTap()}>
+                <h1 className="tapHereText">Tap Anywhere in yellow area</h1>
+            </div>
         </div>);
     }
 }
