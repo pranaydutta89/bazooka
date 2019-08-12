@@ -7,7 +7,7 @@
     "clean": "rimraf dist",
     "ui": "npm run clean && parcel ui/index.html",
     "build": "npm run clean && parcel build ui/index.html",
-    "start": "npm run build && node server"
+    "start": "npm run build && forever start server.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,7 +25,8 @@
     "typescript": "^3.5.3",
     "rimraf": "^2.6.3",
     "static-server": "^2.2.1",
-    "compression": "^1.7.4"
+    "compression": "^1.7.4",
+    "forever": "^1.0.0"
   },
   "devDependencies": {
     "sass": "^1.22.9"
