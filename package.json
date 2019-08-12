@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "ui": "npm run clean && parcel ui/index.html",
-    "build": "npm run clean && parcel build ui/index.html"
+    "build": "npm run clean && parcel build ui/index.html",
+    "start": "npm run build && node server"
   },
   "author": "",
   "license": "ISC",
@@ -23,9 +24,13 @@
     "socket.io-client": "^2.2.0",
     "typescript": "^3.5.3",
     "rimraf": "^2.6.3",
-    "static-server": "^2.2.1"
+    "static-server": "^2.2.1",
+    "compression": "^1.7.4"
   },
   "devDependencies": {
     "sass": "^1.22.9"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
