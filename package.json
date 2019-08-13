@@ -7,7 +7,7 @@
     "clean": "rimraf dist",
     "ui": "npm run clean && parcel ui/index.html",
     "build": "npm run clean && parcel build ui/index.html",
-    "start": "npm run build && forever start server.js"
+    "start": "npm run build && node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -30,8 +30,5 @@
   },
   "devDependencies": {
     "sass": "^1.22.9"
-  },
-  "engines": {
-    "node": "10.x"
   }
 }
