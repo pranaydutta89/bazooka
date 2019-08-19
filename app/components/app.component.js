@@ -5,6 +5,7 @@ import css from './common/css/css.component';
 import './header/header.component';
 import './home/home.component';
 import './games/games.component';
+import './game/game.component';
 import routes from './routes';
 
 class App extends routerMixin(LitElement) {
@@ -32,11 +33,8 @@ class App extends routerMixin(LitElement) {
     return this;
   }
 
-  selectGame(gameId) {
-    switch (gameId) {
-      case 'tapit':
-        return html`<app-tapit></app-tapit>`
-    }
+  setGame() {
+    return html`<app-game gameId='${this.params.id}'></app-game>`
   }
 
   render() {
@@ -53,7 +51,7 @@ class App extends routerMixin(LitElement) {
           </app-games>
     
           <div route='game'>
-            ${this.route === 'game' ? this.selectGame(this.params.id) : ''}
+            ${this.route === 'game' ? this.setGame() : ''}
           </div>
     
         </app-main>

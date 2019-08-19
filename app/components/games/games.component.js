@@ -1,5 +1,4 @@
 import { LitElement, html } from "lit-element";
-import './tapIt/tapIt.component';
 import { routerLinkMixin } from "lit-element-router";
 
 class Games extends routerLinkMixin(LitElement) {
