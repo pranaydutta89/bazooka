@@ -5,6 +5,7 @@ import css from './common/css/css.component';
 import './header/header.component';
 import './home/home.component';
 import './games/games.component';
+import routes from './routes';
 
 class App extends routerMixin(LitElement) {
 
@@ -20,16 +21,7 @@ class App extends routerMixin(LitElement) {
   }
 
   static get routes() {
-    return [{
-      name: 'home',
-      pattern: ''
-    }, {
-      name: 'games',
-      pattern: 'games'
-    }, , {
-      name: 'not-found',
-      pattern: '*'
-    }];
+    return routes;
   }
 
   onRoute(route, params, query, data) {
@@ -40,18 +32,32 @@ class App extends routerMixin(LitElement) {
     return this;
   }
 
+  selectGame(gameId) {
+    switch (gameId) {
+      case 'tapit':
+        return html`<app-tapit></app-tapit>`
+    }
+  }
+
   render() {
+
     return html`
     <css-ele></css-ele>
-<div>
-    <app-header></app-header>
-    <div class="container-fluid">
-      <app-main current-route='${this.route}'>
-                <app-home route='home'></app-home>
-                <app-games route='games'></app-home>
-                
-  </app-main>
-  </div>
+    <div>
+      <app-header></app-header>
+      <div class="container-fluid">
+        <app-main current-route='${this.route}'>
+          <app-home route='home'></app-home>
+    
+          <app-games route='games'>
+          </app-games>
+    
+          <div route='game'>
+            ${this.route === 'game' ? this.selectGame(this.params.id) : ''}
+          </div>
+    
+        </app-main>
+      </div>
     </div>`;
   }
 }
