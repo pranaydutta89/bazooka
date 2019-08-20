@@ -16,7 +16,7 @@ class TapItInit extends LitElement {
 
     startGame(data) {
         this.isGameStarted = true;
-        this.gameData = data;
+        this.gameData = data.detail;
     }
 
     render() {

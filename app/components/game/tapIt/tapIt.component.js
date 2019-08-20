@@ -10,7 +10,7 @@ class TapIt extends LitElement {
 
   firstUpdated(changedProperties) {
     google.charts.load('current', { packages: ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(this.drawChart);
   }
 
   drawChart() {
@@ -34,7 +34,7 @@ class TapIt extends LitElement {
     </div>
 
     <div class='row'>
-      
+
   </div>
     </div>
     `

@@ -4,9 +4,12 @@ class TeamDetails extends LitElement {
 
   static get properties() {
     return {
-      selectedTab: { type: String },
+      selectedTab: {
+        type: String
+      },
       team: { type: Array },
-      teamName: { type: String }
+      teamName: { type: String },
+      teamNameAdd: { type: String }
     }
   }
 
@@ -14,10 +17,11 @@ class TeamDetails extends LitElement {
     super();
     this.selectedTab = 'room';
     this.team = [];
+    this.teamNameAdd = '';
   }
   get roomDetailsRender() {
     return html`
-        <form @submit='${this.selectedTab = 'teams'}'>
+        <form @submit='${(evt) => { this.selectedTab = 'teams'; evt.preventDefault() }}'>
         <div class='row' style="margin-bottom:0.6rem">
             <div class='col'>
                 <input type="text" @change=${(evt) => this.teamName = evt.target.value} class="form-control" maxlength="20" required placeholder="Enter Room Name"/>
@@ -65,22 +69,27 @@ class TeamDetails extends LitElement {
   
         <div class='row' style="margin-bottom:0.6rem">
           <div class='col'>
-            <input class="form-control" @change=${(evt) => this.teamNameAdd = evt.target.value} type="text" maxlength="20" placeholder="Enter Team Name"/>
+            <input class="form-control" .value='${this.teamNameAdd}'  @change=${(evt) => this.teamNameAdd = evt.target.value} type="text" maxlength="20" placeholder="Enter Team Name"/>
           </div>
           <div class='col'>
-            <button type="button" @click=${(evt) => { this.team = this.team.concat([this.teamNameAdd]); this.teamNameAdd = ''; evt.preventDefault() }} class="btn btn-success">Add</button>
+            <button type="button" @click=${(evt) => { this.addTeam() }} class="btn btn-success">Add</button>
           </div>
         </div>
 
  <div class='row'>
           <div class='col'>
-            <button type="button" @click='${this.selectedTab = 'start'}' class="btn btn-success">Next</button>
+            <button type="button" @click='${() => this.selectedTab = 'start'}' class="btn btn-success">Next</button>
           </div>
   </div>
     </div>
       `;
   }
-  
+
+  addTeam() {
+    this.team = this.team.concat([this.teamNameAdd]);
+    this.teamNameAdd = '';
+  }
+
   get startRender() {
     return html`
     <div class='row'>
