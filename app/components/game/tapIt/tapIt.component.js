@@ -2,29 +2,44 @@ import { LitElement, html } from "lit-element";
 
 class TapIt extends LitElement {
 
-    render() {
-        return html`
-        <css-ele></css-ele>
-        <div>
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Room</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Teams</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Start</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
-            </div>
-        
-        </div>`;
+  static get properties() {
+    return {
+      data: { type: Object }
     }
+  }
+
+  firstUpdated(changedProperties) {
+    google.charts.load('current', { packages: ['corechart', 'bar'] });
+    google.charts.setOnLoadCallback(drawChart);
+  }
+
+  drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Element', 'Density', { role: 'style' }],
+      ['Copper', 8.94, '#b87333'],            // RGB value
+      ['Silver', 10.49, 'silver'],            // English color name
+      ['Gold', 19.30, 'gold'],
+      ['Platinum', 21.45, 'color: #e5e4e2'], // CSS-style declaration
+    ]);
+  }
+
+
+  render() {
+    return html`
+    <div>
+    <div class='row'>
+      <div class="col">
+         <div id="chart_div"></div>
+      </div>
+    </div>
+
+    <div class='row'>
+      
+  </div>
+    </div>
+    `
+  }
+
 }
 
 customElements.define('app-tapit', TapIt);

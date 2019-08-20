@@ -34,7 +34,7 @@ class App extends routerMixin(LitElement) {
   }
 
   setGame() {
-    return html`<app-game gameId='${this.params.id}'></app-game>`
+    return html`<app-game gameId='${this.params && this.params.id}'></app-game>`
   }
 
   render() {
@@ -51,7 +51,7 @@ class App extends routerMixin(LitElement) {
           </app-games>
     
           <div route='game'>
-            ${this.route === 'game' ? this.setGame() : ''}
+            ${this.setGame()}
           </div>
     
         </app-main>

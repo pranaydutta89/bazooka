@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit-element";
-import './tapIt/tapIt.component';
-
+import './tapIt/tapItInit.component';
+import '../common/teamDetails/teamDetails.component'
 class Game extends LitElement {
 
 
@@ -18,12 +18,12 @@ class Game extends LitElement {
     selectGame() {
         switch (this.gameId) {
             case 'tapit':
-                return html`<app-tapit></app-tapit>`
+                return html`<app-tapit-init></app-tapit-init>`;
         }
     }
 
     render() {
-        return html`${this.selectGame()}`
+        return html`${this.selectGame()}`;
     }
 }
 
