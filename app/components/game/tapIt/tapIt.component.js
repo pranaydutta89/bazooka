@@ -15,12 +15,29 @@ class TapIt extends LitElement {
 
   drawChart() {
     var data = google.visualization.arrayToDataTable([
-      ['Element', 'Density', { role: 'style' }],
-      ['Copper', 8.94, '#b87333'],            // RGB value
-      ['Silver', 10.49, 'silver'],            // English color name
-      ['Gold', 19.30, 'gold'],
-      ['Platinum', 21.45, 'color: #e5e4e2'], // CSS-style declaration
+      ['City', '2010 Population',],
+      ['New York City, NY', 8175000],
+      ['Los Angeles, CA', 3792000],
+      ['Chicago, IL', 2695000],
+      ['Houston, TX', 2099000],
+      ['Philadelphia, PA', 1526000]
     ]);
+
+    var options = {
+      title: 'Population of Largest U.S. Cities',
+      chartArea: { width: '50%' },
+      hAxis: {
+        title: 'Total Population',
+        minValue: 0
+      },
+      vAxis: {
+        title: 'City'
+      }
+    };
+
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+    chart.draw(data, options);
   }
 
 
