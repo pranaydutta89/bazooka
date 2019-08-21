@@ -78,7 +78,7 @@ class TeamDetails extends LitElement {
 
  <div class='row'>
           <div class='col'>
-            <button type="button" @click='${() => this.selectedTab = 'start'}' class="btn btn-success">Next</button>
+             <button type="submit" @click='${this.startClicked}' class="btn btn-success">Start</button>
           </div>
   </div>
     </div>
@@ -90,23 +90,13 @@ class TeamDetails extends LitElement {
     this.teamNameAdd = '';
   }
 
-  get startRender() {
-    return html`
-    <div class='row'>
-          <div class='col'>
-            <button type="submit" @click='${this.startClicked}' class="btn btn-success">Start</button>
-          </div>
-  </div>
-    `
-  }
+  
   get selectedTabRender() {
     switch (this.selectedTab) {
       case 'room':
         return this.roomDetailsRender;
       case 'teams':
         return this.teamDetailsRender;
-      case 'start':
-        return this.startRender;
     }
   }
 
@@ -138,11 +128,6 @@ class TeamDetails extends LitElement {
                     <a class="nav-link ${this.selectedTab == 'teams' ? 'active' : 'disabled'}" data-toggle="tab" 
                      disabled='${this.selectedTab !== 'teams'}'
                       role="tab" aria-controls="Teams" >Teams</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ${this.selectedTab == 'start' ? 'active' : 'disabled'}" data-toggle="tab" 
-                    disabled='${this.selectedTab !== 'start'}'
-                      role="tab" aria-controls="Start" >Start</a>
                 </li>
             </ul>
             <div class="tab-content">

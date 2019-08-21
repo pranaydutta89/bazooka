@@ -1,16 +1,33 @@
-import io from 'socket.io-client';
+import config from './configService';
 class socketService {
 
     constructor() {
         this.socket = io.connect(config.serverUrl)
     }
 
-    createRoom() {
-
+    joinRoom(isAdmin) {
+        const roomId = uuid()
+        return new Promise((res, rej) => {
+            this.socket.emit('joinRoom', { isAdmin, roomId }, (response) => {
+                if (!response) {
+                    res(roomId);
+                }
+                else {
+                    rej(response)
+                }
+            })
+        })
     }
 
     sendData() {
 
+    }
+
+    receiveDataAdmin(cb) {
+        this.socket.on('messageToAdmin',cb);
+        return () => {
+            this.socket.removeListener('messageToAdmin',cb);
+        }
     }
 }
 

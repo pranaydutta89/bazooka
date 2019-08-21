@@ -11,18 +11,21 @@ app.use(compression())
 app.use(express.static('dist'))
 
 io.on('connection', (socket) => {
-    socket.on('joinRoom', (msg) => {
+    socket.on('joinRoom', (msg,cb) => {
         if (msg.isAdmin) {
             socket.join(msg.roomId);
             games(io.to(msg.roomId), msg.roomId, socket.id);
+            cb();
         }
         else {
             if (socket.adapter.rooms[msg.roomId]) {
                 socket.join(msg.roomId);
                 games(io.to(msg.roomId));
+                cb();
             }
             else {
                 //room doesnt exist
+                cb('room Does not exist');
             }
         }
     });
