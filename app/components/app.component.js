@@ -13,16 +13,27 @@ class App extends routerMixin(LitElement) {
   static get properties() {
     return {
       route: { type: String },
-      params: { type: Object }
+      params: { type: Object },
+      isAdmin: { type: Boolean }
     }
   }
   constructor() {
     super();
     this.route = '';
+
   }
 
   static get routes() {
     return routes;
+  }
+
+  checkUserType() {
+    if (location.pathname === 'play') {
+      this.isAdmin = false;
+    } else {
+      this.isAdmin = true;
+    }
+
   }
 
   onRoute(route, params, query, data) {

@@ -41,7 +41,7 @@ class TapIt extends LitElement {
   }
 
   disconnectedCallback() {
-    this.listeners.forEach(r = r());
+    this.listeners.forEach(r => r());
     super.disconnectedCallback();
   }
 
