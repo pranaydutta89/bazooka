@@ -112,11 +112,14 @@ class TapIt extends LitElement {
     this.alertMessage = `Copied URL,share this to players`;
   }
 
+  alertClosed() {
+    this.alertStatus = 'hide';
+  }
   render() {
     return html`
     <css-ele></css-ele>
     <app-spinner isStarted=${this.spinnerStarted}></app-spinner>
-    <app-alert status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
+    <app-alert @close=${this.alertClosed} status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
     <div>
      
     <div class='row'>
@@ -134,14 +137,14 @@ class TapIt extends LitElement {
     <app-chart-bar data=${JSON.stringify(this.chartData)}></app-chart-bar>
 
     <div class='row'>
-      <div class='col'>
-      <h3>Leaders</h3>
+      <div class='col' style="text-align:center">
+      <h5>Players Joined (${this.userDetails.length})</h5>
       </div>
     </div>
 
 <div class='row'>
       <div class='col'>
-          <table class="table table-striped">
+          <table class="table table-sm table-striped">
           <thead>
             <tr>
               <th scope="col">#</th>

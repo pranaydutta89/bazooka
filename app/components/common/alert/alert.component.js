@@ -6,7 +6,9 @@ class Alert extends LitElement {
     return {
       type: { type: String },
       message: { type: String },
-      status: { type: String }
+      status: {
+        type: String,
+      }
     }
   }
 
@@ -26,8 +28,16 @@ class Alert extends LitElement {
 
       this.timeout = setTimeout(() => {
         this.status = 'hide';
+        const event = new CustomEvent('close', {
+          detail: {
+            teamName: this.teamName,
+            team: this.team
+          }
+        });
+        this.dispatchEvent(event);
       }, 5000)
     }
+    super.performUpdate();
   }
 
   get renderByAlertType() {
@@ -56,6 +66,7 @@ class Alert extends LitElement {
   }
   render() {
     return html`
+    <css-ele></css-ele>
     ${this.status === 'show' ?
         html`<div class='row'>
          <div class='col'>
