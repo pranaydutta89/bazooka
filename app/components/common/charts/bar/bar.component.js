@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit-element";
-
+import utilService from '../../../../services/utilService';
 class BarChart extends LitElement {
 
   static get properties() {
@@ -13,17 +13,12 @@ class BarChart extends LitElement {
 
   constructor() {
     super();
-    this.data = this.data || []
+    this.data = this.data || [];
+    this.xLabel = this.xLabel || 'x-axis';
+    this.yLabel = this.yLabel || 'y-axis';
     this.options = this.options || {
-      title: 'Population of Largest U.S. Cities',
-      chartArea: { width: '50%' },
-      hAxis: {
-        title: 'Total Population',
-        minValue: 0
-      },
-      vAxis: {
-        title: 'City'
-      }
+      title: 'Live Chart',
+      chartArea: { width: '100%' }
     };
 
   }
@@ -32,15 +27,18 @@ class BarChart extends LitElement {
     google.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 
+  performUpdate() {
+    this.data.forEach(r => {
+      r.push(utilService.randomHexColor());
+    })
+  }
+
+
   drawChart() {
 
     const data = google.visualization.arrayToDataTable([
-      ['City', '2010 Population',],
-      ['New York City, NY', 8175000],
-      ['Los Angeles, CA', 3792000],
-      ['Chicago, IL', 2695000],
-      ['Houston, TX', 2099000],
-      ['Philadelphia, PA', 1526000]
+      [this.yLabel, this.xLabel, { role: 'style' }],
+      ...this.data
     ]);
 
     const chart = new google.visualization.BarChart(this.shadowRoot.getElementById('chart_div'));
