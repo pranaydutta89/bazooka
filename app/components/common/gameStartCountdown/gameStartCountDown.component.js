@@ -10,13 +10,14 @@ class GameStartCountDown extends LitElement {
   }
 
   constructor() {
-    this.countDownText = 'READY';
     super();
+    this.countDownText = 'READY';
+
   }
 
   firstUpdated() {
-    const counter = 5;
-    var countdown = setInterval(() => {
+    let counter = 5;
+    const countdown = setInterval(() => {
       this.countDownText = counter;
       counter--
       if (counter === 0) {
@@ -48,7 +49,7 @@ class GameStartCountDown extends LitElement {
   right: 0;
   bottom: 0;
   background-color: grey;
-    opacity: 0.6;
+    opacity: 0.9;
     z-index: 1;
 }
 

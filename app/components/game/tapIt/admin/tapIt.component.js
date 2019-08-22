@@ -40,11 +40,11 @@ class TapIt extends LitElement {
 
   async joinSocket() {
     this.spinnerStarted = 'show';
-    const roomId = uuid();
-    await socketService.joinRoom(true, roomId);
-    this.clientUrl = utilService.encryptClientUrl(constants.game.tapIt, roomId, this.data);
+    this.roomId = uuid();
+    await socketService.joinRoom(true, this.roomId);
+    this.clientUrl = utilService.encryptClientUrl(constants.game.tapIt, this.roomId, this.data);
     this.spinnerStarted = 'hide';
-    this.listeners.push(socketService.receiveDataAdmin(this.receiveData.bind(this)));
+    this.listeners.push(socketService.receiveDataFromClient(this.receiveData.bind(this)));
     this.alertMessage = 'Joined Room';
   }
 
@@ -70,7 +70,7 @@ class TapIt extends LitElement {
       this.userDetails.push({ ...userData, ...{ tapCount: 0 } });
       this.checkTapCount();
       this.alertStatus = 'show';
-      this.alertMessage = `User ${userData.name} Joined`;
+      this.alertMessage = `User ${userData.userName} Joined`;
     }
     else {
       //user already exists
@@ -79,7 +79,7 @@ class TapIt extends LitElement {
 
   checkTapCount() {
     const teams = this.userDetails.map(r => r.team).filter((value, idx, self) => {
-      return self.indexOf(value) === idx;
+      return value && self.indexOf(value) === idx;
     });
 
     const chartData = [];
@@ -88,7 +88,7 @@ class TapIt extends LitElement {
       chartData.push({
         team: r,
         value: [r,
-          this.userDetails.filter(y => y.team === x).map(z => z.tapCount).reduce((t, n) => t + n)]
+          this.userDetails.filter(y => y.team === r).map(z => z.tapCount).reduce((t, n) => t + n)]
       });
     });
 
@@ -104,7 +104,7 @@ class TapIt extends LitElement {
         this.userDetails = this.userDetails;
         this.checkTapCount();
         this.alertStatus = 'show';
-        this.alertMessage = `User ${userData.name} Tapped`;
+        this.alertMessage = `User ${user.userName} Tapped`;
       }
       else {
         //user doesnt exist already exists
@@ -113,7 +113,7 @@ class TapIt extends LitElement {
   }
 
   async startGame() {
-    await socketService.sendDataToClient({
+    await socketService.sendDataToClient(this.roomId, {
       event: 'startGame'
     })
     this.gameStartCountDown = true;
@@ -225,7 +225,7 @@ class TapIt extends LitElement {
       return html`
        <tr>
       <th scope="row">${idx + 1}</th>
-      <td>${r.name}</td>
+      <td>${r.userName}</td>
        <td>${r.team}</td>
         <td>${r.tapCount}</td>
 

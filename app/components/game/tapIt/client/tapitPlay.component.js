@@ -9,7 +9,7 @@ class TapItPlay extends LitElement {
       roomId: { type: String },
       team: { type: String },
       isGameStarted: { type: Boolean },
-      name: { type: String },
+      userName: { type: String },
       spinnerStarted: { type: String }
 
     }
@@ -19,9 +19,12 @@ class TapItPlay extends LitElement {
     this.listeners = [];
     this.isGameStarted = false;
     this.spinnerStarted = 'hide';
-    this.joinRoom();
+
   }
 
+  firstUpdated() {
+    this.joinRoom();
+  }
   disconnectedCallback() {
     this.listeners.forEach(r => r());
     super.disconnectedCallback();
@@ -30,17 +33,18 @@ class TapItPlay extends LitElement {
   async joinRoom() {
     await socketio.joinRoom(false, this.roomId);
     this.joinUser();
-    this.listeners.push(socketio.receiveDataClient(this.receiveData.bind(this)));
+    this.listeners.push(socketio.receiveDataFromAdmin(this.receiveData.bind(this)));
   }
 
   async joinUser() {
     this.userId = utilService.generateUniqueBrowserId();
     const user = {
       id: this.userId,
-      name: this.name
+      userName: this.userName,
+      team:this.team
     }
     this.spinnerStarted = 'show';
-    await socketio.sendDataToAdmin({
+    await socketio.sendDataToAdmin(this.roomId, {
       event: 'userJoined',
       data: user
     });
@@ -48,7 +52,7 @@ class TapItPlay extends LitElement {
   }
 
   userTapped() {
-    socketio.sendDataToAdmin({
+    socketio.sendDataToAdmin(this.roomId, {
       event: 'userTapped',
       data: {
         id: this.userId

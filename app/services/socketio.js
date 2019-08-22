@@ -9,7 +9,7 @@ class socketService {
         return new Promise((res, rej) => {
             this.socket.emit('joinRoom', { isAdmin, roomId }, (response) => {
                 if (!response) {
-                    res(roomId);
+                    res();
                 }
                 else {
                     rej(response)
@@ -18,9 +18,9 @@ class socketService {
         });
     }
 
-    sendDataToClient(data, waitForResponse = true) {
+    sendDataToClient(roomId, data, waitForResponse = true) {
         return new Promise((res, rej) => {
-            this.socket.emit('msgToClient', data, (response) => {
+            this.socket.emit('msgToClient', { data, roomId }, (response) => {
                 if (waitForResponse) {
                     if (!response) {
                         res(roomId);
@@ -36,9 +36,9 @@ class socketService {
         });
     }
 
-    sendDataToAdmin(data, waitForResponse = true) {
+    sendDataToAdmin(roomId, data, waitForResponse = true) {
         return new Promise((res, rej) => {
-            this.socket.emit('msgToAdmin', data, (response) => {
+            this.socket.emit('msgToAdmin', { data, roomId }, (response) => {
                 if (waitForResponse) {
                     if (!response) {
                         res(roomId);
@@ -54,17 +54,17 @@ class socketService {
         });
     }
 
-    receiveDataAdmin(cb) {
-        this.socket.on('messageToAdmin', cb);
+    receiveDataFromClient(cb) {
+        this.socket.on('msgFromClient', cb);
         return () => {
-            this.socket.removeListener('messageToAdmin', cb);
+            this.socket.removeListener('msgFromClient', cb);
         }
     }
 
-    receiveDataClient(cb) {
-        this.socket.on('messageToAdmin', cb);
+    receiveDataFromAdmin(cb) {
+        this.socket.on('msgFromAdmin', cb);
         return () => {
-            this.socket.removeListener('messageToAdmin', cb);
+            this.socket.removeListener('msgFromAdmin', cb);
         }
     }
 }
