@@ -4,11 +4,11 @@ var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var compression = require('compression');
-
+var path = require('path');
 
 app.use(compression())
 
-app.use(express.static('dist'))
+app.use(express.static(path.join(__dirname, '../build/es5-bundled')))
 const roomAdmin = {};
 
 io.on('connection', (socket) => {

@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rimraf dist",
-    "ui": "npm run clean && polymer serve",
-    "build": "npm run clean && parcel build ui/index.html",
+    "ui": "polymer serve",
+    "build": "polymer build --preset es5-bundled",
     "start": "npm run build && node server.js"
   },
   "author": "",
@@ -19,7 +18,8 @@
     "socket.io": "^2.2.0",
     "rimraf": "^2.6.3",
     "compression": "^1.7.4",
-    "forever": "^1.0.0"
+    "forever": "^1.0.0",
+    "@webcomponents/webcomponentsjs": "^2.2.10"
   },
   "devDependencies": {
     "polymer-cli": "^1.9.11"
