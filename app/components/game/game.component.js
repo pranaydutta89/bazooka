@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit-element";
-import './tapIt/tapItInit.component';
+import './tapIt/admin/tapItInit.component';
 import '../common/teamDetails/teamDetails.component'
 class Game extends LitElement {
 

@@ -1,10 +1,11 @@
 import { LitElement, html } from "lit-element";
-import '../../common/charts/bar/bar.component';
-import socketService from '../../../services/socketio';
+import '../../../common/charts/bar/bar.component';
+import socketService from '../../../../services/socketio';
 import '../../common/spinner/spinner.component';
-import utilService from '../../../services/utilService';
-import constants from '../../../services/constants';
-import '../../common/alert/alert.component';
+import utilService from '../../../../services/utilService';
+import constants from '../../../../services/constants';
+import '../../../common/alert/alert.component';
+import '../../../common/gameStartCountdown/gameStartCountDown.component';
 class TapIt extends LitElement {
 
   static get properties() {
@@ -16,7 +17,10 @@ class TapIt extends LitElement {
       chartData: { type: Array },
       alertStatus: { type: String },
       alertType: { type: String },
-      alertMessage: { type: String }
+      alertMessage: { type: String },
+      gameStartCountDown: { type: Boolean },
+      gameStartedFlag: { type: Boolean },
+      gameTime: { type: Number }
     }
   }
 
@@ -24,19 +28,23 @@ class TapIt extends LitElement {
     super();
     this.alertStatus = 'hide'
     this.alertType = 'info';
+    this.gameTime = 30;
     this.clientUrl = "";
     this.listeners = [];
     this.userDetails = [];
     this.chartData = [];
+    this.gameStartCountDown = false;
+    this.gameStartedFlag = false;
     this.joinSocket();
   }
 
   async joinSocket() {
     this.spinnerStarted = 'show';
-    const roomId = await socketService.joinRoom(true);
+    const roomId = uuid();
+    await socketService.joinRoom(true, roomId);
     this.clientUrl = utilService.encryptClientUrl(constants.game.tapIt, roomId, this.data);
     this.spinnerStarted = 'hide';
-    this.listeners.push(socketService.receiveDataAdmin('tapItUserTapped', this.receiveData.bind(this)));
+    this.listeners.push(socketService.receiveDataAdmin(this.receiveData.bind(this)));
     this.alertMessage = 'Joined Room';
   }
 
@@ -53,7 +61,7 @@ class TapIt extends LitElement {
       case 'userTapped':
         this.userTapped(msg.data);
         break;
-    }
+    } 
   }
 
   userJoined(userData) {
@@ -89,17 +97,52 @@ class TapIt extends LitElement {
   }
 
   userTapped(data) {
-    const user = this.userDetails.find(r => r.id === data.id);
-    if (user) {
-      user.tapCount += 1;
-      this.userDetails = this.userDetails;
-      this.checkTapCount();
-      this.alertStatus = 'show';
-      this.alertMessage = `User ${userData.name} Tapped`;
+    if (this.gameStartedFlag) {
+      const user = this.userDetails.find(r => r.id === data.id);
+      if (user) {
+        user.tapCount += 1;
+        this.userDetails = this.userDetails;
+        this.checkTapCount();
+        this.alertStatus = 'show';
+        this.alertMessage = `User ${userData.name} Tapped`;
+      }
+      else {
+        //user doesnt exist already exists
+      }
     }
-    else {
-      //user doesnt exist already exists
-    }
+  }
+
+  async startGame() {
+    await socketService.sendDataToClient({
+      event: 'startGame'
+    })
+    this.gameStartCountDown = true;
+  }
+
+  gameStarted() {
+    this.gameStartCountDown = false;
+    this.gameStartedFlag = true;
+  }
+
+  gameEnded() {
+    this.gameStartedFlag = false;
+  }
+
+  gameCountDown() {
+    let counter = this.gameTime;
+    this.alertStatus = 'show';
+    this.alertType = 'info';
+
+    var countdown = setInterval(() => {
+      this.alertMessage = `Time left ${this.counter} seconds`
+      counter--
+      if (counter === 0) {
+        this.alertMessage = `Game Over`;
+
+        clearInterval(countdown);
+        this.started();
+      }
+    }, 1000);
   }
 
 
@@ -120,6 +163,7 @@ class TapIt extends LitElement {
     <css-ele></css-ele>
     <app-spinner isStarted=${this.spinnerStarted}></app-spinner>
     <app-alert @close=${this.alertClosed} status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
+    ${this.gameStartCountDown ? html` <app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
     <div>
      
     <div class='row'>
@@ -131,6 +175,23 @@ class TapIt extends LitElement {
   </div>
 </div>
       </div>
+    </div>
+
+    <div class='row'>
+           <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Play Time</label>
+    <div class="col-sm-6">
+      <input type="number" .value=${this.gameTime} @change=${(evt) => this.gameTime = evt.target.value}
+       class="form-control form-control-sm" id="colFormLabelSm" placeholder="Enter Seconds">
+    </div>
+
+    <div class="col-sm-2">
+      <button type="button" @click=${this.startGame} class="btn btn-success">Start</button>
+    </div>
+
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-error">Reset</button>
+    </div>
+ 
     </div>
 
 

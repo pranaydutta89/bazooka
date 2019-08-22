@@ -5,8 +5,7 @@ class socketService {
         this.socket = io.connect(config.serverUrl)
     }
 
-    joinRoom(isAdmin) {
-        const roomId = uuid()
+    joinRoom(isAdmin, roomId) {
         return new Promise((res, rej) => {
             this.socket.emit('joinRoom', { isAdmin, roomId }, (response) => {
                 if (!response) {
@@ -15,18 +14,34 @@ class socketService {
                 else {
                     rej(response)
                 }
-            })
-        })
+            });
+        });
     }
 
-    sendData() {
-
+    sendDataToClient(data) {
+        return new Promise((res, rej) => {
+            this.socket.emit('msgToClient', data, (response) => {
+                if (!response) {
+                    res(roomId);
+                }
+                else {
+                    rej(response)
+                }
+            });
+        });
     }
 
     receiveDataAdmin(cb) {
         this.socket.on('messageToAdmin',cb);
         return () => {
             this.socket.removeListener('messageToAdmin',cb);
+        }
+    }
+
+    receiveDataClient(cb) {
+        this.socket.on('messageToAdmin', cb);
+        return () => {
+            this.socket.removeListener('messageToAdmin', cb);
         }
     }
 }
