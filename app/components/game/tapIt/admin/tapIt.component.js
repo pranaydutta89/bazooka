@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit-element";
 import '../../../common/charts/bar/bar.component';
 import socketService from '../../../../services/socketio';
-import '../../common/spinner/spinner.component';
+import '../../../common/spinner/spinner.component';
 import utilService from '../../../../services/utilService';
 import constants from '../../../../services/constants';
 import '../../../common/alert/alert.component';
@@ -61,7 +61,7 @@ class TapIt extends LitElement {
       case 'userTapped':
         this.userTapped(msg.data);
         break;
-    } 
+    }
   }
 
   userJoined(userData) {
@@ -178,18 +178,24 @@ class TapIt extends LitElement {
     </div>
 
     <div class='row'>
+      <div class='col' style="text-align:center">
+      <h5>Game Info</h5>
+      </div>
+    </div>
+
+    <div class='row'>
            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Play Time</label>
     <div class="col-sm-6">
       <input type="number" .value=${this.gameTime} @change=${(evt) => this.gameTime = evt.target.value}
        class="form-control form-control-sm" id="colFormLabelSm" placeholder="Enter Seconds">
     </div>
 
-    <div class="col-sm-2">
-      <button type="button" @click=${this.startGame} class="btn btn-success">Start</button>
+    <div class="col-sm-1">
+      <button type="button" @click=${this.startGame} class="btn btn-sm btn-success">Start</button>
     </div>
 
-    <div class="col-sm-2">
-      <button type="button" class="btn btn-error">Reset</button>
+    <div class="col-sm-1">
+      <button type="button" class="btn btn-sm btn-danger">Reset</button>
     </div>
  
     </div>

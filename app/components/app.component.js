@@ -9,6 +9,7 @@ import './game/game.component';
 import routes from './routes';
 import utilService from '../services/utilService';
 import constants from '../services/constants';
+import './game/tapIt/client/tapitPlayInit.component';
 
 class App extends routerMixin(LitElement) {
 
@@ -22,7 +23,7 @@ class App extends routerMixin(LitElement) {
   constructor() {
     super();
     this.route = '';
-
+    this.checkUserType();
   }
 
   static get routes() {
@@ -30,23 +31,23 @@ class App extends routerMixin(LitElement) {
   }
 
   checkUserType() {
-    if (location.pathname === 'play') {
+    if (location.pathname === '/play') {
       this.isAdmin = false;
     } else {
       this.isAdmin = true;
     }
   }
 
-  get renderClientGame(){
-     const game = utilService.getQueryStringValue('game');
-     const data ={
-       roomId: utilService.getQueryStringValue('roomId'),
-       data: JSON.parse(utilService.getQueryStringValue('data'))
-     }
-     switch(game){
-       case constants.game.tapIt:
-         return html `<app-tapit-play-init data=${JSON.stringify(data)}></app-tapit-play-init>`
-     }
+  get renderClientGame() {
+    const game = utilService.getQueryStringValue('game');
+    const data = {
+      roomId: utilService.getQueryStringValue('roomId'),
+      team: JSON.parse(utilService.getQueryStringValue('data'))
+    }
+    switch (game) {
+      case constants.game.tapIt:
+        return html`<app-tapit-play-init gameData=${JSON.stringify(data)}></app-tapit-play-init>`
+    }
   }
 
   onRoute(route, params, query, data) {
@@ -57,9 +58,6 @@ class App extends routerMixin(LitElement) {
     return this;
   }
 
-  setGame() {
-    return html`<app-game gameId='${this.params && this.params.id}'></app-game>`
-  }
 
   render() {
 
@@ -68,21 +66,18 @@ class App extends routerMixin(LitElement) {
     <div>
       <app-header></app-header>
       <div class="container-fluid">
-        ${this.isAdmin ? html `
+        ${this.isAdmin ? html`
         <app-main current-route='${this.route}'>
           <app-home route='home'></app-home>
     
           <app-games route='games'>
           </app-games>
     
-          <div route='game'>
-            ${this.setGame()}
-          </div>
+         <app-game route='game' gameId='${this.params && this.params.id}'></app-game>
     
         </app-main>`:
-         html `
-            ${this.renderClientGame}
-         `}
+        html` ${this.renderClientGame}`
+        }
       </div>
     </div>`;
   }

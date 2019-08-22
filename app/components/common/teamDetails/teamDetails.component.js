@@ -9,7 +9,10 @@ class TeamDetails extends LitElement {
       },
       team: { type: Array },
       teamName: { type: String },
-      teamNameAdd: { type: String }
+      teamNameAdd: { type: String },
+      alertStatus: { type: String },
+      alertType: { type: String },
+      alertMessage: { type: String },
     }
   }
 
@@ -18,6 +21,10 @@ class TeamDetails extends LitElement {
     this.selectedTab = 'room';
     this.team = [];
     this.teamNameAdd = '';
+    this.alert = {
+      type: 'info',
+      status: 'hide'
+    }
   }
   get roomDetailsRender() {
     return html`
@@ -42,7 +49,7 @@ class TeamDetails extends LitElement {
         <div class="row">
           <div class="col">
            ${this.team.length !== 0 ?
-      html`<table class="table table-striped table-sm">
+        html`<table class="table table-striped table-sm">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -90,7 +97,7 @@ class TeamDetails extends LitElement {
     this.teamNameAdd = '';
   }
 
-  
+
   get selectedTabRender() {
     switch (this.selectedTab) {
       case 'room':
@@ -101,14 +108,19 @@ class TeamDetails extends LitElement {
   }
 
   startClicked() {
-    const event = new CustomEvent('start', {
-      detail: {
-        teamName: this.teamName,
-        team: this.team
-      }
-    });
-    this.dispatchEvent(event);
+
+    if (this.team.length > 1) {
+      const event = new CustomEvent('start', {
+        detail: this.team
+      });
+      this.dispatchEvent(event);
+    } else {
+      this.alertStatus = 'show';
+      this.alertType = 'error';
+      this.alertMessage = 'Minimum 2 teams required';
+    }
   }
+
   render() {
     return html`
         <css-ele></css-ele>
@@ -117,6 +129,9 @@ class TeamDetails extends LitElement {
             margin-bottom:0.6rem;
           }
         </style>
+        <app-alert  @close=${() => this.alertStatus = 'hide'}
+         status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
+
         <div class='teamDetails'>
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
