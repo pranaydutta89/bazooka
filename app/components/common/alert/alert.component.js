@@ -6,6 +6,8 @@ class Alert extends LitElement {
     return {
       type: { type: String },
       message: { type: String },
+      keepOpen: { type: Boolean },
+      positionFixed: { type: Boolean },
       status: {
         type: String,
       }
@@ -17,25 +19,29 @@ class Alert extends LitElement {
     this.type = 'info';
     this.status = 'hide'
     this.message = '';
+    this.keepOpen = false;
+    this.positionFixed = false;
   }
 
   performUpdate() {
     if (this.status === 'show') {
 
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
+      if (!this.keepOpen) {
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
 
-      this.timeout = setTimeout(() => {
-        this.status = 'hide';
-        const event = new CustomEvent('close', {
-          detail: {
-            teamName: this.teamName,
-            team: this.team
-          }
-        });
-        this.dispatchEvent(event);
-      }, 5000)
+        this.timeout = setTimeout(() => {
+          this.status = 'hide';
+          const event = new CustomEvent('close', {
+            detail: {
+              teamName: this.teamName,
+              team: this.team
+            }
+          });
+          this.dispatchEvent(event);
+        }, 5000);
+      }
     }
     super.performUpdate();
   }
@@ -67,8 +73,16 @@ class Alert extends LitElement {
   render() {
     return html`
     <css-ele></css-ele>
+    <style>
+      .posFixed{
+position:fixed;
+bottom:0;width:
+100%;
+z-index:1030;
+      }
+      </style>
     ${this.status === 'show' ?
-        html`<div class='row'>
+        html`<div class='row ${this.positionFixed ? 'posFixed' : 'empty'}'>
          <div class='col'>
            ${this.renderByAlertType}
   </div>

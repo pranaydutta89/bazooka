@@ -28,21 +28,22 @@ class BarChart extends LitElement {
   }
 
   performUpdate() {
-    this.data.forEach(r => {
-      r.push(utilService.randomHexColor());
-    })
+    this.drawChart();
+    super.performUpdate();
   }
 
 
   drawChart() {
 
-    const data = google.visualization.arrayToDataTable([
-      [this.yLabel, this.xLabel, { role: 'style' }],
-      ...this.data
-    ]);
+    if (this.data.length != 0) {
+      const data = google.visualization.arrayToDataTable([
+        [this.yLabel, this.xLabel, { role: 'style' }],
+        ...this.data
+      ]);
 
-    const chart = new google.visualization.BarChart(this.shadowRoot.getElementById('chart_div'));
-    chart.draw(data, this.options);
+      const chart = new google.visualization.BarChart(this.shadowRoot.getElementById('chart_div'));
+      chart.draw(data, this.options);
+    }
   }
 
   render() {
