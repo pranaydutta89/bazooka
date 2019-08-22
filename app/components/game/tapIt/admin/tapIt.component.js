@@ -10,7 +10,7 @@ class TapIt extends LitElement {
 
   static get properties() {
     return {
-      data: { type: Object },
+      gameData: { type: Object },
       spinnerStarted: { type: String },
       clientUrl: { type: String },
       userDetails: { type: Array },
@@ -42,7 +42,7 @@ class TapIt extends LitElement {
     this.spinnerStarted = 'show';
     this.roomId = uuid();
     await socketService.joinRoom(true, this.roomId);
-    this.clientUrl = utilService.encryptClientUrl(constants.game.tapIt, this.roomId, this.data);
+    this.clientUrl = utilService.encryptClientUrl(constants.game.tapIt, this.roomId, this.gameData);
     this.spinnerStarted = 'hide';
     this.listeners.push(socketService.receiveDataFromClient(this.receiveData.bind(this)));
     this.alertMessage = 'Joined Room';
@@ -165,7 +165,15 @@ class TapIt extends LitElement {
     <app-alert @close=${this.alertClosed} status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
     ${this.gameStartCountDown ? html` <app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
     <div>
-     
+
+      <div class='row'>
+      <div class='col'>
+        <h3>${this.gameData.roomName}</h3>
+      </div>
+
+      </div>
+
+
     <div class='row'>
       <div class='col'>
         <div class="input-group mb-3">

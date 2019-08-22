@@ -60,7 +60,7 @@ class TapItPlayInit extends LitElement {
  <app-alert @close=${() => this.alertStatus = 'hide'} status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
        <div class="row" style="margin-bottom:0.6px">
            <div class='col' style="text-align:center">
-             <h3>TapIt Game Play</h3>
+             <h3>TapIt Room ${this.gameData.roomName}</h3>
            </div>
        </div>
          <div class="row" style="margin-bottom:0.6px">

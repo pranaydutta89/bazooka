@@ -8,7 +8,7 @@ class TeamDetails extends LitElement {
         type: String
       },
       team: { type: Array },
-      teamName: { type: String },
+      roomName: { type: String },
       teamNameAdd: { type: String },
       alertStatus: { type: String },
       alertType: { type: String },
@@ -31,7 +31,7 @@ class TeamDetails extends LitElement {
         <form @submit='${(evt) => { this.selectedTab = 'teams'; evt.preventDefault() }}'>
         <div class='row' style="margin-bottom:0.6rem">
             <div class='col'>
-                <input type="text" @change=${(evt) => this.teamName = evt.target.value} class="form-control" maxlength="20" required placeholder="Enter Room Name"/>
+                <input type="text" @change=${(evt) => this.roomName = evt.target.value} class="form-control" maxlength="20" required placeholder="Enter Room Name"/>
             </div>
         </div>
         <div class='row'>
@@ -111,7 +111,10 @@ class TeamDetails extends LitElement {
 
     if (this.team.length > 1) {
       const event = new CustomEvent('start', {
-        detail: this.team
+        detail: {
+          team :this.team,
+          roomName:this.roomName
+        }
       });
       this.dispatchEvent(event);
     } else {

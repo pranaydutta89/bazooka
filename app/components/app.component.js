@@ -42,7 +42,8 @@ class App extends routerMixin(LitElement) {
     const game = utilService.getQueryStringValue('game');
     const data = {
       roomId: utilService.getQueryStringValue('roomId'),
-      team: JSON.parse(utilService.getQueryStringValue('data'))
+      team: JSON.parse(utilService.getQueryStringValue('data')).team,
+      roomName: JSON.parse(utilService.getQueryStringValue('data')).roomName
     }
     switch (game) {
       case constants.game.tapIt:
