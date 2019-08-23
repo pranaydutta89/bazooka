@@ -37,12 +37,13 @@ class BarChart extends LitElement {
 
     if (this.data.length != 0) {
       const data = google.visualization.arrayToDataTable([
-        [this.yLabel, this.xLabel, { role: 'style' }],
+        [this.yLabel, this.xLabel, { role: 'style' }, { role: 'annotation' }],
         ...this.data
       ]);
-
-      const chart = new google.visualization.BarChart(this.shadowRoot.getElementById('chart_div'));
-      chart.draw(data, this.options);
+      if (!this.chart) {
+        this.chart = new google.visualization.BarChart(this.shadowRoot.getElementById('chart_div'));
+      }
+      this.chart.draw(data, this.options);
     }
   }
 

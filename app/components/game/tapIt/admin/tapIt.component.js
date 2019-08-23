@@ -36,14 +36,28 @@ class TapIt extends LitElement {
     this.chartData = [];
     this.gameStartCountDown = false;
     this.gameStartedFlag = false;
+    this.teamColor = {};
     this.joinSocket();
     this.gameSummaryMsg = 'Game not yet Started,copy and share the below link to players';
+    this.chartOptions = {
+      title: 'Live Tap Count',
+      chartArea: { width: '100%' }, hAxis: {
+        title: 'Teams Total Tap count',
+        minValue: 0
+      },
+      vAxis: {
+        title: 'Teams'
+      },
+    };
   }
 
   async joinSocket() {
     this.spinnerStarted = 'show';
     this.roomId = uuid();
     await socketService.joinRoom(true, this.roomId);
+    this.gameData.team.forEach(r => {
+      this.teamColor[r] = utilService.pickColor(r);
+    });
     this.clientUrl = utilService.encryptClientUrl(constants.game.tapIt, this.roomId, this.gameData);
     this.spinnerStarted = 'hide';
     this.listeners.push(socketService.receiveDataFromClient(this.receiveData.bind(this)));
@@ -106,10 +120,9 @@ class TapIt extends LitElement {
       });
     });
 
-    chartData.sort((a, b) => a.team > b.team)
     const val = chartData.map(r => r.value);
     val.forEach(r => {
-      r.push(utilService.pickColor(r[0]));
+      r.push(this.teamColor[r[0]], r[0]);
     });
     this.chartData = val;
   }
@@ -234,7 +247,7 @@ class TapIt extends LitElement {
     </div>
 
 
-    <app-chart-bar xLabel='Team tap Count' yLabel='Teams' data=${JSON.stringify(this.chartData)}></app-chart-bar>
+    <app-chart-bar xLabel='Team tap Count' options=${JSON.stringify(this.chartOptions)} teamInfo=${JSON.stringify(this.teamColor)} yLabel='Teams' data=${JSON.stringify(this.chartData)}></app-chart-bar>
 
     ${
       this.userDetails.length === 0 ?
