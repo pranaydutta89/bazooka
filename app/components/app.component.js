@@ -15,14 +15,12 @@ class App extends LitElement {
   static get properties() {
     return {
       params: { type: Object },
-      isAdmin: { type: Boolean },
       currentRoute: { type: String }
     }
   }
   constructor() {
     super();
     this.currentRoute = 'home';
-    this.checkUserType();
     this.attachRoute();
   }
 
@@ -54,16 +52,14 @@ class App extends LitElement {
         this.currentRoute = 'about';
       })
       .resolve();
+    router
+      .on('/play', (params, query) => {
+        this.currentRoute = 'play';
+      })
+      .resolve();
   }
 
 
-  checkUserType() {
-    if (location.hash.indexOf('#/play') !==-1) {
-      this.isAdmin = false;
-    } else {
-      this.isAdmin = true;
-    }
-  }
 
   get renderClientGame() {
     const game = utilService.getQueryStringValue('game');
@@ -93,6 +89,8 @@ class App extends LitElement {
         return html`<app-game route='game' gameId='${this.params.id}'></app-game>`
       case 'about':
         return html`<app-about></app-about>`
+      case 'play':
+        return this.renderClientGame;
 
     }
   }
@@ -104,9 +102,7 @@ class App extends LitElement {
     <div>
       <app-header></app-header>
       <div class="container">
-        ${
-      this.isAdmin ? this.renderRoute : this.renderClientGame
-      }
+        ${this.renderRoute}
       </div>
     </div > `;
   }

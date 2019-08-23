@@ -2,6 +2,8 @@ import { LitElement, html } from "lit-element";
 import socketio from "../../../../services/socketio";
 import utilService from "../../../../services/utilService";
 import '../../../common/tap/tap.component';
+import router from '../../../routes';
+
 class TapItPlay extends LitElement {
 
   static get properties() {
@@ -11,7 +13,10 @@ class TapItPlay extends LitElement {
       isGameStarted: { type: Boolean },
       isGameStarting: { type: Boolean },
       userName: { type: String },
-      spinnerStarted: { type: String }
+      spinnerStarted: { type: String },
+      alertStatus: { type: String },
+      alertType: { type: String },
+      alertMessage: { type: String },
 
     }
   }
@@ -21,7 +26,8 @@ class TapItPlay extends LitElement {
     this.isGameStarted = false;
     this.isGameStarting = false;
     this.spinnerStarted = 'hide';
-
+    this.alertStatus = 'hide';
+    this.alertType = 'error';
   }
 
   firstUpdated() {
@@ -33,11 +39,25 @@ class TapItPlay extends LitElement {
   }
 
   async joinRoom() {
-    await socketio.joinRoom(false, this.roomId);
-    this.joinUser();
-    this.listeners.push(socketio.receiveDataFromAdmin(this.receiveData.bind(this)));
+
+    try {
+      await socketio.joinRoom(false, this.roomId);
+      this.joinUser();
+      this.listeners.push(socketio.receiveDataFromAdmin(this.receiveData.bind(this)));
+    }
+    catch (e) {
+      this.changeAlertStatus('Room does not exist,logging out');
+      setTimeout(() => {
+        router.navigate('/')
+      }, 3000);
+    }
   }
 
+  changeAlertStatus(message, status = 'show', type = 'error') {
+    this.alertMessage = message;
+    this.alertStatus = status;
+    this.alertType = type;
+  }
   async joinUser() {
     this.userId = utilService.generateUniqueBrowserId();
     const user = {
@@ -89,7 +109,7 @@ class TapItPlay extends LitElement {
     return html`
     <css-ele></css-ele>
     <app-spinner isStarted=${this.spinnerStarted}></app-spinner>
-
+<app-alert status=${this.alertStatus} positionFixed='true' keepOpen='true' type=${this.alertType} message=${this.alertMessage}></app-alert>
     ${this.isGameStarting ? html`<app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
       ${this.isGameStarted ? html`<div>
         <app-tap @tapped=${this.userTapped}></app-tap>
