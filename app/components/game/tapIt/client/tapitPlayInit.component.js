@@ -45,7 +45,7 @@ class TapItPlayInit extends LitElement {
     
     <style>
      .rowSelected{
-       background-color:grey;
+       background-color:grey !important;
      }
     </style>
     <css-ele></css-ele>
@@ -57,32 +57,32 @@ class TapItPlayInit extends LitElement {
         team=${this.teamSelected}></app-tapit-play>`
         : html`
        <div>
- <app-alert @close=${() => this.alertStatus = 'hide'} status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
-       <div class="row" style="margin-bottom:0.6px">
-           <div class='col' style="text-align:center">
-             <h3>TapIt Room ${this.gameData.roomName}</h3>
+ <app-alert @close=${() => this.alertStatus = 'hide'} positionFixed='true' status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
+       <div class="row" style="margin-bottom:0.6rem">
+           <div class='col'>
+             <h3>Room { ${this.gameData.roomName} }</h3>
            </div>
        </div>
-         <div class="row" style="margin-bottom:0.6px">
+         <div class="row" style="margin-bottom:0.6rem">
            <div class='col'>
              <input class="form-control" placeholder="Enter Player Name" 
              maxlength="20" @change=${(evt) => this.userName = evt.target.value} required/>
            </div>
          </div>
          <div class='row'>
-           <div class='col' style="text-align:center">
-             <h5>Select Your Team</h5>
+           <div class='col'>
+             <h6>SelectTeam</h6>
     </div>
          </div>
 
 
          <div class='row'>
            <div class='col'>
-             <table class="table table-striped table-sm">
+             <table class="table table-striped">
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
+              <th scope="col">Team Name</th>
             </tr>
           </thead>
           <tbody>

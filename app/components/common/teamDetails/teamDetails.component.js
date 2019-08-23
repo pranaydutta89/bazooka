@@ -75,11 +75,11 @@ class TeamDetails extends LitElement {
         </div>
   
         <div class='row' style="margin-bottom:0.6rem">
-          <div class='col'>
+          <div class='col-9'>
             <input class="form-control" .value='${this.teamNameAdd}'  @change=${(evt) => this.teamNameAdd = evt.target.value} type="text" maxlength="20" placeholder="Enter Team Name"/>
           </div>
           <div class='col'>
-            <button type="button" @click=${(evt) => { this.addTeam() }} class="btn btn-success">Add</button>
+            <button type="button" @click=${(evt) => { this.addTeam() }} class="btn btn-primary btn-block">Add</button>
           </div>
         </div>
 
@@ -112,8 +112,8 @@ class TeamDetails extends LitElement {
     if (this.team.length > 1) {
       const event = new CustomEvent('start', {
         detail: {
-          team :this.team,
-          roomName:this.roomName
+          team: this.team,
+          roomName: this.roomName
         }
       });
       this.dispatchEvent(event);

@@ -58,7 +58,7 @@ class App extends LitElement {
 
 
   checkUserType() {
-    if (location.pathname === '/play') {
+    if (location.hash.indexOf('#/play') !==-1) {
       this.isAdmin = false;
     } else {
       this.isAdmin = true;
@@ -103,7 +103,7 @@ class App extends LitElement {
     <css-ele></css-ele>
     <div>
       <app-header></app-header>
-      <div class="container-fluid">
+      <div class="container">
         ${
       this.isAdmin ? this.renderRoute : this.renderClientGame
       }

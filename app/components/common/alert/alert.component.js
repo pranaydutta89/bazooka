@@ -57,6 +57,10 @@ class Alert extends LitElement {
         return html`<div class="alert alert-danger" role="alert">
  ${this.message}
 </div>`
+      case 'warning':
+        return html`<div class="alert alert-warning" role="alert">
+ ${this.message}
+</div>`
 
       case 'success':
         return html`<div class="alert alert-success" role="alert">
@@ -75,15 +79,17 @@ class Alert extends LitElement {
     <css-ele></css-ele>
     <style>
       .posFixed{
-position:fixed;
-bottom:0;width:
+position:fixed!important;
+right:0;
+bottom:0;
+width:
 100%;
 z-index:1030;
       }
       </style>
     ${this.status === 'show' ?
-        html`<div class='row ${this.positionFixed ? 'posFixed' : 'empty'}'>
-         <div class='col'>
+        html`<div class='row '>
+         <div class='col ${this.positionFixed ? 'posFixed' : 'empty'}'>
            ${this.renderByAlertType}
   </div>
        </div>`

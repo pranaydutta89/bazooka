@@ -135,7 +135,7 @@ class TapIt extends LitElement {
       this.gameStartCountDown = true;
     }
     else {
-      this.setAlert('Minimum 2 users required to start the game.',null,'error');
+      this.setAlert('Minimum 2 users required to start the game.', 'show', 'error');
     }
   }
 
@@ -147,6 +147,7 @@ class TapIt extends LitElement {
   }
 
   gameEnded() {
+    socketService.sendDataToClient(this.roomId, { event: 'endGame' })
     this.gameStartedFlag = false;
     let message = '';
     this.chartData.forEach(r => {
@@ -189,7 +190,7 @@ class TapIt extends LitElement {
 
       <div class='row'>
       <div class='col'>
-        <h3>${this.gameData.roomName}</h3>
+        <h3>Room { ${this.gameData.roomName} }</h3>
       </div>
 
       </div>
@@ -208,33 +209,26 @@ class TapIt extends LitElement {
       </div>
     </div>
 
-    <div class='row'>
-      <div class='col' style="text-align:center">
-      <h5>Game Info</h5>
-      </div>
+
+    <div class='row' style="margin-bottom:0.6rem">
+           <label for="colFormLabelSm" class="col-2 col-form-label col-form-label text-truncate">Play Time(Seconds)</label>
+    <div class="col-7">
+      <input type="number" .value=${this.gameTime} .disabled=${this.gameStartedFlag} @change=${(evt) => this.gameTime = evt.target.value}
+       class="form-control form-control-xs" id="colFormLabelSm" placeholder="Enter Seconds">
     </div>
 
-    <div class='row'>
-           <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Play Time</label>
-    <div class="col-sm-6">
-      <input type="number" .value=${this.gameTime} @change=${(evt) => this.gameTime = evt.target.value}
-       class="form-control form-control-sm" id="colFormLabelSm" placeholder="Enter Seconds">
-    </div>
-
-    <div class="col-sm-1">
-      <button type="button" @click=${this.startGame} class="btn btn-sm btn-success">Start</button>
+    <div class="col-3">
+      <button type="button" @click=${this.startGame} class="btn btn-block btn-success">Start</button>
     </div> 
     </div>
 
 
     <app-chart-bar xLabel='Team tap Count' yLabel='Teams' data=${JSON.stringify(this.chartData)}></app-chart-bar>
 
-    <div class='row'>
-      <div class='col' style="text-align:center">
-      <h5>Players Joined (${this.userDetails.length})</h5>
-      </div>
-    </div>
-
+    ${
+      this.userDetails.length === 0 ?
+        html`<app-alert status='show' keepOpen='true' type='info' message='No Players joined yet'></app-alert>` :
+        html`
 <div class='row'>
       <div class='col'>
           <table class="table table-sm table-striped">
@@ -248,7 +242,7 @@ class TapIt extends LitElement {
           </thead>
           <tbody>
             ${this.userDetails.sort((a, b) => b.tapCount - a.tapCount).map((r, idx) => {
-      return html`
+          return html`
        <tr>
       <th scope="row">${idx + 1}</th>
       <td>${r.userName}</td>
@@ -257,13 +251,13 @@ class TapIt extends LitElement {
 
     </tr>
       `
-    })}
+        })}
 
           </tbody>
         </table>
       </div>
-  </div>
-
+  </div>`
+      }
     </div>
     `
   }
