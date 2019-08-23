@@ -35,6 +35,7 @@ class TapItPlay extends LitElement {
     this.joinRoom();
   }
   disconnectedCallback() {
+    this.leaveGame(false);
     this.listeners.forEach(r => r());
     super.disconnectedCallback();
   }
@@ -101,14 +102,16 @@ class TapItPlay extends LitElement {
     this.isGameStarting = true;
   }
 
-  async leaveGame() {
+  async leaveGame(route = true) {
     await socketio.sendDataToAdmin(this.roomId, {
       event: 'userLeft',
       data: {
         id: this.userId
       }
     });
-    router.navigate('/');
+    if (route) {
+      router.navigate('/');
+    }
   }
 
   gameStarted() {
