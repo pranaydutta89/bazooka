@@ -86,7 +86,7 @@ class App extends LitElement {
       case 'games':
         return html`<app-games></app-games>`
       case 'game':
-        return html`<app-game route='game' gameId=${this.params.id}></app-game>`
+        return html`<app-game route='game' .gameId=${this.params.id}></app-game>`
       case 'about':
         return html`<app-about></app-about>`
       case 'play':
