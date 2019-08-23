@@ -109,7 +109,7 @@ class TapIt extends LitElement {
     chartData.sort((a, b) => a.team > b.team)
     const val = chartData.map(r => r.value);
     val.forEach(r => {
-      r.push(utilService.randomHexColor());
+      r.push(utilService.pickColor(r[0]));
     });
     this.chartData = val;
   }

@@ -102,7 +102,7 @@ class TapItPlayInit extends LitElement {
 
 <div class='row'>
   <div class='col'>
-    <button type="button" @click=${this.startGame}  class="btn btn-primary">Start</button>
+    <button type="button" @click=${this.startGame}  class="btn btn-primary btn-block">Start</button>
       </div>
       </div
       </div>

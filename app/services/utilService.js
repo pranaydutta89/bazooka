@@ -6,8 +6,31 @@ class UtilsService {
     return `${location.origin}/#/play?game=${gameId}&roomId=${roomId}&data=${JSON.stringify(data)}`;
   }
 
-  randomHexColor() {
-    return '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+  hashCode(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+  }
+
+  // Convert an int to hexadecimal with a max length
+  // of six characters.
+  intToARGB(i) {
+    var hex = ((i >> 24) & 0xFF).toString(16) +
+      ((i >> 16) & 0xFF).toString(16) +
+      ((i >> 8) & 0xFF).toString(16) +
+      (i & 0xFF).toString(16);
+    // Sometimes the string returned will be too short so we 
+    // add zeros to pad it out, which later get removed if
+    // the length is greater than six.
+    hex += '000000';
+    return hex.substring(0, 6);
+  }
+
+  pickColor(str) {
+    const hex = this.intToARGB(this.hashCode(str));
+    return '#' + hex;
   }
 
   getQueryStringValue(key) {
