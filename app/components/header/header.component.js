@@ -1,13 +1,18 @@
 import { LitElement, html } from "lit-element";
-import { routerLinkMixin } from 'lit-element-router';
-class Header extends routerLinkMixin(LitElement) {
+import routes from '../routes';
+class Header extends LitElement {
+
+
+  constructor() {
+    super();
+  }
 
   createRenderRoot() {
     return this;
   }
   linkClick(event, route) {
     event.preventDefault();
-    this.navigate(route);
+    routes.navigate(route);
   }
 
   render() {
@@ -30,10 +35,10 @@ class Header extends routerLinkMixin(LitElement) {
         <a class="nav-link" href="/" @click='${(evt) => this.linkClick(evt, '/')}'>Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="games" @click='${(evt) => this.linkClick(evt, 'games')}'>Games</a>
+        <a class="nav-link" href="/games" @click='${(evt) => this.linkClick(evt, '/games')}'>Games</a>
       </li>
      <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
+        <a class="nav-link" href="/about" @click='${(evt) => this.linkClick(evt, '/about')}'>About</a>
       </li>
     </ul>
   </div>

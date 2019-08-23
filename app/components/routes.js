@@ -1,13 +1,1 @@
-export default [{
-    name: 'home',
-    pattern: ''
-}, {
-    name: 'games',
-    pattern: 'games'
-}, {
-    name: 'game',
-    pattern: 'game/:id'
-}, {
-    name: 'not-found',
-    pattern: '*'
-}]
+export default new Navigo(location.origin, true);

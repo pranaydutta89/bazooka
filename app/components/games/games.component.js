@@ -1,9 +1,7 @@
 import { LitElement, html } from "lit-element";
-import { routerLinkMixin } from "lit-element-router";
+import router from '../routes';
 
-class Games extends routerLinkMixin(LitElement) {
-
-
+class Games extends LitElement {
 
 
   createRenderRoot() {
@@ -12,7 +10,7 @@ class Games extends routerLinkMixin(LitElement) {
 
   linkClick(event, route) {
     event.preventDefault();
-    this.navigate(route);
+    router.navigate(route);
   }
 
   render() {
@@ -24,7 +22,7 @@ class Games extends routerLinkMixin(LitElement) {
           <div class="card-body">
             <h5 class="card-title">Tap It</h5>
             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="game/tapit" @click='${(evt) => this.linkClick(evt, ' game/tapit')}' class="btn btn-primary">Play</a>
+            <a href="/game/tapit" @click='${(evt) => this.linkClick(evt, '/game/tapit')}' class="btn btn-primary">Play</a>
           </div>
         </div>
       </div>

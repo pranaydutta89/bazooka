@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "lit-element": "^2.2.1",
-    "lit-element-router": "~1.2.5",
     "bootstrap": "^4.3.1",
     "express": "^4.17.1",
     "socket.io": "^2.2.0",

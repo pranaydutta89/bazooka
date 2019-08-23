@@ -1,34 +1,61 @@
 import { LitElement, html } from 'lit-element';
-import './appMain.component';
-import { routerMixin } from 'lit-element-router';
 import css from './common/css/css.component';
 import './header/header.component';
 import './home/home.component';
 import './games/games.component';
 import './game/game.component';
-import routes from './routes';
 import utilService from '../services/utilService';
 import constants from '../services/constants';
 import './game/tapIt/client/tapitPlayInit.component';
+import './about/about.components';
+import router from './routes';
 
-class App extends routerMixin(LitElement) {
+class App extends LitElement {
 
   static get properties() {
     return {
-      route: { type: String },
       params: { type: Object },
-      isAdmin: { type: Boolean }
+      isAdmin: { type: Boolean },
+      currentRoute: { type: String }
     }
   }
   constructor() {
     super();
-    this.route = '';
+    this.currentRoute = 'home';
     this.checkUserType();
+    this.attachRoute();
   }
 
-  static get routes() {
-    return routes;
+  attachRoute() {
+    router
+      .on('/', (params, query) => {
+        this.currentRoute = 'home'
+      })
+      .resolve();
+    router
+      .on('/home', (params, query) => {
+        this.currentRoute = 'home';
+      })
+      .resolve();
+    router
+      .on('/games', (params, query) => {
+        this.currentRoute = 'games';
+      })
+      .resolve();
+
+    router
+      .on('/game/:id', (params, query) => {
+        this.currentRoute = 'game';
+        this.params = params;
+      })
+      .resolve();
+    router
+      .on('/about', (params, query) => {
+        this.currentRoute = 'about';
+      })
+      .resolve();
   }
+
 
   checkUserType() {
     if (location.pathname === '/play') {
@@ -51,14 +78,24 @@ class App extends routerMixin(LitElement) {
     }
   }
 
-  onRoute(route, params, query, data) {
-    this.route = route;
-    this.params = params;
-  }
+
   createRenderRoot() {
     return this;
   }
 
+  get renderRoute() {
+    switch (this.currentRoute) {
+      case 'home':
+        return html`<app-home></app-home>`;
+      case 'games':
+        return html`<app-games></app-games>`
+      case 'game':
+        return html`<app-game route='game' gameId='${this.params.id}'></app-game>`
+      case 'about':
+        return html`<app-about></app-about>`
+
+    }
+  }
 
   render() {
 
@@ -67,20 +104,11 @@ class App extends routerMixin(LitElement) {
     <div>
       <app-header></app-header>
       <div class="container-fluid">
-        ${this.isAdmin ? html`
-        <app-main current-route='${this.route}'>
-          <app-home route='home'></app-home>
-    
-          <app-games route='games'>
-          </app-games>
-    
-         <app-game route='game' gameId='${this.params && this.params.id}'></app-game>
-    
-        </app-main>`:
-        html` ${this.renderClientGame}`
-        }
+        ${
+      this.isAdmin ? this.renderRoute : this.renderClientGame
+      }
       </div>
-    </div>`;
+    </div > `;
   }
 }
 customElements.define('app-init', App);
