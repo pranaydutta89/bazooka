@@ -63,7 +63,15 @@ class TapIt extends LitElement {
       case 'userTapped':
         this.userTapped(msg.data);
         break;
+      case 'userLeft':
+        this.userLeft(msg.data);
+        break;
     }
+  }
+
+  userLeft(userData) {
+    this.userDetails.splice(this.userDetails.findIndex(r => r.id === userData.id), 1);
+    this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
   }
 
   userJoined(userData) {

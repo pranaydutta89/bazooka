@@ -28,6 +28,7 @@ class TapItPlay extends LitElement {
     this.spinnerStarted = 'hide';
     this.alertStatus = 'hide';
     this.alertType = 'error';
+    window.onbeforeunload = this.leaveGame.bind(this);
   }
 
   firstUpdated() {
@@ -100,6 +101,16 @@ class TapItPlay extends LitElement {
     this.isGameStarting = true;
   }
 
+  async leaveGame() {
+    await socketio.sendDataToAdmin(this.roomId, {
+      event: 'userLeft',
+      data: {
+        id: this.userId
+      }
+    });
+    router.navigate('/');
+  }
+
   gameStarted() {
     this.isGameStarting = false;
     this.isGameStarted = true;
@@ -108,14 +119,25 @@ class TapItPlay extends LitElement {
 
     return html`
     <css-ele></css-ele>
+      <div class='row' style="margin-top:0.6rem">
+    <div class='col' style='text-align:center'>
+      <h5>Hello!! Player ${this.userName}</h5>
+    </div>
+      </div>
     <app-spinner isStarted=${this.spinnerStarted}></app-spinner>
 <app-alert status=${this.alertStatus} positionFixed='true' keepOpen='true' type=${this.alertType} message=${this.alertMessage}></app-alert>
+
     ${this.isGameStarting ? html`<app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
       ${this.isGameStarted ? html`<div>
         <app-tap @tapped=${this.userTapped}></app-tap>
       </div>` :
         html`<app-alert status='show' keepOpen='true' type='warning' message='Game not yet started'>`
       }
+      <div class='row' style="margin-top:0.6rem">
+    <div class='col'>
+      <button type='button' class='btn btn-block btn-danger' @click=${this.leaveGame}>Leave Game</button>
+    </div>
+</div>
     `
   }
 }

@@ -49,7 +49,7 @@ class TeamDetails extends LitElement {
         <div class="row">
           <div class="col">
            ${this.team.length !== 0 ?
-        html`<table class="table table-striped table-sm">
+        html`<table class="table table-striped">
           <thead>
             <tr>
               <th scope="col">#</th>
