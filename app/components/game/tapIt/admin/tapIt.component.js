@@ -212,13 +212,16 @@ class TapIt extends LitElement {
 
     <div class='row' style="margin-bottom:0.6rem">
            <label for="colFormLabelSm" class="col-2 col-form-label col-form-label text-truncate">Play Time(Seconds)</label>
-    <div class="col-7">
+    <div class="col-6">
       <input type="number" .value=${this.gameTime} .disabled=${this.gameStartedFlag} @change=${(evt) => this.gameTime = evt.target.value}
        class="form-control form-control-xs" id="colFormLabelSm" placeholder="Enter Seconds">
     </div>
 
-    <div class="col-3">
+    <div class="col-2">
       <button type="button" @click=${this.startGame} class="btn btn-block btn-success">Start</button>
+    </div> 
+    <div class="col-2">
+      <button type="button" @click=${this.resetData} class="btn btn-block btn-danger">Reset</button>
     </div> 
     </div>
 
