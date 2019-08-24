@@ -84,8 +84,13 @@ class TapIt extends LitElement {
   }
 
   userLeft(userData) {
-    this.userDetails.splice(this.userDetails.findIndex(r => r.id === userData.id), 1);
-    this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
+    const idx = this.userDetails.findIndex(r => r.id === userData.id);
+    if (idx != -1) {
+      const user = this.userDetails.find(r => r.id === userData.id);
+      this.userDetails.splice(idx, 1);
+      this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
+      this.setAlert(`User ${user.userName} left`, 'show', 'error');
+    }
   }
 
   userJoined(userData) {
@@ -216,7 +221,7 @@ class TapIt extends LitElement {
 
       </div>
 
-       <app-alert .keepOpen='true' .status='show' .type='info' .message=${this.gameSummaryMsg}></app-alert>
+       <app-alert keepOpen='true' status='show' type='info' .message=${this.gameSummaryMsg}></app-alert>
 
 
     <div class='row'>
@@ -239,21 +244,21 @@ class TapIt extends LitElement {
     </div>
 
     <div class="col-2">
-      <button type="button" @click=${this.startGame} class="btn btn-block btn-success">Start</button>
+      <button type="button" @click=${this.startGame} class="btn btn-block btn-info">Start</button>
     </div> 
     <div class="col-2">
-      <button type="button" @click=${this.resetData} class="btn btn-block btn-danger">Reset</button>
+      <button type="button" @click=${this.resetData} class="btn btn-block btn-secondary">Reset</button>
     </div> 
     </div>
 
 
-    <app-chart-bar .xLabel='Team tap Count' .options=${this.chartOptions}
-     .teamInfo=${this.teamColor} .yLabel='Teams' 
+    <app-chart-bar xLabel='Team tap Count' .options=${this.chartOptions}
+     .teamInfo=${this.teamColor} yLabel='Teams' 
      .data=${this.chartData}></app-chart-bar>
 
     ${
       this.userDetails.length === 0 ?
-        html`<app-alert .status='show' .keepOpen='true' .type='info' .message='No Players joined yet'></app-alert>` :
+        html`<app-alert status='show' keepOpen='true' type='info' message='No Players joined yet'></app-alert>` :
         html`
 <div class='row'>
       <div class='col'>

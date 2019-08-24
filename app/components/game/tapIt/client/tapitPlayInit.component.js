@@ -57,7 +57,7 @@ class TapItPlayInit extends LitElement {
         .team=${this.teamSelected}></app-tapit-play>`
         : html`
        <div>
- <app-alert @close=${() => this.alertStatus = 'hide'} .positionFixed='true' .status=${this.alertStatus}
+ <app-alert @close=${() => this.alertStatus = 'hide'} positionFixed='true' .status=${this.alertStatus}
   .type=${this.alertType} .message=${this.alertMessage}></app-alert>
        <div class="row" style="margin-bottom:0.6rem">
            <div class='col'>

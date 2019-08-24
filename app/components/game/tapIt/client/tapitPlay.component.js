@@ -128,14 +128,14 @@ class TapItPlay extends LitElement {
     </div>
       </div>
     <app-spinner .isStarted=${this.spinnerStarted}></app-spinner>
-<app-alert .status=${this.alertStatus} .positionFixed='true' .keepOpen='true'
+<app-alert .status=${this.alertStatus} positionFixed='true' keepOpen='true'
  .type=${this.alertType} .message=${this.alertMessage}></app-alert>
 
     ${this.isGameStarting ? html`<app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
       ${this.isGameStarted ? html`<div>
         <app-tap @tapped=${this.userTapped}></app-tap>
       </div>` :
-        html`<app-alert .status='show' .keepOpen='true' .type='warning' .message='Game not yet started'>`
+        html`<app-alert status='show' keepOpen='true' type='warning' message='Game not yet started'>`
       }
       <div class='row' style="margin-top:0.6rem">
     <div class='col'>
