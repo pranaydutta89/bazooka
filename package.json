@@ -10,9 +10,10 @@
     "build": "npm run clean && npm run buildes5 && ncp build dist && npm run buildes6 && ncp build dist && npm run copy",
     "copy": "ncp beanstalk dist && ncp package.json dist/package.json && ncp server dist",
     "clean": "rimraf dist",
-    "stopServer": "forever stop server/server.js",
+    "stopServer": "npm run forever stop app.js",
     "start": "npm run stopServer || npm run startServer",
-    "startServer": "forever start server/server.js"
+    "startServer": "npm run forever start app.js",
+    "forever": "forever"
   },
   "author": "",
   "license": "ISC",
