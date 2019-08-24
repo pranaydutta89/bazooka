@@ -70,7 +70,7 @@ class App extends LitElement {
     }
     switch (game) {
       case constants.game.tapIt:
-        return html`<app-tapit-play-init gameData=${JSON.stringify(data)}></app-tapit-play-init>`
+        return html`<app-tapit-play-init .gameData=${data}></app-tapit-play-init>`
     }
   }
 

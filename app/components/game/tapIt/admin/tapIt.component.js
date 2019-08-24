@@ -203,9 +203,9 @@ class TapIt extends LitElement {
   render() {
     return html`
     <css-ele></css-ele>
-    <app-spinner isStarted=${this.spinnerStarted}></app-spinner>
+    <app-spinner .isStarted=${this.spinnerStarted}></app-spinner>
     <app-alert positionFixed='true' @close=${this.alertClosed} 
-    status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
+    .status=${this.alertStatus} .type=${this.alertType} .message=${this.alertMessage}></app-alert>
     ${this.gameStartCountDown ? html` <app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
     <div>
 
@@ -216,7 +216,7 @@ class TapIt extends LitElement {
 
       </div>
 
-       <app-alert keepOpen='true' status='show' type='info' message=${this.gameSummaryMsg}></app-alert>
+       <app-alert .keepOpen='true' .status='show' .type='info' .message=${this.gameSummaryMsg}></app-alert>
 
 
     <div class='row'>
@@ -247,11 +247,13 @@ class TapIt extends LitElement {
     </div>
 
 
-    <app-chart-bar xLabel='Team tap Count' options=${JSON.stringify(this.chartOptions)} teamInfo=${JSON.stringify(this.teamColor)} yLabel='Teams' data=${JSON.stringify(this.chartData)}></app-chart-bar>
+    <app-chart-bar .xLabel='Team tap Count' .options=${this.chartOptions}
+     .teamInfo=${this.teamColor} .yLabel='Teams' 
+     .data=${this.chartData}></app-chart-bar>
 
     ${
       this.userDetails.length === 0 ?
-        html`<app-alert status='show' keepOpen='true' type='info' message='No Players joined yet'></app-alert>` :
+        html`<app-alert .status='show' .keepOpen='true' .type='info' .message='No Players joined yet'></app-alert>` :
         html`
 <div class='row'>
       <div class='col'>

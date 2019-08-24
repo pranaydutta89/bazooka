@@ -133,7 +133,7 @@ class TeamDetails extends LitElement {
           }
         </style>
         <app-alert  @close=${() => this.alertStatus = 'hide'}
-         status=${this.alertStatus} type=${this.alertType} message=${this.alertMessage}></app-alert>
+         .status=${this.alertStatus} .type=${this.alertType} .message=${this.alertMessage}></app-alert>
 
         <div class='teamDetails'>
             <ul class="nav nav-tabs" role="tablist">

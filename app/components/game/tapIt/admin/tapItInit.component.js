@@ -22,7 +22,7 @@ class TapItInit extends LitElement {
     render() {
         return html`
           ${
-            this.isGameStarted ? html`<app-tapit gameData='${JSON.stringify(this.gameData)}'></app-tapit>` :
+            this.isGameStarted ? html`<app-tapit .gameData='${this.gameData}'></app-tapit>` :
                 html`<app-team-details @start=${this.startGame}></app - team - details >`
             }
             `;
