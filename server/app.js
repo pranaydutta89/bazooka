@@ -1,15 +1,39 @@
 
-var express = require('express');
+var path = require('path');
 var app = require('express')();
 var http = require('http').createServer(app);
+const helmet = require('helmet')
 var io = require('socket.io')(http);
 var compression = require('compression');
-var path = require('path');
+var useragent = require('useragent');
+useragent(true);
 
-app.use(compression())
 
-app.use(express.static(path.join(__dirname, '../build/es5-bundled')))
+app.use(helmet());
+app.use(compression());
+//app.use(express.static('public'));
 const roomAdmin = {};
+
+
+app.get('*', (req, res) => {
+    if (useragent.is(req.headers['user-agent']).android || useragent.is(req.headers['user-agent']).mobile_safari ||
+        useragent.is(req.headers['user-agent']).ie) {
+        if (req.path == '/') {
+            res.sendFile(path.resolve(__dirname, 'es5-bundled', 'index.html'))
+        }
+        else {
+            res.sendFile(path.resolve(__dirname + '/es5-bundled' + req.path))
+        }
+    }
+    else {
+        if (req.path == '/') {
+            res.sendFile(path.resolve(__dirname, 'uncompiled-unbundled', 'index.html'))
+        }
+        else {
+            res.sendFile(__dirname + '/uncompiled-unbundled' + req.path)
+        }
+    }
+});
 
 io.on('connection', (socket) => {
 

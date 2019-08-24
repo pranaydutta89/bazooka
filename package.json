@@ -5,20 +5,29 @@
   "main": "index.js",
   "scripts": {
     "ui": "polymer serve",
-    "build": "polymer build --preset es5-bundled",
-    "start": "npm run build && node server.js"
+    "buildes5": "polymer build --preset es5-bundled",
+    "buildes6": "polymer build --preset uncompiled-unbundled",
+    "build": "npm run clean && npm run buildes5 && ncp build dist && npm run buildes6 && ncp build dist && npm run copy",
+    "copy": "ncp beanstalk dist && ncp package.json dist/package.json && ncp server dist",
+    "clean": "rimraf dist",
+    "stopServer": "forever stop server/server.js",
+    "start": "npm run stopServer || npm run startServer",
+    "startServer": "forever start server/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit-element": "^2.2.1",
+    "@webcomponents/webcomponentsjs": "^2.2.10",
     "bootstrap": "^4.3.1",
-    "express": "^4.17.1",
-    "socket.io": "^2.2.0",
-    "rimraf": "^2.6.3",
     "compression": "^1.7.4",
+    "express": "^4.17.1",
     "forever": "^1.0.0",
-    "@webcomponents/webcomponentsjs": "^2.2.10"
+    "helmet": "^3.20.0",
+    "lit-element": "^2.2.1",
+    "ncp": "^2.0.0",
+    "rimraf": "^2.6.3",
+    "socket.io": "^2.2.0",
+    "useragent": "^2.3.0"
   },
   "devDependencies": {
     "polymer-cli": "^1.9.11"
