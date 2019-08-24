@@ -3,7 +3,7 @@
 class UtilsService {
 
   encryptClientUrl(gameId, roomId, data) {
-    return `${location.origin}/#/play?game=${gameId}&roomId=${roomId}&data=${JSON.stringify(data)}`;
+    return `${location.origin}/#/play?game=${gameId}&roomId=${roomId}&data=${encodeURIComponent(JSON.stringify(data))}`;
   }
 
   hashCode(str) {

@@ -63,10 +63,11 @@ class App extends LitElement {
 
   get renderClientGame() {
     const game = utilService.getQueryStringValue('game');
+    const gameData = JSON.parse(decodeURIComponent(utilService.getQueryStringValue('data')));
     const data = {
       roomId: utilService.getQueryStringValue('roomId'),
-      team: JSON.parse(utilService.getQueryStringValue('data')).team,
-      roomName: JSON.parse(utilService.getQueryStringValue('data')).roomName
+      team: gameData.team,
+      roomName: gameData.roomName
     }
     switch (game) {
       case constants.game.tapIt:
