@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit-element";
 import './tapIt/admin/tapItInit.component';
 import '../common/teamDetails/teamDetails.component'
+import constants from "../../services/constants";
 class Game extends LitElement {
 
 
@@ -17,7 +18,7 @@ class Game extends LitElement {
 
     selectGame() {
         switch (this.gameId) {
-            case 'tapit':
+            case constants.game.tapIt:
                 return html`<app-tapit-init></app-tapit-init>`;
         }
     }

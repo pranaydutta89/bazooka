@@ -24,7 +24,7 @@ class App extends LitElement {
     router
       .on('/', async (params, query) => {
         await import('./home/home.component')
-        this.currentRoute = 'home'
+        this.currentRoute = 'home';
       })
       .resolve();
     router

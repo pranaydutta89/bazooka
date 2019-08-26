@@ -1,12 +1,10 @@
 import { LitElement, html } from "lit-element";
 import router from '../routes';
+import gamesStatic from '../../staticData/games';
+import games from "../../staticData/games";
 
 class Games extends LitElement {
 
-
-  createRenderRoot() {
-    return this;
-  }
 
   linkClick(event, route) {
     event.preventDefault();
@@ -17,23 +15,18 @@ class Games extends LitElement {
     return html`
     <css-ele></css-ele>
     <div class="row">
-      <div class="col-sm-6">
-        <div class="card">
+      <div class="col">
+        ${gamesStatic.map(r => {
+      return html`
+          <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Tap It</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="/game/tapit" @click='${(evt) => this.linkClick(evt, '/game/tapit')}' class="btn btn-primary">Play</a>
+            <h5 class="card-title">${r.title}</h5>
+            <p class="card-text">${r.summary}</p>
+            <a href="#/game/tapIt" @click='${(evt) => this.linkClick(evt, `/game/${r.id}`)}' class="btn btn-primary">Play</a>
           </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
+        </div>`
+    })}
+        
       </div>
     </div>
     `;

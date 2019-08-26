@@ -1,5 +1,8 @@
 import { LitElement, html } from "lit-element";
 import './tapIt.component';
+import '../../../common/instructions/instructions.component';
+import constants from "../../../../services/constants";
+
 class TapItInit extends LitElement {
 
     static get properties() {
@@ -23,7 +26,11 @@ class TapItInit extends LitElement {
         return html`
           ${
             this.isGameStarted ? html`<app-tapit .gameData='${this.gameData}'></app-tapit>` :
-                html`<app-team-details @start=${this.startGame}></app - team - details >`
+                html`<div>
+                <app-team-details @start=${this.startGame}></app-team-details >
+                <app-game-instruction .gameId=${constants.game.tapIt}></app-game-instruction>
+                </div>
+                `
             }
             `;
     }
