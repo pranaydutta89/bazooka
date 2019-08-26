@@ -36,7 +36,7 @@ class TapItPlay extends LitElement {
     window.onbeforeunload = this.leaveGame.bind(this);
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        //this.leaveGame();
+        this.leaveGame();
       }
     }, false);
   }
