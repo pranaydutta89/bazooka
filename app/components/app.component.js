@@ -1,13 +1,9 @@
 import { LitElement, html } from 'lit-element';
 import css from './common/css/css.component';
 import './header/header.component';
-import './home/home.component';
-import './games/games.component';
-import './game/game.component';
 import utilService from '../services/utilService';
 import constants from '../services/constants';
-import './game/tapIt/client/tapitPlayInit.component';
-import './about/about.components';
+
 import router from './routes';
 
 class App extends LitElement {
@@ -26,29 +22,34 @@ class App extends LitElement {
 
   attachRoute() {
     router
-      .on('/', (params, query) => {
+      .on('/', async (params, query) => {
+        await import('./home/home.component')
         this.currentRoute = 'home'
       })
       .resolve();
     router
-      .on('/home', (params, query) => {
+      .on('/home', async (params, query) => {
+        await import('./home/home.component')
         this.currentRoute = 'home';
       })
       .resolve();
     router
-      .on('/games', (params, query) => {
+      .on('/games', async (params, query) => {
+        await import('./games/games.component');
         this.currentRoute = 'games';
       })
       .resolve();
 
     router
-      .on('/game/:id', (params, query) => {
+      .on('/game/:id', async (params, query) => {
+        await import('./game/game.component');
         this.currentRoute = 'game';
         this.params = params;
       })
       .resolve();
     router
-      .on('/about', (params, query) => {
+      .on('/about', async (params, query) => {
+        await import('./about/about.components');
         this.currentRoute = 'about';
       })
       .resolve();
@@ -61,7 +62,7 @@ class App extends LitElement {
 
 
 
-  get renderClientGame() {
+  async renderClientGame() {
     const game = utilService.getQueryStringValue('game');
     const gameData = JSON.parse(decodeURIComponent(utilService.getQueryStringValue('data')));
     const data = {
@@ -69,8 +70,10 @@ class App extends LitElement {
       team: gameData.team,
       roomName: gameData.roomName
     }
+
     switch (game) {
       case constants.game.tapIt:
+        await import('./game/tapIt/client/tapitPlayInit.component');
         return html`<app-tapit-play-init .gameData=${data}></app-tapit-play-init>`
     }
   }
@@ -91,7 +94,7 @@ class App extends LitElement {
       case 'about':
         return html`<app-about></app-about>`
       case 'play':
-        return this.renderClientGame;
+        return this.renderClientGame();
 
     }
   }
