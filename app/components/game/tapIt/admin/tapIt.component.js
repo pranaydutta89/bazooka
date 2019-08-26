@@ -58,7 +58,7 @@ class TapIt extends LitElement {
     this.gameData.team.forEach(r => {
       this.teamColor[r] = utilService.pickColor(r);
     });
-    this.clientUrl = utilService.encryptClientUrl(constants.game.tapIt, this.roomId, this.gameData);
+    this.clientUrl = await utilService.encryptClientUrl(constants.game.tapIt, this.roomId, this.gameData);
     this.spinnerStarted = 'hide';
     this.listeners.push(socketService.receiveDataFromClient(this.receiveData.bind(this)));
     this.setAlert('Joined Room');
