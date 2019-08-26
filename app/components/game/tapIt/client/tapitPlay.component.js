@@ -3,6 +3,7 @@ import socketio from "../../../../services/socketio";
 import utilService from "../../../../services/utilService";
 import '../../../common/tap/tap.component';
 import router from '../../../routes';
+import '../../../common/alert/alert.component';
 
 class TapItPlay extends LitElement {
 
@@ -17,6 +18,8 @@ class TapItPlay extends LitElement {
       alertStatus: { type: String },
       alertType: { type: String },
       alertMessage: { type: String },
+      summaryMessage: { type: String },
+      summaryMessageType: { type: String }
 
     }
   }
@@ -28,6 +31,8 @@ class TapItPlay extends LitElement {
     this.spinnerStarted = 'hide';
     this.alertStatus = 'hide';
     this.alertType = 'error';
+    this.summaryMessage = '';
+    this.summaryMessageType = 'info'
     window.onbeforeunload = this.leaveGame.bind(this);
   }
 
@@ -92,13 +97,38 @@ class TapItPlay extends LitElement {
       case 'endGame':
         this.endGame();
         break;
+
+      case 'tapSummary':
+        this.tapDetails(msg.data);
+        break;
+    }
+  }
+
+  generateSummaryMessage(myTeamDetails, topTeamDetails, secondTeam) {
+    if (topTeamDetails.teamName === this.team) {
+      this.summaryMessageType = 'info';
+      this.summaryMessage = `Your team is leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`;
+
+    } else {
+      this.summaryMessageType = 'warning';
+      this.summaryMessage = `Your team is trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading team ${topTeamDetails.teamName}`;
+    }
+
+  }
+
+  tapDetails(teamDetails) {
+    if (this.isGameStarted) {
+      teamDetails.sort((a, b) => b.tapCount - a.tapCount);
+      const myTeam = teamDetails.find(r => r.teamName === this.team);
+      this.generateSummaryMessage(myTeam, teamDetails[0], teamDetails[1])
     }
   }
 
   endGame() {
     this.isGameStarted = false;
   }
-  startingGame() {
+  async startingGame() {
+    await import('../../../common/gameStartCountdown/gameStartCountDown.component');
     this.isGameStarting = true;
   }
 
@@ -134,6 +164,7 @@ class TapItPlay extends LitElement {
     ${this.isGameStarting ? html`<app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
       ${this.isGameStarted ? html`<div>
         <app-tap @tapped=${this.userTapped}></app-tap>
+        <app-alert status='show' .type=${this.summaryMessageType} positionFixed="true" .message=${this.summaryMessage}></app-alert>
       </div>` :
         html`<app-alert status='show' keepOpen='true' type='warning' message='Game not yet started'>`
       }

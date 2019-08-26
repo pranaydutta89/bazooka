@@ -5,7 +5,7 @@ import '../../../common/spinner/spinner.component';
 import utilService from '../../../../services/utilService';
 import constants from '../../../../services/constants';
 import '../../../common/alert/alert.component';
-import '../../../common/gameStartCountdown/gameStartCountDown.component';
+
 class TapIt extends LitElement {
 
   static get properties() {
@@ -108,6 +108,7 @@ class TapIt extends LitElement {
   resetData() {
     this.userDetails.forEach(r => r.tapCount = 0);
     this.checkTapCount();
+    this.gameEnded();
   }
 
   checkTapCount() {
@@ -126,6 +127,17 @@ class TapIt extends LitElement {
     });
 
     const val = chartData.map(r => r.value);
+    if (this.gameStartedFlag) {
+      socketService.sendDataToClient(this.roomId, {
+        event: 'tapSummary',
+        data: val.map(r => {
+          return {
+            teamName: r[0],
+            tapCount: r[1]
+          }
+        })
+      })
+    }
     val.forEach(r => {
       r.push(this.teamColor[r[0]], r[0]);
     });
@@ -154,14 +166,20 @@ class TapIt extends LitElement {
   }
 
   async startGame() {
-    if (this.userDetails.length > 1) {
-      await socketService.sendDataToClient(this.roomId, {
-        event: 'startGame'
-      });
-      this.gameStartCountDown = true;
+    if (!this.gameStartedFlag) {
+      await import('../../../common/gameStartCountdown/gameStartCountDown.component');
+      if (this.userDetails.length > 1) {
+        await socketService.sendDataToClient(this.roomId, {
+          event: 'startGame'
+        });
+        this.gameStartCountDown = true;
+      }
+      else {
+        this.setAlert('Minimum 2 users required to start the game.', 'show', 'error');
+      }
     }
     else {
-      this.setAlert('Minimum 2 users required to start the game.', 'show', 'error');
+      this.setAlert('Game already in progress', 'show', 'error');
     }
   }
 
@@ -173,6 +191,12 @@ class TapIt extends LitElement {
   }
 
   gameEnded() {
+
+    if (this.countdown) {
+      clearInterval(this.countdown);
+      this.countdown = null;
+    }
+
     socketService.sendDataToClient(this.roomId, { event: 'endGame' })
     this.gameStartedFlag = false;
     let message = '';
@@ -184,11 +208,17 @@ class TapIt extends LitElement {
 
   gameCountDown() {
     let counter = this.gameTime;
-    var countdown = setInterval(() => {
+
+    if (this.countdown) {
+      clearInterval(this.countdown);
+      this.countdown = null;
+    }
+
+    this.countdown = setInterval(() => {
       this.gameSummaryMsg = `Time left ${counter} seconds`
       counter--
       if (counter === 0) {
-        clearInterval(countdown);
+        clearInterval(this.countdown);
         this.gameEnded();
       }
     }, 1000);

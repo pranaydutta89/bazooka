@@ -61,11 +61,16 @@ io.on('connection', (socket) => {
     });
 
     socket.on('msgToAdmin', (msg, cb) => {
-        roomAdmin[msg.roomId].forEach(id => {
-            io.to(id).emit('msgFromClient', msg.data);
-        });
-        if (cb && typeof cb === 'function') {
-            cb();
+        if (roomAdmin[msg.roomId]) {
+            roomAdmin[msg.roomId].forEach(id => {
+                io.to(id).emit('msgFromClient', msg.data);
+            });
+            if (cb && typeof cb === 'function') {
+                cb();
+            }
+        }
+        else {
+            cb('No admin for users')
         }
     });
     socket.on('msgToClient', (msg, cb) => {

@@ -54,7 +54,8 @@ class App extends LitElement {
       })
       .resolve();
     router
-      .on('/play', (params, query) => {
+      .on('/play', async (params, query) => {
+        await import('./game/tapIt/client/tapitPlayInit.component');
         this.currentRoute = 'play';
       })
       .resolve();
@@ -62,7 +63,7 @@ class App extends LitElement {
 
 
 
-  async renderClientGame() {
+  get renderClientGame() {
     const game = utilService.getQueryStringValue('game');
     const gameData = JSON.parse(decodeURIComponent(utilService.getQueryStringValue('data')));
     const data = {
@@ -73,8 +74,7 @@ class App extends LitElement {
 
     switch (game) {
       case constants.game.tapIt:
-        await import('./game/tapIt/client/tapitPlayInit.component');
-        return html`<app-tapit-play-init .gameData=${data}></app-tapit-play-init>`
+        return html`<app-tapit-play-init .gameData=${data}></app-tapit-play-init>`;
     }
   }
 
@@ -94,7 +94,7 @@ class App extends LitElement {
       case 'about':
         return html`<app-about></app-about>`
       case 'play':
-        return this.renderClientGame();
+        return this.renderClientGame;
 
     }
   }

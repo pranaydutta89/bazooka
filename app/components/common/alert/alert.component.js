@@ -87,7 +87,7 @@ width:
 z-index:1030;
       }
       </style>
-    ${this.status === 'show' ?
+    ${this.status === 'show' && this.message ?
         html`<div class='row '>
          <div class='col ${this.positionFixed ? 'posFixed' : 'empty'}'>
            ${this.renderByAlertType}

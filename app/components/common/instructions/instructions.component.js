@@ -20,7 +20,7 @@ class Instructions extends LitElement {
     render() {
         return html`
         <css-ele></css-ele>
-        <div class="row">
+        <div class="row" style="margin-top:0.6rem">
             <div class="col">
         <div class="card">
   <div class="card-header">
