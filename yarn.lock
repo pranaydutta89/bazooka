@@ -3303,6 +3303,11 @@ expect-ct@0.2.0:
   resolved "https://registry.yarnpkg.com/expect-ct/-/expect-ct-0.2.0.tgz#3a54741b6ed34cc7a93305c605f63cd268a54a62"
   integrity sha512-6SK3MG/Bbhm8MsgyJAylg+ucIOU71/FzyFalcfu5nY19dH8y/z0tBJU0wrNBXD4B27EoQtqPF/9wqH0iYAd04g==
 
+express-force-https@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/express-force-https/-/express-force-https-1.0.0.tgz#2adb8121a6894616fc78ea05b15bd8d4b855fd0c"
+  integrity sha1-KtuBIaaJRhb8eOoFsVvY1LhV/Qw=
+
 express@^4.15.3, express@^4.17.1, express@^4.8.5:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
@@ -8018,11 +8023,6 @@ timed-out@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-4.0.1.tgz#f32eacac5a175bea25d7fab565ab3ed8741ef56f"
   integrity sha1-8y6srFoXW+ol1/q1Zas+2HQe9W8=
-
-tinyurl@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/tinyurl/-/tinyurl-1.1.4.tgz#b44eed1573136cbec6a019c4ada914043cb31505"
-  integrity sha512-q4/8DGddX1R9g3SvJtUu6t5xii4cSOawdubt1KD0wVIro0xoH5NCzmTf8FEYidpnuPvkcbnbgOomAc9L7jwHGQ==
 
 tmp@0.0.x, tmp@^0.0.33:
   version "0.0.33"
