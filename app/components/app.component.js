@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit-element';
 import css from './common/css/css.component';
 import './header/header.component';
 import utilService from '../services/utilService';
-import constants from '../services/constants';
+import './game/gameClient.component';
 
 import router from './routes';
 
@@ -42,7 +42,7 @@ class App extends LitElement {
 
     router
       .on('/game/:id', async (params, query) => {
-        await import('./game/game.component');
+        await import('./game/gameAdmin.component');
         this.currentRoute = 'game';
         this.params = params;
       })
@@ -55,7 +55,7 @@ class App extends LitElement {
       .resolve();
     router
       .on('/play', async (params, query) => {
-        await import('./game/tapIt/client/tapitPlayInit.component');
+        await import('./game/gameClient.component');
         this.currentRoute = 'play';
       })
       .resolve();
@@ -64,7 +64,7 @@ class App extends LitElement {
 
 
   get renderClientGame() {
-    const game = utilService.getQueryStringValue('game');
+    const gameId = utilService.getQueryStringValue('game');
     const gameData = JSON.parse(decodeURIComponent(utilService.getQueryStringValue('data')));
     const data = {
       roomId: utilService.getQueryStringValue('roomId'),
@@ -72,10 +72,7 @@ class App extends LitElement {
       roomName: gameData.roomName
     }
 
-    switch (game) {
-      case constants.game.tapIt:
-        return html`<app-tapit-play-init .gameData=${data}></app-tapit-play-init>`;
-    }
+    return html`<app-game-client .gameId=${gameId} .gameData=${data}></app-game-client>`;
   }
 
 

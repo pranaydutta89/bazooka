@@ -1,9 +1,9 @@
 import { LitElement, html } from "lit-element";
-import socketio from "../../../../services/socketio";
-import utilService from "../../../../services/utilService";
-import '../../../common/tap/tap.component';
-import router from '../../../routes';
-import '../../../common/alert/alert.component';
+import socketio from "../../../services/socketio";
+import utilService from "../../../services/utilService";
+import '../../common/tap/tap.component';
+import router from '../../routes';
+import '../../common/alert/alert.component';
 
 class TapItPlay extends LitElement {
 
@@ -133,7 +133,7 @@ class TapItPlay extends LitElement {
     this.isGameStarted = false;
   }
   async startingGame() {
-    await import('../../../common/gameStartCountdown/gameStartCountDown.component');
+    await import('../../common/gameStartCountdown/gameStartCountDown.component');
     this.isGameStarting = true;
   }
 

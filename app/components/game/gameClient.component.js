@@ -1,47 +1,58 @@
 import { LitElement, html } from "lit-element";
-import './tapitPlay.component';
+import './tapIt/tapitClient.component';
+import constants from "../../services/constants";
 
-class TapItPlayInit extends LitElement {
-  static get properties() {
-    return {
-      gameData: { type: Object },
-      teamSelected: { type: String },
-      userName: { type: String },
-      teamSelectedRow: { type: Number },
-      startGameFlag: { type: Boolean },
-      alertStatus: { type: String },
-      alertType: { type: String },
-      alertMessage: { type: String },
-    }
-  }
-
-  constructor() {
-    super();
-    this.startGameFlag = false;
-    this.teamSelectedRow = -1;
-    this.alertType = 'error';
-    this.alertStatus = 'hide';
-  }
-
-  startGame() {
-    if (!this.userName) {
-      this.alertStatus = 'show';
-      this.alertMessage = 'Enter User Name';
-      return;
+class GameClient extends LitElement {
+    static get properties() {
+        return {
+            gameId: { type: String },
+            gameData: { type: Object },
+            teamSelected: { type: String },
+            userName: { type: String },
+            teamSelectedRow: { type: Number },
+            startGameFlag: { type: Boolean },
+            alertStatus: { type: String },
+            alertType: { type: String },
+            alertMessage: { type: String },
+        }
     }
 
-    if (!this.teamSelected) {
-      this.alertStatus = 'show';
-      this.alertMessage = 'Select Team';
-      return;
+    constructor() {
+        super();
+        this.startGameFlag = false;
+        this.teamSelectedRow = -1;
+        this.alertType = 'error';
+        this.alertStatus = 'hide';
     }
-    this.startGameFlag = true;
-  }
 
+    startGame() {
+        if (!this.userName) {
+            this.alertStatus = 'show';
+            this.alertMessage = 'Enter User Name';
+            return;
+        }
 
-  render() {
+        if (!this.teamSelected) {
+            this.alertStatus = 'show';
+            this.alertMessage = 'Select Team';
+            return;
+        }
+        this.startGameFlag = true;
+    }
 
-    return html`
+    get renderGameClient() {
+        switch (this.gameId) {
+            case constants.game.tapIt:
+                return html`<app-tapit-play 
+        .userName=${this.userName} 
+        .roomId=${this.gameData.roomId} 
+        .team=${this.teamSelected}></app-tapit-play>`
+        }
+    }
+
+    render() {
+
+        return html`
     
     <style>
      .rowSelected{
@@ -50,12 +61,9 @@ class TapItPlayInit extends LitElement {
     </style>
     <css-ele></css-ele>
     ${
-      this.startGameFlag ?
-        html`<app-tapit-play 
-        .userName=${this.userName} 
-        .roomId=${this.gameData.roomId} 
-        .team=${this.teamSelected}></app-tapit-play>`
-        : html`
+            this.startGameFlag ?
+                this.renderGameClient
+                : html`
        <div>
  <app-alert @close=${() => this.alertStatus = 'hide'} positionFixed='true' .status=${this.alertStatus}
   .type=${this.alertType} .message=${this.alertMessage}></app-alert>
@@ -88,13 +96,13 @@ class TapItPlayInit extends LitElement {
           </thead>
           <tbody>
             ${this.gameData.team.map((name, idx) => {
-          return html`
+                    return html`
        <tr style='cursor:pointer' class="${this.teamSelectedRow === idx ? 'rowSelected' : 'empty'}" @click=${() => { this.teamSelected = name; this.teamSelectedRow = idx }}>
       <th scope="row">${idx + 1}</th>
       <td>${name}</td>
     </tr>
       `
-        })}
+                })}
 
           </tbody>
         </table>
@@ -108,7 +116,7 @@ class TapItPlayInit extends LitElement {
       </div
       </div>
    `}`
-  }
+    }
 }
 
-customElements.define('app-tapit-play-init', TapItPlayInit);
+customElements.define('app-game-client', GameClient);

@@ -1,10 +1,10 @@
 import { LitElement, html } from "lit-element";
-import '../../../common/charts/bar/bar.component';
-import socketService from '../../../../services/socketio';
-import '../../../common/spinner/spinner.component';
-import utilService from '../../../../services/utilService';
-import constants from '../../../../services/constants';
-import '../../../common/alert/alert.component';
+import '../../common/charts/bar/bar.component';
+import socketService from '../../../services/socketio';
+import '../../common/spinner/spinner.component';
+import utilService from '../../../services/utilService';
+import constants from '../../../services/constants';
+import '../../common/alert/alert.component';
 
 class TapIt extends LitElement {
 
@@ -167,7 +167,7 @@ class TapIt extends LitElement {
 
   async startGame() {
     if (!this.gameStartedFlag) {
-      await import('../../../common/gameStartCountdown/gameStartCountDown.component');
+      await import('../../common/gameStartCountdown/gameStartCountDown.component');
       if (this.userDetails.length > 1) {
         await socketService.sendDataToClient(this.roomId, {
           event: 'startGame'

@@ -1,14 +1,17 @@
 import { LitElement, html } from "lit-element";
-import './tapIt.component';
-import '../../../common/instructions/instructions.component';
-import constants from "../../../../services/constants";
+import './tapIt/tapItAdmin.component';
+import '../common/instructions/instructions.component';
+import constants from "../../services/constants";
+import '../common/teamDetails/teamDetails.component';
+import '../common/instructions/instructions.component';
 
-class TapItInit extends LitElement {
+class GameAdmin extends LitElement {
 
     static get properties() {
         return {
             isGameStarted: { type: String },
-            gameData: { type: Object }
+            gameData: { type: Object },
+            gameId: { type: String }
         }
     }
 
@@ -22,10 +25,17 @@ class TapItInit extends LitElement {
         this.gameData = data.detail;
     }
 
+    get renderGame() {
+        switch (this.gameId) {
+            case constants.game.tapIt:
+                return html`<app-tapit .gameData='${this.gameData}'></app-tapit>`;
+        }
+    }
+
     render() {
         return html`
           ${
-            this.isGameStarted ? html`<app-tapit .gameData='${this.gameData}'></app-tapit>` :
+            this.isGameStarted ? this.renderGame :
                 html`<div>
                 <app-team-details @start=${this.startGame}></app-team-details >
                 <app-game-instruction .gameId=${constants.game.tapIt}></app-game-instruction>
@@ -36,4 +46,4 @@ class TapItInit extends LitElement {
     }
 }
 
-customElements.define('app-tapit-init', TapItInit);
+customElements.define('app-game', GameAdmin);
