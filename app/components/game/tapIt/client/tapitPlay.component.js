@@ -19,7 +19,7 @@ class TapItPlay extends LitElement {
       alertType: { type: String },
       alertMessage: { type: String },
       summaryMessage: { type: String },
-      summaryMessageType: { type: String }
+      summaryMessageType: { type: String },
 
     }
   }
@@ -34,6 +34,11 @@ class TapItPlay extends LitElement {
     this.summaryMessage = '';
     this.summaryMessageType = 'info'
     window.onbeforeunload = this.leaveGame.bind(this);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        //this.leaveGame();
+      }
+    }, false);
   }
 
   firstUpdated() {
@@ -164,7 +169,7 @@ class TapItPlay extends LitElement {
     ${this.isGameStarting ? html`<app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
       ${this.isGameStarted ? html`<div>
         <app-tap @tapped=${this.userTapped}></app-tap>
-        <app-alert status='show' .type=${this.summaryMessageType} positionFixed="true" .message=${this.summaryMessage}></app-alert>
+        <app-alert status='show' keepOpen='true' .type=${this.summaryMessageType} positionFixed="true" .message=${this.summaryMessage}></app-alert>
       </div>` :
         html`<app-alert status='show' keepOpen='true' type='warning' message='Game not yet started'>`
       }

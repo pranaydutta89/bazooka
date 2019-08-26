@@ -16,8 +16,6 @@ class Alert extends LitElement {
 
   constructor() {
     super();
-    this.type = 'info';
-    this.status = 'hide'
     this.message = '';
     this.keepOpen = false;
     this.positionFixed = false;
@@ -29,6 +27,7 @@ class Alert extends LitElement {
       if (!this.keepOpen) {
         if (this.timeout) {
           clearTimeout(this.timeout);
+          this.timeout = null;
         }
 
         this.timeout = setTimeout(() => {

@@ -16,15 +16,17 @@ class GameStartCountDown extends LitElement {
   }
 
   firstUpdated() {
-    let counter = 5;
+    let counter = 6;
     const countdown = setInterval(() => {
-      this.countDownText = counter;
-      counter--
+      this.countDownText = --counter;
       if (counter === 0) {
-        this.countDownText = 'GO'
         clearInterval(countdown);
-        this.started();
+        this.countDownText = "GO!!!";
+        setTimeout(() => {
+          this.started();
+        }, 1000);
       }
+
     }, 1000);
   }
 
