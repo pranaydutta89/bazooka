@@ -4,7 +4,7 @@ class Home extends LitElement {
 
   constructor() {
     super();
-    document.title = 'Bazooka- Real-time,online,simple,collaborative,team mini gaming platform';
+    document.title = 'Real-time,online,simple,collaborative,team mini gaming platform';
   }
 
   render() {
