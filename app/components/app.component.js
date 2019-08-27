@@ -17,6 +17,10 @@ class App extends LitElement {
   constructor() {
     super();
     this.currentRoute = 'home';
+    const loadingNode = document.getElementById('loadingInit');
+    if (loadingNode) {
+      loadingNode.remove();
+    }
     this.attachRoute();
   }
 
@@ -95,6 +99,7 @@ class App extends LitElement {
 
     }
   }
+
 
   render() {
 
