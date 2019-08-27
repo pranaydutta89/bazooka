@@ -17,7 +17,7 @@ class App extends LitElement {
   constructor() {
     super();
     this.currentRoute = 'home';
-    const loadingNode = document.getElementById('loadingInit');
+    const loadingNode = $('#loadingInit');
     if (loadingNode) {
       loadingNode.remove();
     }
