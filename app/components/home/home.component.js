@@ -2,6 +2,10 @@ import { LitElement, html } from "lit-element";
 import staticData from '../../staticData/pages/home.js';
 class Home extends LitElement {
 
+  constructor() {
+    super();
+    document.title = 'Bazooka- Real-time,online,simple,collaborative,team mini gaming platform';
+  }
 
   render() {
     return html`
@@ -12,7 +16,7 @@ class Home extends LitElement {
       return html`
          <div class="card" style="margin-bottom:0.6rem">
   <div class="card-header">
-    ${r.title}
+    <h6>${r.title}</h6>
   </div>
   <div class="card-body">
     <blockquote class="blockquote mb-0">

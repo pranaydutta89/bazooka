@@ -4,6 +4,7 @@ import '../common/instructions/instructions.component';
 import constants from "../../services/constants";
 import '../common/teamDetails/teamDetails.component';
 import '../common/instructions/instructions.component';
+import staticGames from '../../staticData/games';
 
 class GameAdmin extends LitElement {
 
@@ -18,6 +19,10 @@ class GameAdmin extends LitElement {
     constructor() {
         super();
         this.isGameStarted = false;
+    }
+
+    firstUpdated() {
+        document.title = staticGames.find(r => r.id === constants.game.tapIt).title;
     }
 
     startGame(data) {

@@ -24,7 +24,7 @@ class Instructions extends LitElement {
             <div class="col">
         <div class="card">
   <div class="card-header">
-    ${this.currentGame.title} Play Instructions
+   <h6> ${this.currentGame.title} Play Instructions</h6>
   </div>
   <ul class="list-group list-group-flush">
       ${this.currentGame.instructions.map((r, idx) => {

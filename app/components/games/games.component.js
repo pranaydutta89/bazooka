@@ -5,6 +5,10 @@ import games from "../../staticData/games";
 
 class Games extends LitElement {
 
+  constructor(){
+    super();
+    document.title = "Real-time and simple collaborative team games";
+  }
 
   linkClick(event, route) {
     event.preventDefault();

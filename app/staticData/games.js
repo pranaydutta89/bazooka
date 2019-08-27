@@ -2,7 +2,7 @@ import constants from "../services/constants";
 
 export default [{
     id: constants.game.tapIt,
-    title: "Tap It",
+    title: "Tap It - Team tapping competition",
     summary: "Lets see who is a tapping master",
     instructions: [{
         type: 'info',
