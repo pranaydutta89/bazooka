@@ -1,9 +1,7 @@
 
 var path = require('path');
 var app = require('express')();
-var fs = require('fs');
 var http = require('http').createServer(app);
-var https = require('https');
 const helmet = require('helmet')
 var io = require('socket.io')(http);
 var compression = require('compression');
@@ -12,7 +10,6 @@ useragent(true);
 
 
 function requireHTTPS(req, res, next) {
-    // The 'x-forwarded-proto' check is for Heroku
     if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
         return res.redirect('https://' + req.get('host') + req.url);
     }
@@ -23,7 +20,6 @@ app.use(requireHTTPS);
 
 app.use(helmet());
 app.use(compression());
-//app.use(express.static('public'));
 const roomAdmin = {};
 
 
@@ -97,12 +93,3 @@ http.listen(process.env.PORT || 3000, function () {
     console.log('listening...');
 });
 
-const options = {
-    key: fs.readFileSync(__dirname + '/certs/key.pem'),
-    cert: fs.readFileSync(__dirname + '/certs/cert.cert'),
-    port: 8081
-};
-
-// https.createServer(app).listen(options, function () {
-//     console.log('listening...');
-// });
