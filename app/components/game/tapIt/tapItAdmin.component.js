@@ -1,18 +1,17 @@
 import { LitElement, html } from "lit-element";
 import '../../common/charts/bar/bar.component';
-import socketService from '../../../services/socketio';
+import socketService from '../../../services/socketService';
 import '../../common/spinner/spinner.component';
 import utilService from '../../../services/utilService';
 import constants from '../../../services/constants';
 import '../../common/alert/alert.component';
-
+import events from '../../../../common/constants/events';
 class TapIt extends LitElement {
 
   static get properties() {
     return {
       gameData: { type: Object },
       spinnerStarted: { type: String },
-      clientUrl: { type: String },
       userDetails: { type: Array },
       chartData: { type: Array },
       alertStatus: { type: String },
@@ -30,7 +29,6 @@ class TapIt extends LitElement {
     this.alertStatus = 'hide'
     this.alertType = 'info';
     this.gameTime = 30;
-    this.clientUrl = "";
     this.listeners = [];
     this.userDetails = [];
     this.chartData = [];
@@ -53,12 +51,10 @@ class TapIt extends LitElement {
 
   async joinSocket() {
     this.spinnerStarted = 'show';
-    this.roomId = uuid();
-    await socketService.joinRoom(true, this.roomId);
+    await socketService.joinRoom(true, this.gameData.roomId);
     this.gameData.team.forEach(r => {
       this.teamColor[r] = utilService.pickColor(r);
     });
-    this.clientUrl = await utilService.encryptClientUrl(constants.game.tapIt, this.roomId, this.gameData);
     this.spinnerStarted = 'hide';
     this.listeners.push(socketService.receiveDataFromClient(this.receiveData.bind(this)));
     this.setAlert('Joined Room');
@@ -128,8 +124,8 @@ class TapIt extends LitElement {
 
     const val = chartData.map(r => r.value);
     if (this.gameStartedFlag) {
-      socketService.sendDataToClient(this.roomId, {
-        event: 'tapSummary',
+      socketService.sendDataToClient(this.gameData.roomId, {
+        event: events.socketDataEvents.tapSummary,
         data: val.map(r => {
           return {
             teamName: r[0],
@@ -169,8 +165,8 @@ class TapIt extends LitElement {
     if (!this.gameStartedFlag) {
       await import('../../common/gameStartCountdown/gameStartCountDown.component');
       if (this.userDetails.length > 1) {
-        await socketService.sendDataToClient(this.roomId, {
-          event: 'startGame'
+        await socketService.sendDataToClient(this.gameData.roomId, {
+          event: events.socketDataEvents.startGame
         });
         this.gameStartCountDown = true;
       }
@@ -197,7 +193,7 @@ class TapIt extends LitElement {
       this.countdown = null;
     }
 
-    socketService.sendDataToClient(this.roomId, { event: 'endGame' })
+    socketService.sendDataToClient(this.gameData.roomId, { event: events.socketDataEvents.endGame })
     this.gameStartedFlag = false;
     let message = '';
     this.chartData.forEach(r => {
@@ -225,13 +221,6 @@ class TapIt extends LitElement {
   }
 
 
-  copyClientUrl() {
-    const copyText = this.shadowRoot.getElementById("clientUrl");
-    copyText.select();
-    document.execCommand("copy");
-    this.setAlert('Copied URL,share this to players', 'show', 'success');
-  }
-
   alertClosed() {
     this.setAlert(null, 'hide', 'info');
   }
@@ -254,16 +243,6 @@ class TapIt extends LitElement {
        <app-alert keepOpen='true' status='show' type='info' .message=${this.gameSummaryMsg}></app-alert>
 
 
-    <div class='row'>
-      <div class='col'>
-        <div class="input-group mb-3">
-  <input type="text" class="form-control" id='clientUrl' .value=${this.clientUrl} readonly>
-  <div class="input-group-append" style="cursor:pointer">
-    <span class="input-group-text" id="basic-addon2" @click=${this.copyClientUrl}>Click to copy</span>
-  </div>
-</div>
-      </div>
-    </div>
 
 
     <div class='row' style="margin-bottom:0.6rem">

@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit-element";
+import constants from "../../../services/constants";
 
 class TeamDetails extends LitElement {
 
@@ -13,6 +14,7 @@ class TeamDetails extends LitElement {
       alertStatus: { type: String },
       alertType: { type: String },
       alertMessage: { type: String },
+      playAs: { type: String }
     }
   }
 
@@ -34,9 +36,28 @@ class TeamDetails extends LitElement {
                 <input type="text" @change=${(evt) => this.roomName = evt.target.value} class="form-control" maxlength="20" required placeholder="Enter Room Name"/>
             </div>
         </div>
+        <div class="row">
+        Play As 
+        </div>
+
+        <div class="row">
+        <div class="form-check form-check-inline">
+  <input class="form-check-input" required type="radio" name="inlineRadioOptions" id="inlineRadio1"  .value=${constants.playAs.individual} @click=${(evt) => this.playAs = evt.target.value}>
+  <label class="form-check-label" for="inlineRadio1">Individual</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" required type="radio" name="inlineRadioOptions" id="inlineRadio2" .value=${constants.playAs.team} @click=${(evt) => this.playAs = evt.target.value}>
+  <label class="form-check-label" for="inlineRadio2">Team</label>
+</div>
+
+        </div>
+
         <div class='row'>
             <div class='col'>
-                <button type="submit" class="btn btn-success">Next</button>
+                <button type="submit" .disabled=${this.playAs !== constants.playAs.team ? true : false} class="btn btn-success">Next</button>
+            </div>
+            <div class='col'>
+                <button type="submit" @click='${this.startClicked}' .disabled=${this.playAs === constants.playAs.team ? true : false} class="btn btn-success">Start</button>
             </div>
         </div>
         </form>`;
@@ -85,7 +106,7 @@ class TeamDetails extends LitElement {
 
  <div class='row'>
           <div class='col'>
-             <button type="submit" @click='${this.startClicked}' class="btn btn-success">Start</button>
+             <button type="button" @click='${this.startClicked}' class="btn btn-success">Start</button>
           </div>
   </div>
     </div>
@@ -108,19 +129,31 @@ class TeamDetails extends LitElement {
   }
 
   startClicked() {
-
-    if (this.team.length > 1) {
+    if (this.playAs == constants.playAs.team) {
+      if (this.team.length > 1) {
+        const event = new CustomEvent('start', {
+          detail: {
+            playAs: this.playAs,
+            team: this.team,
+            roomName: this.roomName
+          }
+        });
+        this.dispatchEvent(event);
+      } else {
+        this.alertStatus = 'show';
+        this.alertType = 'error';
+        this.alertMessage = 'Minimum 2 teams required';
+      }
+    }
+    else {
       const event = new CustomEvent('start', {
         detail: {
+          playAs: this.playAs,
           team: this.team,
           roomName: this.roomName
         }
       });
       this.dispatchEvent(event);
-    } else {
-      this.alertStatus = 'show';
-      this.alertType = 'error';
-      this.alertMessage = 'Minimum 2 teams required';
     }
   }
 

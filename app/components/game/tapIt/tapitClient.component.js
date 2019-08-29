@@ -4,6 +4,7 @@ import utilService from "../../../services/utilService";
 import '../../common/tap/tap.component';
 import router from '../../routes';
 import '../../common/alert/alert.component';
+import events from '../../../../common/constants/events';
 
 class TapItPlay extends LitElement {
 
@@ -79,7 +80,7 @@ class TapItPlay extends LitElement {
     }
     this.spinnerStarted = 'show';
     await socketio.sendDataToAdmin(this.roomId, {
-      event: 'userJoined',
+      event: events.socketDataEvents.userJoined,
       data: user
     });
     this.spinnerStarted = 'hide';
@@ -87,7 +88,7 @@ class TapItPlay extends LitElement {
 
   userTapped() {
     socketio.sendDataToAdmin(this.roomId, {
-      event: 'userTapped',
+      event: events.socketDataEvents.userTapped,
       data: {
         id: this.userId
       }
@@ -139,7 +140,7 @@ class TapItPlay extends LitElement {
 
   async leaveGame(route = true) {
     await socketio.sendDataToAdmin(this.roomId, {
-      event: 'userLeft',
+      event: events.socketDataEvents.userLeft,
       data: {
         id: this.userId
       }

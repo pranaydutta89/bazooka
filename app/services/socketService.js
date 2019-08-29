@@ -1,10 +1,23 @@
-import config from './configService';
+import constants from "./constants";
+
 class socketService {
 
     constructor() {
-        this.socket = io.connect(config.serverUrl)
+        this.socket = io.connect(constants.serverUrl)
     }
 
+    api(data) {
+        return new Promise((res, rej) => {
+            this.socket.emit('api', data, (response) => {
+                if (!response) {
+                    res();
+                }
+                else {
+                    rej(response)
+                }
+            });
+        });
+    }
     joinRoom(isAdmin, roomId) {
         return new Promise((res, rej) => {
             this.socket.emit('joinRoom', { isAdmin, roomId }, (response) => {

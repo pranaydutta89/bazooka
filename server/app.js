@@ -6,6 +6,8 @@ const helmet = require('helmet')
 var io = require('socket.io')(http);
 var compression = require('compression');
 var useragent = require('useragent');
+var Events = require('../common/constants/events');
+var api = require('./api');
 useragent(true);
 
 
@@ -45,7 +47,15 @@ app.get('*', (req, res) => {
 
 io.on('connection', (socket) => {
 
-    socket.on('joinRoom', (msg, cb) => {
+    socket.on(Events.socketEvents.api, (msg, cb) => {
+        switch (msg.event) {
+            case Events.socketDataEvents.encryptClientUrl:
+                const data = api.encryptClientUrl(msg.data);
+                cb(data);
+        }
+    })
+
+    socket.on(Events.socketEvents.joinRoom, (msg, cb) => {
         if (msg.isAdmin) {
             socket.join(msg.roomId);
             if (roomAdmin[msg.roomId]) {
@@ -68,10 +78,10 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('msgToAdmin', (msg, cb) => {
+    socket.on(Events.socketEvents.msgToAdmin, (msg, cb) => {
         if (roomAdmin[msg.roomId]) {
             roomAdmin[msg.roomId].forEach(id => {
-                io.to(id).emit('msgFromClient', msg.data);
+                io.to(id).emit(Events.socketEvents.msgFromClient, msg.data);
             });
             if (cb && typeof cb === 'function') {
                 cb();
@@ -81,8 +91,8 @@ io.on('connection', (socket) => {
             cb('No admin for users')
         }
     });
-    socket.on('msgToClient', (msg, cb) => {
-        socket.to(msg.roomId).emit('msgFromAdmin', msg.data);
+    socket.on(Events.socketEvents.msgToClient, (msg, cb) => {
+        socket.to(msg.roomId).emit(Events.socketEvents.msgFromAdmin, msg.data);
         if (cb && typeof cb === 'function') {
             cb();
         }

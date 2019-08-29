@@ -5,6 +5,7 @@ import constants from "../../services/constants";
 import '../common/teamDetails/teamDetails.component';
 import '../common/instructions/instructions.component';
 import staticGames from '../../staticData/games';
+import '../common/clientUrl/clientUrl.component';
 
 class GameAdmin extends LitElement {
 
@@ -25,9 +26,13 @@ class GameAdmin extends LitElement {
         document.title = staticGames.find(r => r.id === constants.game.tapIt).title;
     }
 
-    startGame(data) {
+
+    async startGame(data) {
         this.isGameStarted = true;
         this.gameData = data.detail;
+        this.gameData.roomId = uuid();
+        this.gameData.gameId = this.gameId;
+
     }
 
     get renderGame() {
@@ -40,7 +45,14 @@ class GameAdmin extends LitElement {
     render() {
         return html`
           ${
-            this.isGameStarted ? this.renderGame :
+            this.isGameStarted ?
+                html`
+              <div>
+              <app-client-url .gameData='${this.gameData}'></app-client-url>
+              ${this.renderGame}
+              </div>
+             `
+                :
                 html`<div>
                 <app-team-details @start=${this.startGame}></app-team-details >
                 <app-game-instruction .gameId=${constants.game.tapIt}></app-game-instruction>
