@@ -113,11 +113,11 @@ class TapItClient extends LitElement {
   generateSummaryMessage(myTeamDetails, topTeamDetails, secondTeam) {
     if (topTeamDetails.teamName === this.team) {
       this.summaryMessageType = 'info';
-      this.summaryMessage = `Your team is leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`;
+      this.summaryMessage = `${this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'} leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`;
 
     } else {
       this.summaryMessageType = 'warning';
-      this.summaryMessage = `Your team is trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading team ${topTeamDetails.teamName}`;
+      this.summaryMessage = `${this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'} trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading ${topTeamDetails.teamName}`;
     }
 
   }
@@ -139,12 +139,15 @@ class TapItClient extends LitElement {
   }
 
   async leaveGame(route = true) {
-    await socketService.sendDataToAdmin(this.gameDataroomId, {
-      event: constants.socketDataEvents.userLeft,
-      data: {
-        id: this.userId
-      }
-    });
+    try {
+      await socketService.sendDataToAdmin(this.gameDataroomId, {
+        event: constants.socketDataEvents.userLeft,
+        data: {
+          id: this.userId
+        }
+      });
+    }
+    catch (e) { }
     if (route) {
       router.navigate('/');
     }

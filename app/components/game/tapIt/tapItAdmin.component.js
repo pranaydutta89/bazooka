@@ -197,11 +197,7 @@ class TapItAdmin extends LitElement {
 
     socketService.sendDataToClient(this.gameData.roomId, { event: constants.socketDataEvents.endGame })
     this.gameStartedFlag = false;
-    let message = '';
-    this.chartData.forEach(r => {
-      message += `Team ${r[0]} tap count ${r[1]},`
-    });
-    this.gameSummaryMsg = 'Game Summary: ' + message;
+    this.gameSummaryMsg = `Winner is ${this.chartData[0][0]} with a total of ${this.chartData[0][1]} taps`;
   }
 
   gameCountDown() {
