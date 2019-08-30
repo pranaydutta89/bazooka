@@ -1,7 +1,6 @@
 import { LitElement, html } from "lit-element";
 import router from "../routes";
 import gamesStatic from "../../staticData/games";
-import games from "../../staticData/games";
 
 class Games extends LitElement {
   constructor() {

@@ -48,6 +48,8 @@ class GameClient extends LitElement {
             .team=${this.teamSelected}
           ></app-tapit-client>
         `;
+      default:
+        return eventDispatch.triggerAlert("Invalid Game", "error");
     }
   }
 

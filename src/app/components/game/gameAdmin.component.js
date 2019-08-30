@@ -29,6 +29,7 @@ class GameAdmin extends LitElement {
 
   async startGame(data) {
     this.gameData = data.detail;
+    // eslint-disable-next-line no-undef
     this.gameData.roomId = uuid();
     this.isGameStarted = true;
     this.gameData.gameId = this.gameId;
@@ -42,6 +43,8 @@ class GameAdmin extends LitElement {
         return html`
           <app-tapit-admin .gameData="${this.gameData}"></app-tapit-admin>
         `;
+      default:
+        return eventDispatch.triggerAlert("Invalid Game", "error");
     }
   }
 

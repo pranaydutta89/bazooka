@@ -1,5 +1,5 @@
+/* eslint-disable no-undef */
 import { LitElement, html } from "lit-element";
-import utilService from "../../../../services/utilService";
 class BarChart extends LitElement {
   static get properties() {
     return {
@@ -20,7 +20,7 @@ class BarChart extends LitElement {
       chartArea: { width: "100%" }
     };
   }
-  firstUpdated(changedProperties) {
+  firstUpdated() {
     google.charts.load("current", { packages: ["corechart", "bar"] });
     google.charts.setOnLoadCallback(this.drawChart.bind(this));
   }

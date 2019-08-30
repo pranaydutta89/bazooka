@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit-element";
 import constants from "../../../services/constants";
+import eventDispatch from "../../../services/eventDispatch";
 
 class TeamDetails extends LitElement {
   static get properties() {
@@ -150,7 +151,7 @@ class TeamDetails extends LitElement {
           <div class="col">
             <button
               type="button"
-              @click=${evt => {
+              @click=${() => {
                 this.addTeam();
               }}
               class="btn btn-primary btn-block"
@@ -186,6 +187,8 @@ class TeamDetails extends LitElement {
         return this.roomDetailsRender;
       case "teams":
         return this.teamDetailsRender;
+      default:
+        return eventDispatch.triggerAlert("Invalid Target", "error");
     }
   }
 
