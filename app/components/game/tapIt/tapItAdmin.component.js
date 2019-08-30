@@ -35,19 +35,19 @@ class TapItAdmin extends LitElement {
     this.gameStartedFlag = false;
     this.teamColor = {};
     this.gameSummaryMsg = 'Game not yet Started';
-    this.chartOptions = {
-      title: 'Live Tap Count',
-      chartArea: { width: '100%' }, hAxis: {
-        title: 'Teams Total Tap count',
-        minValue: 0
-      },
-      vAxis: {
-        title: 'Teams'
-      },
-    };
   }
 
   async firstUpdated() {
+    this.chartOptions = {
+      title: 'Live Tap Count',
+      chartArea: { width: '100%' }, hAxis: {
+        title: `${this.gameData.playAs === constants.playAs.team ? 'Teams' : ''} Total Tap count`,
+        minValue: 0
+      },
+      vAxis: {
+        title: this.gameData.playAs
+      },
+    };
     await this.joinSocket();
   }
 
@@ -274,27 +274,27 @@ class TapItAdmin extends LitElement {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
-              <th scope="col">Team</th>
+              ${this.gameData.playAs === constants.playAs.team ? html`<th scope="col">Team</th>` : ''}
               <th scope="col">Tap Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${this.userDetails.sort((a, b) => b.tapCount - a.tapCount).map((r, idx) => {
+            </tr >
+          </thead >
+  <tbody>
+    ${this.userDetails.sort((a, b) => b.tapCount - a.tapCount).map((r, idx) => {
           return html`
        <tr>
       <th scope="row">${idx + 1}</th>
       <td>${r.userName}</td>
-       <td>${r.team}</td>
+      ${this.gameData.playAs === constants.playAs.team ? html` <td>${r.team}</td>` : ''}
         <td>${r.tapCount}</td>
 
     </tr>
       `
         })}
 
-          </tbody>
-        </table>
-      </div>
-  </div>`
+  </tbody>
+        </table >
+      </div >
+  </div > `
       }
     </div>
     `
