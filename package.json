@@ -1,6 +1,6 @@
 {
-  "name": "tugofwar",
-  "version": "1.0.0",
+  "name": "bazooka",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,11 +9,11 @@
     "buildes6": "polymer build --preset uncompiled-unbundled",
     "copyRes": "ncp src/app/resources dist/es5-bundled/app/resources && ncp src/app/resources dist/uncompiled-unbundled/app/resources",
     "build": "npm run clean && npm run buildes5 && ncp build dist && npm run buildes6 && ncp build dist && npm run copy",
-    "copy": "ncp beanstalk dist && ncp package.json dist/package.json && ncp src/server dist && npm run copyRes",
+    "copy": "ncp beanstalk dist && ncp package.json dist/package.json && ncp src/server dist/server && npm run copyRes",
     "clean": "rimraf dist",
-    "stopServer": "npm run forever stop app.js",
+    "stopServer": "npm run forever stop app.js || npm run forever stop server/app.js",
     "start": "npm run stopServer || npm run startServer",
-    "startServer": "npm run forever start app.js",
+    "startServer": "npm run forever start server/app.js",
     "forever": "forever"
   },
   "author": "Pranay Dutta",
@@ -21,18 +21,18 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "compression": "^1.7.4",
-    "eslint": "^6.2.2",
     "express": "^4.17.1",
     "forever": "^1.0.0",
     "helmet": "^3.20.0",
     "lit-element": "^2.2.1",
     "ncp": "^2.0.0",
-    "prettier": "^1.18.2",
     "rimraf": "^2.6.3",
     "socket.io": "^2.2.0",
     "useragent": "^2.3.0"
   },
   "devDependencies": {
+    "prettier": "^1.18.2",
+    "eslint": "^6.2.2",
     "husky": "^3.0.4",
     "polymer-cli": "^1.9.11",
     "pretty-quick": "^1.11.1"

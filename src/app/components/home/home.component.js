@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit-element";
-import staticData from "../../staticData/pages/home.js.js";
+import staticData from "../../staticData/pages/home";
 import "../common/fabButton/fab.component";
 import router from "../routes";
 class Home extends LitElement {
