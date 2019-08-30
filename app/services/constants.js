@@ -7,6 +7,10 @@ export default {
     individual: 'individual',
     team: 'team'
   },
+  domEvents: {
+    triggerSpinner: 'triggerSpinner',
+    triggerAlert: 'triggerAlert'
+  },
   socketEvents: {
     api: 'api',
     joinRoom: 'joinRoom',

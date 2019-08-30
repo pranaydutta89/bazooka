@@ -6,6 +6,8 @@ import '../common/teamDetails/teamDetails.component';
 import '../common/instructions/instructions.component';
 import staticGames from '../../staticData/games';
 import '../common/clientUrl/clientUrl.component';
+import eventDispatch from "../../services/eventDispatch";
+import socketService from "../../services/socketService";
 
 class GameAdmin extends LitElement {
 
@@ -13,7 +15,7 @@ class GameAdmin extends LitElement {
         return {
             isGameStarted: { type: String },
             gameData: { type: Object },
-            gameId: { type: String }
+            gameId: { type: String },
         }
     }
 
@@ -28,10 +30,12 @@ class GameAdmin extends LitElement {
 
 
     async startGame(data) {
-        this.isGameStarted = true;
         this.gameData = data.detail;
         this.gameData.roomId = uuid();
+        this.isGameStarted = true;
         this.gameData.gameId = this.gameId;
+        await socketService.joinRoom(true, this.gameData.roomId);
+        eventDispatch.triggerAlert('Room Created...');
 
     }
 

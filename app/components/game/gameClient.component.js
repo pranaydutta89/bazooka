@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit-element";
 import './tapIt/tapitClient.component';
 import constants from "../../services/constants";
+import eventDispatch from "../../services/eventDispatch";
 
 class GameClient extends LitElement {
   static get properties() {
@@ -10,9 +11,6 @@ class GameClient extends LitElement {
       userName: { type: String },
       teamSelectedRow: { type: Number },
       startGameFlag: { type: Boolean },
-      alertStatus: { type: String },
-      alertType: { type: String },
-      alertMessage: { type: String },
     }
   }
 
@@ -20,20 +18,16 @@ class GameClient extends LitElement {
     super();
     this.startGameFlag = false;
     this.teamSelectedRow = -1;
-    this.alertType = 'error';
-    this.alertStatus = 'hide';
   }
 
   startGame() {
     if (!this.userName) {
-      this.alertStatus = 'show';
-      this.alertMessage = 'Enter User Name';
+      eventDispatch.triggerAlert('Enter User Name', 'error');
       return;
     }
 
     if (!this.teamSelected && this.gameData.playAs === constants.playAs.team) {
-      this.alertStatus = 'show';
-      this.alertMessage = 'Select Team';
+      eventDispatch.triggerAlert('Select Team',  'error');
       return;
     }
 
@@ -69,8 +63,6 @@ class GameClient extends LitElement {
         this.renderGameClient
         : html`
        <div>
- <app-alert @close=${() => this.alertStatus = 'hide'} positionFixed='true' .status=${this.alertStatus}
-  .type=${this.alertType} .message=${this.alertMessage}></app-alert>
        <div class="row" style="margin-bottom:0.6rem">
            <div class='col'>
              <h3>Room { ${this.gameData.roomName} }</h3>

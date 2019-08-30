@@ -5,17 +5,14 @@ import '../../common/spinner/spinner.component';
 import utilService from '../../../services/utilService';
 import constants from '../../../services/constants';
 import '../../common/alert/alert.component';
+import eventDispatch from "../../../services/eventDispatch";
 class TapItAdmin extends LitElement {
 
   static get properties() {
     return {
       gameData: { type: Object },
-      spinnerStarted: { type: String },
       userDetails: { type: Array },
       chartData: { type: Array },
-      alertStatus: { type: String },
-      alertType: { type: String },
-      alertMessage: { type: String },
       gameStartCountDown: { type: Boolean },
       gameStartedFlag: { type: Boolean },
       gameTime: { type: Number },
@@ -25,8 +22,6 @@ class TapItAdmin extends LitElement {
 
   constructor() {
     super();
-    this.alertStatus = 'hide'
-    this.alertType = 'info';
     this.gameTime = 30;
     this.listeners = [];
     this.userDetails = [];
@@ -48,18 +43,14 @@ class TapItAdmin extends LitElement {
         title: this.gameData.playAs
       },
     };
-    await this.joinSocket();
+    await this.init();
   }
 
-  async joinSocket() {
-    this.spinnerStarted = 'show';
-    await socketService.joinRoom(true, this.gameData.roomId);
+  async init() {
     this.gameData.team.forEach(r => {
       this.teamColor[r] = utilService.pickColor(r);
     });
-    this.spinnerStarted = 'hide';
     this.listeners.push(socketService.receiveDataFromClient(this.receiveData.bind(this)));
-    this.setAlert('Joined Room');
   }
 
   disconnectedCallback() {
@@ -87,7 +78,7 @@ class TapItAdmin extends LitElement {
       const user = this.userDetails.find(r => r.id === userData.id);
       this.userDetails.splice(idx, 1);
       this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
-      this.setAlert(`User ${user.userName} left`, 'show', 'error');
+      eventDispatch.triggerAlert(`User ${user.userName} left`, 'error');
     }
   }
 
@@ -96,10 +87,10 @@ class TapItAdmin extends LitElement {
     if (!user) {
       this.userDetails.push({ ...userData, ...{ tapCount: 0 } });
       this.checkTapCount();
-      this.setAlert(`User ${userData.userName} Joined`)
+      eventDispatch.triggerAlert(`User ${userData.userName} Joined`);
     }
     else {
-      //user already exists
+      eventDispatch.triggerAlert(`User ${userData.userName} already joined`);
     }
   }
 
@@ -107,6 +98,7 @@ class TapItAdmin extends LitElement {
     this.userDetails.forEach(r => r.tapCount = 0);
     this.checkTapCount();
     this.gameEnded();
+    this.gameSummaryMsg = 'Game not yet Started';
   }
 
   checkTapCount() {
@@ -149,18 +141,12 @@ class TapItAdmin extends LitElement {
         user.tapCount += 1;
         this.userDetails = this.userDetails;
         this.checkTapCount();
-        this.setAlert(`User ${user.userName} Tapped`);
+        eventDispatch.triggerAlert(`User ${user.userName} Tapped`);
       }
       else {
         //user doesnt exist already exists
       }
     }
-  }
-
-  setAlert(message, status = 'show', type = 'info') {
-    this.alertMessage = message;
-    this.alertStatus = status;
-    this.alertType = type;
   }
 
   async startGame() {
@@ -173,11 +159,11 @@ class TapItAdmin extends LitElement {
         this.gameStartCountDown = true;
       }
       else {
-        this.setAlert('Minimum 2 users required to start the game.', 'show', 'error');
+        eventDispatch.triggerAlert('Minimum 2 users required to start the game.', 'error');
       }
     }
     else {
-      this.setAlert('Game already in progress', 'show', 'error');
+      eventDispatch.triggerAlert('Game already in progress', 'error');
     }
   }
 
@@ -218,16 +204,9 @@ class TapItAdmin extends LitElement {
     }, 1000);
   }
 
-
-  alertClosed() {
-    this.setAlert(null, 'hide', 'info');
-  }
   render() {
     return html`
     <css-ele></css-ele>
-    <app-spinner .isStarted=${this.spinnerStarted}></app-spinner>
-    <app-alert positionFixed='true' @close=${this.alertClosed} 
-    .status=${this.alertStatus} .type=${this.alertType} .message=${this.alertMessage}></app-alert>
     ${this.gameStartCountDown ? html` <app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
     <div>
 

@@ -1,28 +1,25 @@
 import { LitElement, html } from "lit-element";
 import socketService from "../../../services/socketService";
 import constants from "../../../services/constants";
+import eventDispatch from "../../../services/eventDispatch";
 
 class ClientUrl extends LitElement {
   static get properties() {
     return {
       gameData: { type: Object },
       clientUrl: { type: String },
-      alertStatus: { type: String },
-      alertMessage: { type: String }
     }
   }
 
   constructor() {
     super();
-    this.alertStatus = 'hide';
   }
 
   copyClientUrl() {
     const copyText = this.shadowRoot.getElementById("clientUrl");
     copyText.select();
     document.execCommand("copy");
-    this.alertStatus = 'show';
-    this.alertMessage = 'Copied URL,share this with players';
+    eventDispatch.triggerAlert('Copied URL,share this with players');
   }
 
 
@@ -36,8 +33,6 @@ class ClientUrl extends LitElement {
   render() {
     return html`
     <css-ele></css-ele>
-    <app-alert positionFixed='true' @close=${() => this.alertStatus = 'hide'} 
-    .status=${this.alertStatus} .type='info' .message=${this.alertMessage}></app-alert>
     <div class='row'>
       <div class='col'>
         <div class="input-group mb-3">

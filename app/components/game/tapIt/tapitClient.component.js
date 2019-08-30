@@ -5,6 +5,7 @@ import '../../common/tap/tap.component';
 import router from '../../routes';
 import '../../common/alert/alert.component';
 import constants from "../../../services/constants";
+import eventDispatch from "../../../services/eventDispatch";
 
 class TapItClient extends LitElement {
 
@@ -15,13 +16,6 @@ class TapItClient extends LitElement {
       isGameStarted: { type: Boolean },
       isGameStarting: { type: Boolean },
       userName: { type: String },
-      spinnerStarted: { type: String },
-      alertStatus: { type: String },
-      alertType: { type: String },
-      alertMessage: { type: String },
-      summaryMessage: { type: String },
-      summaryMessageType: { type: String },
-
     }
   }
   constructor() {
@@ -29,11 +23,6 @@ class TapItClient extends LitElement {
     this.listeners = [];
     this.isGameStarted = false;
     this.isGameStarting = false;
-    this.spinnerStarted = 'hide';
-    this.alertStatus = 'hide';
-    this.alertType = 'error';
-    this.summaryMessage = '';
-    this.summaryMessageType = 'info'
     window.onbeforeunload = this.leaveGame.bind(this);
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
@@ -59,18 +48,13 @@ class TapItClient extends LitElement {
       this.listeners.push(socketService.receiveDataFromAdmin(this.receiveData.bind(this)));
     }
     catch (e) {
-      this.changeAlertStatus('Room does not exist,logging out');
+      eventDispatch.triggerAlert('Room does not exist,logging out');
       setTimeout(() => {
         router.navigate('/')
       }, 3000);
     }
   }
 
-  changeAlertStatus(message, status = 'show', type = 'error') {
-    this.alertMessage = message;
-    this.alertStatus = status;
-    this.alertType = type;
-  }
   async joinUser() {
     this.userId = utilService.generateUniqueBrowserId();
     const user = {
@@ -78,12 +62,10 @@ class TapItClient extends LitElement {
       userName: this.userName,
       team: this.team
     }
-    this.spinnerStarted = 'show';
     await socketService.sendDataToAdmin(this.gameData.roomId, {
       event: constants.socketDataEvents.userJoined,
       data: user
     });
-    this.spinnerStarted = 'hide';
   }
 
   userTapped() {
@@ -112,12 +94,10 @@ class TapItClient extends LitElement {
 
   generateSummaryMessage(myTeamDetails, topTeamDetails, secondTeam) {
     if (topTeamDetails.teamName === this.team) {
-      this.summaryMessageType = 'info';
-      this.summaryMessage = `${this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'} leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`;
+      eventDispatch.triggerAlert(`${this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'} leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`);
 
     } else {
-      this.summaryMessageType = 'warning';
-      this.summaryMessage = `${this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'} trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading ${topTeamDetails.teamName}`;
+      eventDispatch.triggerAlert(`${this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'} trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading ${topTeamDetails.teamName}`, 'error');
     }
 
   }
@@ -166,14 +146,9 @@ class TapItClient extends LitElement {
       <h5>Hello!! Player ${this.userName}</h5>
     </div>
       </div>
-    <app-spinner .isStarted=${this.spinnerStarted}></app-spinner>
-<app-alert .status=${this.alertStatus} positionFixed='true' keepOpen='true'
- .type=${this.alertType} .message=${this.alertMessage}></app-alert>
-
     ${this.isGameStarting ? html`<app-countdown @started=${this.gameStarted}></app-countdown>` : ''}
       ${this.isGameStarted ? html`<div>
         <app-tap @tapped=${this.userTapped}></app-tap>
-        <app-alert status='show' keepOpen='true' .type=${this.summaryMessageType} positionFixed="true" .message=${this.summaryMessage}></app-alert>
       </div>` :
         html`<app-alert status='show' keepOpen='true' type='warning' message='Game not yet started'>`
       }

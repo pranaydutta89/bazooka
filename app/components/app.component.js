@@ -3,7 +3,7 @@ import css from './common/css/css.component';
 import './header/header.component';
 import utilService from '../services/utilService';
 import './game/gameClient.component';
-
+import './footer/footer.component';
 import router from './routes';
 import socketService from '../services/socketService';
 import constants from '../services/constants';
@@ -105,7 +105,9 @@ class App extends LitElement {
       <div class="container">
         ${this.renderRoute}
       </div>
-    </div > `;
+    </div >
+    <app-footer></app-footer>
+    `;
   }
 }
 customElements.define('app-init', App);
