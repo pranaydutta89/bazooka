@@ -39,7 +39,6 @@ class TapItClient extends LitElement {
     this.listeners.forEach(r => r());
     super.disconnectedCallback();
   }
-
   async joinRoom() {
 
     try {

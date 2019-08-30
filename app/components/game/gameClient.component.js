@@ -27,7 +27,7 @@ class GameClient extends LitElement {
     }
 
     if (!this.teamSelected && this.gameData.playAs === constants.playAs.team) {
-      eventDispatch.triggerAlert('Select Team',  'error');
+      eventDispatch.triggerAlert('Select Team', 'error');
       return;
     }
 
