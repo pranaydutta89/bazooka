@@ -1,1 +1,0 @@
-export default new Navigo(location.origin, true);
