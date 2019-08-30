@@ -1,9 +1,17 @@
-const staticData = {
+const utils = require('./utils');
 
+const staticData = {
+  clientUrlData: {}
 }
 
 module.exports = {
   encryptClientUrl: (gameData) => {
-    // do a db call and get data
+    const rndStr = utils.randomString();
+    staticData.clientUrlData[rndStr] = gameData;
+    return rndStr;
+  },
+  decryptClientUrl: (id) => {
+    return staticData.clientUrlData[id];
+
   }
 }

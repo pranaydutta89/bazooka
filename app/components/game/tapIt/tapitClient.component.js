@@ -1,17 +1,17 @@
 import { LitElement, html } from "lit-element";
-import socketio from "../../../services/socketio";
+import socketService from "../../../services/socketService";
 import utilService from "../../../services/utilService";
 import '../../common/tap/tap.component';
 import router from '../../routes';
 import '../../common/alert/alert.component';
-import events from '../../../../common/constants/events';
+import constants from "../../../services/constants";
 
-class TapItPlay extends LitElement {
+class TapItClient extends LitElement {
 
   static get properties() {
     return {
-      roomId: { type: String },
       team: { type: String },
+      gameData: { type: Object },
       isGameStarted: { type: Boolean },
       isGameStarting: { type: Boolean },
       userName: { type: String },
@@ -37,7 +37,7 @@ class TapItPlay extends LitElement {
     window.onbeforeunload = this.leaveGame.bind(this);
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        this.leaveGame();
+        //this.leaveGame();
       }
     }, false);
   }
@@ -54,9 +54,9 @@ class TapItPlay extends LitElement {
   async joinRoom() {
 
     try {
-      await socketio.joinRoom(false, this.roomId);
+      await socketService.joinRoom(false, this.gameData.roomId);
       this.joinUser();
-      this.listeners.push(socketio.receiveDataFromAdmin(this.receiveData.bind(this)));
+      this.listeners.push(socketService.receiveDataFromAdmin(this.receiveData.bind(this)));
     }
     catch (e) {
       this.changeAlertStatus('Room does not exist,logging out');
@@ -79,16 +79,16 @@ class TapItPlay extends LitElement {
       team: this.team
     }
     this.spinnerStarted = 'show';
-    await socketio.sendDataToAdmin(this.roomId, {
-      event: events.socketDataEvents.userJoined,
+    await socketService.sendDataToAdmin(this.gameData.roomId, {
+      event: constants.socketDataEvents.userJoined,
       data: user
     });
     this.spinnerStarted = 'hide';
   }
 
   userTapped() {
-    socketio.sendDataToAdmin(this.roomId, {
-      event: events.socketDataEvents.userTapped,
+    socketService.sendDataToAdmin(this.gameData.roomId, {
+      event: constants.socketDataEvents.userTapped,
       data: {
         id: this.userId
       }
@@ -139,8 +139,8 @@ class TapItPlay extends LitElement {
   }
 
   async leaveGame(route = true) {
-    await socketio.sendDataToAdmin(this.roomId, {
-      event: events.socketDataEvents.userLeft,
+    await socketService.sendDataToAdmin(this.gameDataroomId, {
+      event: constants.socketDataEvents.userLeft,
       data: {
         id: this.userId
       }
@@ -183,4 +183,4 @@ class TapItPlay extends LitElement {
   }
 }
 
-customElements.define('app-tapit-play', TapItPlay);
+customElements.define('app-tapit-client', TapItClient);

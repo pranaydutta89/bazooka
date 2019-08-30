@@ -5,6 +5,8 @@ import utilService from '../services/utilService';
 import './game/gameClient.component';
 
 import router from './routes';
+import socketService from '../services/socketService';
+import constants from '../services/constants';
 
 class App extends LitElement {
 
@@ -58,8 +60,9 @@ class App extends LitElement {
       })
       .resolve();
     router
-      .on('/play', async (params, query) => {
+      .on('/play/:id', async (params, query) => {
         await import('./game/gameClient.component');
+        this.gameData = await socketService.api({ event: constants.socketDataEvents.decryptClientUrl, data: params.id });
         this.currentRoute = 'play';
       })
       .resolve();
@@ -68,15 +71,7 @@ class App extends LitElement {
 
 
   get renderClientGame() {
-    const gameId = utilService.getQueryStringValue('game');
-    const gameData = JSON.parse(decodeURIComponent(utilService.getQueryStringValue('data')));
-    const data = {
-      roomId: utilService.getQueryStringValue('roomId'),
-      team: gameData.team,
-      roomName: gameData.roomName
-    }
-
-    return html`<app-game-client .gameId=${gameId} .gameData=${data}></app-game-client>`;
+    return html`<app-game-client .gameData=${this.gameData}></app-game-client>`;
   }
 
 

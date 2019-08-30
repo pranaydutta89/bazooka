@@ -38,7 +38,7 @@ class GameAdmin extends LitElement {
     get renderGame() {
         switch (this.gameId) {
             case constants.game.tapIt:
-                return html`<app-tapit .gameData='${this.gameData}'></app-tapit>`;
+                return html`<app-tapit-admin .gameData='${this.gameData}'></app-tapit-admin>`;
         }
     }
 

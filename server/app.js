@@ -6,7 +6,7 @@ const helmet = require('helmet')
 var io = require('socket.io')(http);
 var compression = require('compression');
 var useragent = require('useragent');
-var Events = require('../common/constants/events');
+var Events = require('./constants/events');
 var api = require('./api');
 useragent(true);
 
@@ -48,10 +48,28 @@ app.get('*', (req, res) => {
 io.on('connection', (socket) => {
 
     socket.on(Events.socketEvents.api, (msg, cb) => {
+        let data;
         switch (msg.event) {
             case Events.socketDataEvents.encryptClientUrl:
-                const data = api.encryptClientUrl(msg.data);
-                cb(data);
+                data = api.encryptClientUrl(msg.data);
+                cb({
+                    type: 'success',
+                    data
+                });
+                break;
+            case Events.socketDataEvents.decryptClientUrl:
+                data = api.decryptClientUrl(msg.data);
+                if (data) {
+                    cb({
+                        type: 'success',
+                        data
+                    })
+                } else {
+                    cb({
+                        type: 'error',
+                        data: 'No Room found'
+                    })
+                }
         }
     })
 
@@ -64,16 +82,23 @@ io.on('connection', (socket) => {
             else {
                 roomAdmin[msg.roomId] = [socket.id];
             }
-            cb();
+            cb({
+                type: 'success'
+            });
         }
         else {
             if (socket.adapter.rooms[msg.roomId]) {
                 socket.join(msg.roomId);
-                cb();
+                cb({
+                    type: 'success'
+                });
             }
             else {
                 //room doesnt exist
-                cb('room Does not exist');
+                cb({
+                    type: 'error',
+                    data: "room doesn't exists"
+                });
             }
         }
     });
@@ -84,17 +109,24 @@ io.on('connection', (socket) => {
                 io.to(id).emit(Events.socketEvents.msgFromClient, msg.data);
             });
             if (cb && typeof cb === 'function') {
-                cb();
+                cb({
+                    type: 'success'
+                });
             }
         }
         else {
-            cb('No admin for users')
+            cb({
+                type: 'error',
+                data: 'No Admin for room'
+            })
         }
     });
     socket.on(Events.socketEvents.msgToClient, (msg, cb) => {
         socket.to(msg.roomId).emit(Events.socketEvents.msgFromAdmin, msg.data);
         if (cb && typeof cb === 'function') {
-            cb();
+            cb({
+                type: 'success'
+            });
         }
     });
 });

@@ -37,10 +37,10 @@ class TeamDetails extends LitElement {
             </div>
         </div>
         <div class="row">
-        Play As 
+          <div class="col-3">
+        <h6>Play As </h6>
         </div>
-
-        <div class="row">
+          <div class="col">
         <div class="form-check form-check-inline">
   <input class="form-check-input" required type="radio" name="inlineRadioOptions" id="inlineRadio1"  .value=${constants.playAs.individual} @click=${(evt) => this.playAs = evt.target.value}>
   <label class="form-check-label" for="inlineRadio1">Individual</label>
@@ -49,15 +49,19 @@ class TeamDetails extends LitElement {
   <input class="form-check-input" required type="radio" name="inlineRadioOptions" id="inlineRadio2" .value=${constants.playAs.team} @click=${(evt) => this.playAs = evt.target.value}>
   <label class="form-check-label" for="inlineRadio2">Team</label>
 </div>
-
+</div>
         </div>
+
+       
 
         <div class='row'>
             <div class='col'>
-                <button type="submit" .disabled=${this.playAs !== constants.playAs.team ? true : false} class="btn btn-success">Next</button>
-            </div>
-            <div class='col'>
-                <button type="submit" @click='${this.startClicked}' .disabled=${this.playAs === constants.playAs.team ? true : false} class="btn btn-success">Start</button>
+               ${
+      this.playAs === constants.playAs.individual ?
+        html`<button type="submit" @click='${this.startClicked}' class="btn btn-success">Start</button>`
+        : html`<button type="submit"  class="btn btn-success">Next</button>`
+      } 
+               
             </div>
         </div>
         </form>`;

@@ -5,8 +5,7 @@ import '../../common/spinner/spinner.component';
 import utilService from '../../../services/utilService';
 import constants from '../../../services/constants';
 import '../../common/alert/alert.component';
-import events from '../../../../common/constants/events';
-class TapIt extends LitElement {
+class TapItAdmin extends LitElement {
 
   static get properties() {
     return {
@@ -35,8 +34,7 @@ class TapIt extends LitElement {
     this.gameStartCountDown = false;
     this.gameStartedFlag = false;
     this.teamColor = {};
-    this.joinSocket();
-    this.gameSummaryMsg = 'Game not yet Started,copy and share the below link to players';
+    this.gameSummaryMsg = 'Game not yet Started';
     this.chartOptions = {
       title: 'Live Tap Count',
       chartArea: { width: '100%' }, hAxis: {
@@ -47,6 +45,10 @@ class TapIt extends LitElement {
         title: 'Teams'
       },
     };
+  }
+
+  async firstUpdated() {
+    await this.joinSocket();
   }
 
   async joinSocket() {
@@ -125,7 +127,7 @@ class TapIt extends LitElement {
     const val = chartData.map(r => r.value);
     if (this.gameStartedFlag) {
       socketService.sendDataToClient(this.gameData.roomId, {
-        event: events.socketDataEvents.tapSummary,
+        event: constants.socketDataEvents.tapSummary,
         data: val.map(r => {
           return {
             teamName: r[0],
@@ -166,7 +168,7 @@ class TapIt extends LitElement {
       await import('../../common/gameStartCountdown/gameStartCountDown.component');
       if (this.userDetails.length > 1) {
         await socketService.sendDataToClient(this.gameData.roomId, {
-          event: events.socketDataEvents.startGame
+          event: constants.socketDataEvents.startGame
         });
         this.gameStartCountDown = true;
       }
@@ -193,7 +195,7 @@ class TapIt extends LitElement {
       this.countdown = null;
     }
 
-    socketService.sendDataToClient(this.gameData.roomId, { event: events.socketDataEvents.endGame })
+    socketService.sendDataToClient(this.gameData.roomId, { event: constants.socketDataEvents.endGame })
     this.gameStartedFlag = false;
     let message = '';
     this.chartData.forEach(r => {
@@ -235,7 +237,7 @@ class TapIt extends LitElement {
 
       <div class='row'>
       <div class='col'>
-        <h3>Room { ${this.gameData.roomName} }</h3>
+        <h3>Room { ${this.gameData.roomName} }, Playing as ${this.gameData.playAs}</h3>
       </div>
 
       </div>
@@ -246,16 +248,16 @@ class TapIt extends LitElement {
 
 
     <div class='row' style="margin-bottom:0.6rem">
-           <label for="colFormLabelSm" class="col-2 col-form-label col-form-label text-truncate">Play Time(Seconds)</label>
-    <div class="col-6">
+           <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label text-truncate">Play Time(Seconds)</label>
+    <div class="col-sm-6">
       <input type="number" .value=${this.gameTime} .disabled=${this.gameStartedFlag} @change=${(evt) => this.gameTime = evt.target.value}
        class="form-control form-control-xs" id="colFormLabelSm" placeholder="Enter Seconds">
     </div>
 
-    <div class="col-2">
+    <div class="col-sm-2">
       <button type="button" @click=${this.startGame} class="btn btn-block btn-info">Start</button>
     </div> 
-    <div class="col-2">
+    <div class="col-sm-2">
       <button type="button" @click=${this.resetData} class="btn btn-block btn-secondary">Reset</button>
     </div> 
     </div>
@@ -304,4 +306,4 @@ class TapIt extends LitElement {
 
 }
 
-customElements.define('app-tapit', TapIt);
+customElements.define('app-tapit-admin', TapItAdmin);

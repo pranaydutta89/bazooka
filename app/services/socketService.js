@@ -9,11 +9,11 @@ class socketService {
     api(data) {
         return new Promise((res, rej) => {
             this.socket.emit('api', data, (response) => {
-                if (!response) {
-                    res();
+                if (response.type === 'success') {
+                    res(response.data);
                 }
                 else {
-                    rej(response)
+                    rej(response.data);
                 }
             });
         });
@@ -21,11 +21,11 @@ class socketService {
     joinRoom(isAdmin, roomId) {
         return new Promise((res, rej) => {
             this.socket.emit('joinRoom', { isAdmin, roomId }, (response) => {
-                if (!response) {
-                    res();
+                if (response.type === 'success') {
+                    res(response.data);
                 }
                 else {
-                    rej(response)
+                    rej(response.data)
                 }
             });
         });
@@ -35,11 +35,11 @@ class socketService {
         return new Promise((res, rej) => {
             this.socket.emit('msgToClient', { data, roomId }, (response) => {
                 if (waitForResponse) {
-                    if (!response) {
+                    if (response.type === 'success') {
                         res(roomId);
                     }
                     else {
-                        rej(response)
+                        rej(response.data)
                     }
                 }
                 else {
@@ -53,11 +53,11 @@ class socketService {
         return new Promise((res, rej) => {
             this.socket.emit('msgToAdmin', { data, roomId }, (response) => {
                 if (waitForResponse) {
-                    if (!response) {
+                    if (response.type === 'success') {
                         res(roomId);
                     }
                     else {
-                        rej(response)
+                        rej(response.data)
                     }
                 }
                 else {

@@ -1,4 +1,5 @@
-module.exports = {
+
+const data = {
   socketEvents: {
     api: 'api',
     joinRoom: 'joinRoom',
@@ -8,6 +9,7 @@ module.exports = {
     msgFromAdmin: 'msgFromAdmin'
   },
   socketDataEvents: {
+    decryptClientUrl: 'decryptClientUrl',
     encryptClientUrl: 'encryptClientUrl',
     tapSummary: 'tapSummary',
     startGame: "startGame",
@@ -17,3 +19,5 @@ module.exports = {
     endGame: 'endGame'
   }
 }
+
+module.exports = data;

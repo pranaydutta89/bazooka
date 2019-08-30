@@ -1,36 +1,52 @@
-import { LitElement } from "lit-element";
+import { LitElement, html } from "lit-element";
 import socketService from "../../../services/socketService";
-import events from '../../../../common/constants/events';
+import constants from "../../../services/constants";
+
 class ClientUrl extends LitElement {
   static get properties() {
     return {
       gameData: { type: Object },
-      clientUrl: { type: String }
+      clientUrl: { type: String },
+      alertStatus: { type: String },
+      alertMessage: { type: String }
     }
+  }
+
+  constructor() {
+    super();
+    this.alertStatus = 'hide';
   }
 
   copyClientUrl() {
     const copyText = this.shadowRoot.getElementById("clientUrl");
     copyText.select();
     document.execCommand("copy");
-    this.setAlert('Copied URL,share this to players', 'show', 'success');
+    this.alertStatus = 'show';
+    this.alertMessage = 'Copied URL,share this with players';
   }
 
 
   async firstUpdated() {
-    this.clientUrl = await socketService.api({
-      event: events.socketDataEvents.encryptClientUrl,
-      data: `${location.origin}/#/play?gameData=${encodeURIComponent(JSON.stringify(this.gameData))}`
-    });
+    this.clientUrl = `${location.origin}/#/play/${await socketService.api({
+      event: constants.socketDataEvents.encryptClientUrl,
+      data: this.gameData
+    })}`;
   }
 
   render() {
-    return html`<div class='row'>
+    return html`
+    <css-ele></css-ele>
+    <app-alert positionFixed='true' @close=${() => this.alertStatus = 'hide'} 
+    .status=${this.alertStatus} .type='info' .message=${this.alertMessage}></app-alert>
+    <div class='row'>
       <div class='col'>
         <div class="input-group mb-3">
+          <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon3">Game Link</span>
+  </div>
   <input type="text" class="form-control" id='clientUrl' .value=${this.clientUrl} readonly>
   <div class="input-group-append" style="cursor:pointer">
-    <span class="input-group-text" id="basic-addon2" @click=${this.copyClientUrl}>Click to copy</span>
+    <span class="input-group-text" id="basic-addon2" @click=${this.copyClientUrl}>Click here to copy</span>
   </div>
 </div>
       </div>
