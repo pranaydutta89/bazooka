@@ -1,11 +1,11 @@
-import { LitElement, html } from "lit-element";
-import "../../common/charts/bar/bar.component";
-import socketService from "../../../services/socketService";
-import "../../common/spinner/spinner.component";
-import utilService from "../../../services/utilService";
-import constants from "../../../services/constants";
-import "../../common/alert/alert.component";
-import eventDispatch from "../../../services/eventDispatch";
+import { LitElement, html } from 'lit-element';
+import '../../common/charts/bar/bar.component';
+import socketService from '../../../services/socketService';
+import '../../common/spinner/spinner.component';
+import utilService from '../../../services/utilService';
+import constants from '../../../services/constants';
+import '../../common/alert/alert.component';
+import eventDispatch from '../../../services/eventDispatch';
 class TapItAdmin extends LitElement {
   static get properties() {
     return {
@@ -28,17 +28,15 @@ class TapItAdmin extends LitElement {
     this.gameStartCountDown = false;
     this.gameStartedFlag = false;
     this.teamColor = {};
-    this.gameSummaryMsg = "Game not yet Started";
+    this.gameSummaryMsg = 'Game not yet Started';
   }
 
   async firstUpdated() {
     this.chartOptions = {
-      title: "Live Tap Count",
-      chartArea: { width: "100%" },
+      title: 'Live Tap Count',
+      chartArea: { width: '100%' },
       hAxis: {
-        title: `${
-          this.gameData.playAs === constants.playAs.team ? "Teams" : ""
-        } Total Tap count`,
+        title: `${this.gameData.playAs === constants.playAs.team ? 'Teams' : ''} Total Tap count`,
         minValue: 0
       },
       vAxis: {
@@ -52,9 +50,7 @@ class TapItAdmin extends LitElement {
     this.gameData.team.forEach(r => {
       this.teamColor[r] = utilService.pickColor(r);
     });
-    this.listeners.push(
-      socketService.receiveDataFromClient(this.receiveData.bind(this))
-    );
+    this.listeners.push(socketService.receiveDataFromClient(this.receiveData.bind(this)));
   }
 
   disconnectedCallback() {
@@ -64,13 +60,13 @@ class TapItAdmin extends LitElement {
 
   receiveData(msg) {
     switch (msg.event) {
-      case "userJoined":
+      case constants.socketDataEvents.userJoined:
         this.userJoined(msg.data);
         break;
-      case "userTapped":
+      case constants.socketDataEvents.userTapped:
         this.userTapped(msg.data);
         break;
-      case "userLeft":
+      case constants.socketDataEvents.userLeft:
         this.userLeft(msg.data);
         break;
     }
@@ -82,7 +78,7 @@ class TapItAdmin extends LitElement {
       const user = this.userDetails.find(r => r.id === userData.id);
       this.userDetails.splice(idx, 1);
       this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
-      eventDispatch.triggerAlert(`User ${user.userName} left`, "error");
+      eventDispatch.triggerAlert(`User ${user.userName} left`, 'error');
     }
   }
 
@@ -101,7 +97,7 @@ class TapItAdmin extends LitElement {
     this.userDetails.forEach(r => (r.tapCount = 0));
     this.checkTapCount();
     this.gameEnded();
-    this.gameSummaryMsg = "Game not yet Started";
+    this.gameSummaryMsg = 'Game not yet Started';
   }
 
   checkTapCount() {
@@ -159,22 +155,17 @@ class TapItAdmin extends LitElement {
 
   async startGame() {
     if (!this.gameStartedFlag) {
-      await import(
-        "../../common/gameStartCountdown/gameStartCountDown.component"
-      );
+      await import('../../common/countdown/countDown.component');
       if (this.userDetails.length > 1) {
         await socketService.sendDataToClient(this.gameData.roomId, {
           event: constants.socketDataEvents.startGame
         });
         this.gameStartCountDown = true;
       } else {
-        eventDispatch.triggerAlert(
-          "Minimum 2 users required to start the game.",
-          "error"
-        );
+        eventDispatch.triggerAlert('Minimum 2 users required to start the game.', 'error');
       }
     } else {
-      eventDispatch.triggerAlert("Game already in progress", "error");
+      eventDispatch.triggerAlert('Game already in progress', 'error');
     }
   }
 
@@ -194,9 +185,7 @@ class TapItAdmin extends LitElement {
       event: constants.socketDataEvents.endGame
     });
     this.gameStartedFlag = false;
-    this.gameSummaryMsg = `Winner is ${this.chartData[0][0]} with a total of ${
-      this.chartData[0][1]
-    } taps`;
+    this.gameSummaryMsg = `Winner is ${this.chartData[0][0]} with a total of ${this.chartData[0][1]} taps`;
   }
 
   gameCountDown() {
@@ -222,30 +211,22 @@ class TapItAdmin extends LitElement {
       <css-ele></css-ele>
       ${this.gameStartCountDown
         ? html`
-            <app-countdown @started=${this.gameStarted}></app-countdown>
+            <app-countdown @ended=${this.gameStarted}></app-countdown>
           `
-        : ""}
+        : ''}
       <div>
         <div class="row">
           <div class="col">
             <h3>
-              Room { ${this.gameData.roomName} }, Playing as
-              ${this.gameData.playAs}
+              Room { ${this.gameData.roomName} }, Playing as ${this.gameData.playAs}
             </h3>
           </div>
         </div>
 
-        <app-alert
-          keepOpen="true"
-          status="show"
-          type="info"
-          .message=${this.gameSummaryMsg}
-        ></app-alert>
+        <app-alert keepOpen="true" status="show" type="info" .message=${this.gameSummaryMsg}></app-alert>
 
         <div class="row" style="margin-bottom:0.6rem">
-          <label
-            for="colFormLabelSm"
-            class="col-sm-2 col-form-label col-form-label text-truncate"
+          <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label text-truncate"
             >Play Time(Seconds)</label
           >
           <div class="col-sm-6">
@@ -261,20 +242,12 @@ class TapItAdmin extends LitElement {
           </div>
 
           <div class="col-sm-2">
-            <button
-              type="button"
-              @click=${this.startGame}
-              class="btn btn-block btn-info"
-            >
+            <button type="button" @click=${this.startGame} class="btn btn-block btn-info">
               Start
             </button>
           </div>
           <div class="col-sm-2">
-            <button
-              type="button"
-              @click=${this.resetData}
-              class="btn btn-block btn-secondary"
-            >
+            <button type="button" @click=${this.resetData} class="btn btn-block btn-secondary">
               Reset
             </button>
           </div>
@@ -290,12 +263,7 @@ class TapItAdmin extends LitElement {
 
         ${this.userDetails.length === 0
           ? html`
-              <app-alert
-                status="show"
-                keepOpen="true"
-                type="info"
-                message="No Players joined yet"
-              ></app-alert>
+              <app-alert status="show" keepOpen="true" type="info" message="No Players joined yet"></app-alert>
             `
           : html`
               <div class="row">
@@ -309,7 +277,7 @@ class TapItAdmin extends LitElement {
                           ? html`
                               <th scope="col">Team</th>
                             `
-                          : ""}
+                          : ''}
                         <th scope="col">Tap Count</th>
                       </tr>
                     </thead>
@@ -325,7 +293,7 @@ class TapItAdmin extends LitElement {
                                 ? html`
                                     <td>${r.team}</td>
                                   `
-                                : ""}
+                                : ''}
                               <td>${r.tapCount}</td>
                             </tr>
                           `;
@@ -340,4 +308,4 @@ class TapItAdmin extends LitElement {
   }
 }
 
-customElements.define("app-tapit-admin", TapItAdmin);
+customElements.define('app-tapit-admin', TapItAdmin);

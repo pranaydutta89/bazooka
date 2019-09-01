@@ -1,15 +1,15 @@
-import { LitElement, html } from "lit-element";
-import socketService from "../../../services/socketService";
-import utilService from "../../../services/utilService";
-import "../../common/tap/tap.component";
-import router from "../../routes";
-import "../../common/alert/alert.component";
-import constants from "../../../services/constants";
-import eventDispatch from "../../../services/eventDispatch";
+import { LitElement, html } from 'lit-element';
+import socketService from '../../../services/socketService';
+import '../../common/tap/tap.component';
+import '../../common/alert/alert.component';
+import constants from '../../../services/constants';
+import eventDispatch from '../../../services/eventDispatch';
+import gameService from '../../../services/gameService';
 
 class TapItClient extends LitElement {
   static get properties() {
     return {
+      userId: { type: String },
       team: { type: String },
       gameData: { type: Object },
       isGameStarted: { type: Boolean },
@@ -22,52 +22,14 @@ class TapItClient extends LitElement {
     this.listeners = [];
     this.isGameStarted = false;
     this.isGameStarting = false;
-    window.onbeforeunload = this.leaveGame.bind(this);
-    document.addEventListener(
-      "visibilitychange",
-      () => {
-        if (document.hidden) {
-          //this.leaveGame();
-        }
-      },
-      false
-    );
   }
 
   firstUpdated() {
-    this.joinRoom();
+    this.listeners.push(socketService.receiveDataFromAdmin(this.receiveData.bind(this)));
   }
   disconnectedCallback() {
-    this.leaveGame(false);
     this.listeners.forEach(r => r());
     super.disconnectedCallback();
-  }
-  async joinRoom() {
-    try {
-      await socketService.joinRoom(false, this.gameData.roomId);
-      this.joinUser();
-      this.listeners.push(
-        socketService.receiveDataFromAdmin(this.receiveData.bind(this))
-      );
-    } catch (e) {
-      eventDispatch.triggerAlert("Room does not exist,logging out");
-      setTimeout(() => {
-        router.navigate("/");
-      }, 3000);
-    }
-  }
-
-  async joinUser() {
-    this.userId = utilService.generateUniqueBrowserId();
-    const user = {
-      id: this.userId,
-      userName: this.userName,
-      team: this.team
-    };
-    await socketService.sendDataToAdmin(this.gameData.roomId, {
-      event: constants.socketDataEvents.userJoined,
-      data: user
-    });
   }
 
   userTapped() {
@@ -84,15 +46,15 @@ class TapItClient extends LitElement {
   }
   receiveData(msg) {
     switch (msg.event) {
-      case "startGame":
+      case constants.socketDataEvents.startGame:
         this.startingGame();
         break;
 
-      case "endGame":
+      case constants.socketDataEvents.endGame:
         this.endGame();
         break;
 
-      case "tapSummary":
+      case constants.socketDataEvents.tapSummary:
         this.tapDetails(msg.data);
         break;
     }
@@ -102,21 +64,17 @@ class TapItClient extends LitElement {
     if (topTeamDetails.teamName === this.team) {
       eventDispatch.triggerAlert(
         `${
-          this.gameData.playAs === constants.playAs.team
-            ? "Your team is"
-            : "You are"
-        } leading, second position is ${myTeamDetails.tapCount -
-          secondTeam.tapCount} behind`
+          this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'
+        } leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`
       );
     } else {
       eventDispatch.triggerAlert(
         `${
-          this.gameData.playAs === constants.playAs.team
-            ? "Your team is"
-            : "You are"
-        } trailing with ${topTeamDetails.tapCount -
-          myTeamDetails.tapCount} taps from leading ${topTeamDetails.teamName}`,
-        "error"
+          this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'
+        } trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading ${
+          topTeamDetails.teamName
+        }`,
+        'error'
       );
     }
   }
@@ -133,24 +91,8 @@ class TapItClient extends LitElement {
     this.isGameStarted = false;
   }
   async startingGame() {
-    await import(
-      "../../common/gameStartCountdown/gameStartCountDown.component"
-    );
+    await import('../../common/countdown/countDown.component');
     this.isGameStarting = true;
-  }
-
-  async leaveGame(route = true) {
-    try {
-      await socketService.sendDataToAdmin(this.gameDataroomId, {
-        event: constants.socketDataEvents.userLeft,
-        data: {
-          id: this.userId
-        }
-      });
-    } catch (e) {}
-    if (route) {
-      router.navigate("/");
-    }
   }
 
   gameStarted() {
@@ -167,9 +109,9 @@ class TapItClient extends LitElement {
       </div>
       ${this.isGameStarting
         ? html`
-            <app-countdown @started=${this.gameStarted}></app-countdown>
+            <app-countdown @ended=${this.gameStarted}></app-countdown>
           `
-        : ""}
+        : ''}
       ${this.isGameStarted
         ? html`
             <div>
@@ -177,19 +119,14 @@ class TapItClient extends LitElement {
             </div>
           `
         : html`
-            <app-alert
-              status="show"
-              keepOpen="true"
-              type="warning"
-              message="Game not yet started"
-            ></app-alert>
+            <app-alert status="show" keepOpen="true" type="warning" message="Game not yet started"></app-alert>
           `}
       <div class="row" style="margin-top:0.6rem">
         <div class="col">
           <button
             type="button"
             class="btn btn-block btn-danger"
-            @click=${this.leaveGame}
+            @click=${() => gameService.leaveGame(this.gameData.roomId, this.userId)}
           >
             Leave Game
           </button>
@@ -199,4 +136,4 @@ class TapItClient extends LitElement {
   }
 }
 
-customElements.define("app-tapit-client", TapItClient);
+customElements.define('app-tapit-client', TapItClient);

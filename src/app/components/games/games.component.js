@@ -1,11 +1,11 @@
-import { LitElement, html } from "lit-element";
-import router from "../routes";
-import gamesStatic from "../../staticData/games";
+import { LitElement, html } from 'lit-element';
+import router from '../../services/routerService';
+import gamesStatic from '../../staticData/games';
 
 class Games extends LitElement {
   constructor() {
     super();
-    document.title = "Real-time and simple collaborative team games";
+    document.title = 'Real-time and simple collaborative team games';
   }
 
   linkClick(event, route) {
@@ -25,7 +25,7 @@ class Games extends LitElement {
                   <h5 class="card-title">${r.title}</h5>
                   <p class="card-text">${r.summary}</p>
                   <a
-                    href="#/game/tapIt"
+                    href="#/game/${r.id}"
                     @click="${evt => this.linkClick(evt, `/game/${r.id}`)}"
                     class="btn btn-primary"
                     >Play</a
@@ -40,4 +40,4 @@ class Games extends LitElement {
   }
 }
 
-customElements.define("app-games", Games);
+customElements.define('app-games', Games);

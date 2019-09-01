@@ -1,5 +1,5 @@
-import { LitElement, html } from "lit-element";
-import routes from "../routes";
+import { LitElement, html } from 'lit-element';
+import routes from '../../services/routerService';
 class Header extends LitElement {
   static get properties() {
     return {
@@ -9,7 +9,7 @@ class Header extends LitElement {
 
   constructor() {
     super();
-    this.currentRoute = "/home";
+    this.currentRoute = '/home';
   }
 
   createRenderRoot() {
@@ -32,12 +32,7 @@ class Header extends LitElement {
       </style>
       <div class="heading">
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
-          <a
-            class="navbar-brand"
-            href="/home"
-            @click="${evt => this.linkClick(evt, "/home")}"
-            >{ Bazooka }</a
-          >
+          <a class="navbar-brand" href="/home" @click="${evt => this.linkClick(evt, '/home')}">{ Bazooka }</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -52,41 +47,14 @@ class Header extends LitElement {
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-              <li
-                class="nav-item ${this.currentRoute === "/home"
-                  ? "active"
-                  : "empty"}"
-              >
-                <a
-                  class="nav-link"
-                  href="/home"
-                  @click="${evt => this.linkClick(evt, "/home")}"
-                  >Home</a
-                >
+              <li class="nav-item ${this.currentRoute === '/home' ? 'active' : 'empty'}">
+                <a class="nav-link" href="/home" @click="${evt => this.linkClick(evt, '/home')}">Home</a>
               </li>
-              <li
-                class="nav-item ${this.currentRoute === "/games"
-                  ? "active"
-                  : "empty"}"
-              >
-                <a
-                  class="nav-link"
-                  href="/games"
-                  @click="${evt => this.linkClick(evt, "/games")}"
-                  >Games</a
-                >
+              <li class="nav-item ${this.currentRoute === '/games' ? 'active' : 'empty'}">
+                <a class="nav-link" href="/games" @click="${evt => this.linkClick(evt, '/games')}">Games</a>
               </li>
-              <li
-                class="nav-item ${this.currentRoute === "/about"
-                  ? "active"
-                  : "empty"}"
-              >
-                <a
-                  class="nav-link"
-                  href="/about"
-                  @click="${evt => this.linkClick(evt, "/about")}"
-                  >About</a
-                >
+              <li class="nav-item ${this.currentRoute === '/about' ? 'active' : 'empty'}">
+                <a class="nav-link" href="/about" @click="${evt => this.linkClick(evt, '/about')}">About</a>
               </li>
             </ul>
           </div>
@@ -96,4 +64,4 @@ class Header extends LitElement {
   }
 }
 
-customElements.define("app-header", Header);
+customElements.define('app-header', Header);

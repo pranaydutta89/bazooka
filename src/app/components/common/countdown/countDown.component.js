@@ -1,33 +1,43 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from 'lit-element';
 
-class GameStartCountDown extends LitElement {
+class CountDown extends LitElement {
   static get properties() {
     return {
-      countDownText: { type: String }
+      countDownText: { type: String },
+      seconds: { type: Number },
+      startText: { type: String },
+      endText: { type: String }
     };
   }
 
   constructor() {
     super();
-    this.countDownText = "READY";
+    this.seconds = 6;
+    this.startText = 'READY';
+    this.endText = 'GO!!!';
   }
 
   firstUpdated() {
-    let counter = 6;
+    this.countDownText = this.startText;
+    this.countdown();
+  }
+
+  countdown() {
+    let counter = this.seconds();
     const countdown = setInterval(() => {
       this.countDownText = --counter;
       if (counter === 0) {
         clearInterval(countdown);
-        this.countDownText = "GO!!!";
+        this.countDownText = this.endText;
         setTimeout(() => {
-          this.started();
+          this.ended();
         }, 1000);
       }
     }, 1000);
   }
 
-  started() {
-    const event = new CustomEvent("started", {
+  ended() {
+    const event = new CustomEvent('ended', {
       detail: {
         teamName: this.teamName,
         team: this.team
@@ -75,4 +85,4 @@ class GameStartCountDown extends LitElement {
   }
 }
 
-customElements.define("app-countdown", GameStartCountDown);
+customElements.define('app-countdown', CountDown);

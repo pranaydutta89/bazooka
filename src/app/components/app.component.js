@@ -1,11 +1,11 @@
-import { LitElement, html } from "lit-element";
-import "./common/css/css.component";
-import "./header/header.component";
-import "./game/gameClient.component";
-import "./footer/footer.component";
-import router from "./routes";
-import socketService from "../services/socketService";
-import constants from "../services/constants";
+import { LitElement, html } from 'lit-element';
+import './common/css/css.component';
+import './header/header.component';
+import './game/gameClient.component';
+import './footer/footer.component';
+import router from '../services/routerService';
+import socketService from '../services/socketService';
+import constants from '../services/constants';
 
 class App extends LitElement {
   static get properties() {
@@ -16,9 +16,9 @@ class App extends LitElement {
   }
   constructor() {
     super();
-    this.currentRoute = "home";
+    this.currentRoute = 'home';
     // eslint-disable-next-line no-undef
-    const loadingNode = $("#loadingInit");
+    const loadingNode = $('#loadingInit');
     if (loadingNode) {
       loadingNode.remove();
     }
@@ -27,45 +27,45 @@ class App extends LitElement {
 
   attachRoute() {
     router
-      .on("/", async () => {
-        await import("./home/home.component");
-        this.currentRoute = "home";
+      .on('/', async () => {
+        await import('./home/home.component');
+        this.currentRoute = 'home';
       })
       .resolve();
     router
-      .on("/home", async () => {
-        await import("./home/home.component");
-        this.currentRoute = "home";
+      .on('/home', async () => {
+        await import('./home/home.component');
+        this.currentRoute = 'home';
       })
       .resolve();
     router
-      .on("/games", async () => {
-        await import("./games/games.component");
-        this.currentRoute = "games";
+      .on('/games', async () => {
+        await import('./games/games.component');
+        this.currentRoute = 'games';
       })
       .resolve();
 
     router
-      .on("/game/:id", async params => {
-        await import("./game/gameAdmin.component");
-        this.currentRoute = "game";
+      .on('/game/:id', async params => {
+        await import('./game/gameAdmin.component');
+        this.currentRoute = 'game';
         this.params = params;
       })
       .resolve();
     router
-      .on("/about", async () => {
-        await import("./about/about.components");
-        this.currentRoute = "about";
+      .on('/about', async () => {
+        await import('./about/about.components');
+        this.currentRoute = 'about';
       })
       .resolve();
     router
-      .on("/play/:id", async params => {
-        await import("./game/gameClient.component");
+      .on('/play/:id', async params => {
+        await import('./game/gameClient.component');
         this.gameData = await socketService.api({
           event: constants.socketDataEvents.decryptClientUrl,
           data: params.id
         });
-        this.currentRoute = "play";
+        this.currentRoute = 'play';
       })
       .resolve();
   }
@@ -82,23 +82,23 @@ class App extends LitElement {
 
   get renderRoute() {
     switch (this.currentRoute) {
-      case "home":
+      case 'home':
         return html`
           <app-home></app-home>
         `;
-      case "games":
+      case 'games':
         return html`
           <app-games></app-games>
         `;
-      case "game":
+      case 'game':
         return html`
           <app-game route="game" .gameId=${this.params.id}></app-game>
         `;
-      case "about":
+      case 'about':
         return html`
           <app-about></app-about>
         `;
-      case "play":
+      case 'play':
         return this.renderClientGame;
     }
   }
@@ -116,4 +116,4 @@ class App extends LitElement {
     `;
   }
 }
-customElements.define("app-init", App);
+customElements.define('app-init', App);

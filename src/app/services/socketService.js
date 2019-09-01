@@ -1,19 +1,20 @@
-import constants from "./constants";
-import eventDispatch from "./eventDispatch";
+import constants from './constants';
+import eventDispatch from './eventDispatch';
 
 class socketService {
   constructor() {
+    // eslint-disable-next-line no-undef
     this.socket = io.connect(constants.serverUrl);
   }
 
   api(data) {
     eventDispatch.triggerSpinner();
     return new Promise((res, rej) => {
-      this.socket.emit("api", data, response => {
-        if (response.type === "success") {
+      this.socket.emit('api', data, response => {
+        if (response.type === 'success') {
           res(response.data);
         } else {
-          eventDispatch.triggerAlert(response.data, "error");
+          eventDispatch.triggerAlert(response.data, 'error');
           rej(response.data);
         }
       });
@@ -24,11 +25,11 @@ class socketService {
   joinRoom(isAdmin, roomId) {
     eventDispatch.triggerSpinner();
     return new Promise((res, rej) => {
-      this.socket.emit("joinRoom", { isAdmin, roomId }, response => {
-        if (response.type === "success") {
+      this.socket.emit('joinRoom', { isAdmin, roomId }, response => {
+        if (response.type === 'success') {
           res(response.data);
         } else {
-          eventDispatch.triggerAlert(response.data, "error");
+          eventDispatch.triggerAlert(response.data, 'error');
           rej(response.data);
         }
       });
@@ -42,12 +43,12 @@ class socketService {
       eventDispatch.triggerSpinner();
     }
     return new Promise((res, rej) => {
-      this.socket.emit("msgToClient", { data, roomId }, response => {
+      this.socket.emit('msgToClient', { data, roomId }, response => {
         if (waitForResponse) {
-          if (response.type === "success") {
+          if (response.type === 'success') {
             res(roomId);
           } else {
-            eventDispatch.triggerAlert(response.data, "error");
+            eventDispatch.triggerAlert(response.data, 'error');
             rej(response.data);
           }
         } else {
@@ -66,12 +67,12 @@ class socketService {
       eventDispatch.triggerSpinner();
     }
     return new Promise((res, rej) => {
-      this.socket.emit("msgToAdmin", { data, roomId }, response => {
+      this.socket.emit('msgToAdmin', { data, roomId }, response => {
         if (waitForResponse) {
-          if (response.type === "success") {
+          if (response.type === 'success') {
             res(roomId);
           } else {
-            eventDispatch.triggerAlert(response.data, "error");
+            eventDispatch.triggerAlert(response.data, 'error');
             rej(response.data);
           }
         } else {
@@ -86,16 +87,16 @@ class socketService {
   }
 
   receiveDataFromClient(cb) {
-    this.socket.on("msgFromClient", cb);
+    this.socket.on('msgFromClient', cb);
     return () => {
-      this.socket.removeListener("msgFromClient", cb);
+      this.socket.removeListener('msgFromClient', cb);
     };
   }
 
   receiveDataFromAdmin(cb) {
-    this.socket.on("msgFromAdmin", cb);
+    this.socket.on('msgFromAdmin', cb);
     return () => {
-      this.socket.removeListener("msgFromAdmin", cb);
+      this.socket.removeListener('msgFromAdmin', cb);
     };
   }
 }

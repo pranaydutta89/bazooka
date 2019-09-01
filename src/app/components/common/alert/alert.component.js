@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from 'lit-element';
 
 class Alert extends LitElement {
   static get properties() {
@@ -15,13 +15,18 @@ class Alert extends LitElement {
 
   constructor() {
     super();
-    this.message = "";
+    this.message = '';
     this.keepOpen = false;
     this.positionFixed = false;
   }
+  firstUpdated() {
+    if (this.keepOpen) {
+      this.status = 'show';
+    }
+  }
 
   performUpdate() {
-    if (this.status === "show") {
+    if (this.status === 'show') {
       if (!this.keepOpen) {
         if (this.timeout) {
           clearTimeout(this.timeout);
@@ -29,8 +34,8 @@ class Alert extends LitElement {
         }
 
         this.timeout = setTimeout(() => {
-          this.status = "hide";
-          const event = new CustomEvent("close", {
+          this.status = 'hide';
+          const event = new CustomEvent('close', {
             detail: {
               teamName: this.teamName,
               team: this.team
@@ -45,29 +50,43 @@ class Alert extends LitElement {
 
   get renderByAlertType() {
     switch (this.type) {
-      case "info":
+      case 'info':
         return html`
           <div class="alert alert-info" role="alert">
             ${this.message}
           </div>
         `;
 
-      case "error":
+      case 'error':
         return html`
           <div class="alert alert-danger" role="alert">
             ${this.message}
           </div>
         `;
-      case "warning":
+      case 'warning':
         return html`
           <div class="alert alert-warning" role="alert">
             ${this.message}
           </div>
         `;
 
-      case "success":
+      case 'success':
         return html`
           <div class="alert alert-success" role="alert">
+            ${this.message}
+          </div>
+        `;
+
+      case 'light':
+        return html`
+          <div class="alert alert-light" role="alert">
+            ${this.message}
+          </div>
+        `;
+
+      case 'dark':
+        return html`
+          <div class="alert alert-dark" role="alert">
             ${this.message}
           </div>
         `;
@@ -92,17 +111,17 @@ class Alert extends LitElement {
           z-index: 1030;
         }
       </style>
-      ${this.status === "show" && this.message
+      ${this.status === 'show' && this.message
         ? html`
             <div class="row ">
-              <div class="col ${this.positionFixed ? "posFixed" : "empty"}">
+              <div class="col ${this.positionFixed ? 'posFixed' : 'empty'}">
                 ${this.renderByAlertType}
               </div>
             </div>
           `
-        : ""}
+        : ''}
     `;
   }
 }
 
-customElements.define("app-alert", Alert);
+customElements.define('app-alert', Alert);

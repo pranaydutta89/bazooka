@@ -1,6 +1,7 @@
-import { LitElement, html } from "lit-element";
-import constants from "../../../services/constants";
-import eventDispatch from "../../../services/eventDispatch";
+import { LitElement, html } from 'lit-element';
+import constants from '../../../services/constants';
+import eventDispatch from '../../../services/eventDispatch';
+import gameStatic from '../../../staticData/games';
 
 class TeamDetails extends LitElement {
   static get properties() {
@@ -8,6 +9,7 @@ class TeamDetails extends LitElement {
       selectedTab: {
         type: String
       },
+      gameId: { type: String },
       team: { type: Array },
       roomName: { type: String },
       teamNameAdd: { type: String },
@@ -20,19 +22,26 @@ class TeamDetails extends LitElement {
 
   constructor() {
     super();
-    this.selectedTab = "room";
+    this.selectedTab = 'room';
     this.team = [];
-    this.teamNameAdd = "";
+    this.teamNameAdd = '';
     this.alert = {
-      type: "info",
-      status: "hide"
+      type: 'info',
+      status: 'hide'
     };
+  }
+
+  firstUpdated() {
+    this.gameStatic = gameStatic.find(r => r.id === this.gameId);
+    if (this.gameStatic.gameType !== constants.gameType.both) {
+      this.playAs = this.gameStatic.gameType;
+    }
   }
   get roomDetailsRender() {
     return html`
       <form
         @submit="${evt => {
-          this.selectedTab = "teams";
+          this.selectedTab = 'teams';
           evt.preventDefault();
         }}"
       >
@@ -48,49 +57,47 @@ class TeamDetails extends LitElement {
             />
           </div>
         </div>
-        <div class="row">
-          <div class="col-3">
-            <h6>Play As</h6>
-          </div>
-          <div class="col">
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                required
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio1"
-                .value=${constants.playAs.individual}
-                @click=${evt => (this.playAs = evt.target.value)}
-              />
-              <label class="form-check-label" for="inlineRadio1"
-                >Individual</label
-              >
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                required
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio2"
-                .value=${constants.playAs.team}
-                @click=${evt => (this.playAs = evt.target.value)}
-              />
-              <label class="form-check-label" for="inlineRadio2">Team</label>
-            </div>
-          </div>
-        </div>
+        ${this.gameStatic && this.gameStatic.gameType === constants.gameType.both
+          ? html`
+              <div class="row">
+                <div class="col-3">
+                  <h6>Play As</h6>
+                </div>
+                <div class="col">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      required
+                      type="radio"
+                      name="inlineRadioOptions"
+                      id="inlineRadio1"
+                      .value=${constants.playAs.individual}
+                      @click=${evt => (this.playAs = evt.target.value)}
+                    />
+                    <label class="form-check-label" for="inlineRadio1">Individual</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      required
+                      type="radio"
+                      name="inlineRadioOptions"
+                      id="inlineRadio2"
+                      .value=${constants.playAs.team}
+                      @click=${evt => (this.playAs = evt.target.value)}
+                    />
+                    <label class="form-check-label" for="inlineRadio2">Team</label>
+                  </div>
+                </div>
+              </div>
+            `
+          : ''}
 
         <div class="row">
           <div class="col">
             ${this.playAs === constants.playAs.individual
               ? html`
-                  <button
-                    type="submit"
-                    @click="${this.startClicked}"
-                    class="btn btn-success"
-                  >
+                  <button type="submit" @click="${this.startClicked}" class="btn btn-success">
                     Start
                   </button>
                 `
@@ -163,11 +170,7 @@ class TeamDetails extends LitElement {
 
         <div class="row">
           <div class="col">
-            <button
-              type="button"
-              @click="${this.startClicked}"
-              class="btn btn-success"
-            >
+            <button type="button" @click="${this.startClicked}" class="btn btn-success">
               Start
             </button>
           </div>
@@ -178,24 +181,24 @@ class TeamDetails extends LitElement {
 
   addTeam() {
     this.team = this.team.concat([this.teamNameAdd]);
-    this.teamNameAdd = "";
+    this.teamNameAdd = '';
   }
 
   get selectedTabRender() {
     switch (this.selectedTab) {
-      case "room":
+      case 'room':
         return this.roomDetailsRender;
-      case "teams":
+      case 'teams':
         return this.teamDetailsRender;
       default:
-        return eventDispatch.triggerAlert("Invalid Target", "error");
+        return eventDispatch.triggerAlert('Invalid Target', 'error');
     }
   }
 
   startClicked() {
     if (this.playAs == constants.playAs.team) {
       if (this.team.length > 1) {
-        const event = new CustomEvent("start", {
+        const event = new CustomEvent('start', {
           detail: {
             playAs: this.playAs,
             team: this.team,
@@ -204,12 +207,12 @@ class TeamDetails extends LitElement {
         });
         this.dispatchEvent(event);
       } else {
-        this.alertStatus = "show";
-        this.alertType = "error";
-        this.alertMessage = "Minimum 2 teams required";
+        this.alertStatus = 'show';
+        this.alertType = 'error';
+        this.alertMessage = 'Minimum 2 teams required';
       }
     } else {
-      const event = new CustomEvent("start", {
+      const event = new CustomEvent('start', {
         detail: {
           playAs: this.playAs,
           team: this.team,
@@ -229,7 +232,7 @@ class TeamDetails extends LitElement {
         }
       </style>
       <app-alert
-        @close=${() => (this.alertStatus = "hide")}
+        @close=${() => (this.alertStatus = 'hide')}
         .status=${this.alertStatus}
         .type=${this.alertType}
         .message=${this.alertMessage}
@@ -239,11 +242,9 @@ class TeamDetails extends LitElement {
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item">
             <a
-              class="nav-link ${this.selectedTab == "room"
-                ? "active"
-                : "disabled"}"
+              class="nav-link ${this.selectedTab == 'room' ? 'active' : 'disabled'}"
               data-toggle="tab"
-              disabled="${this.selectedTab !== "room"}"
+              disabled="${this.selectedTab !== 'room'}"
               role="tab"
               aria-controls="Room"
               >Room</a
@@ -251,11 +252,9 @@ class TeamDetails extends LitElement {
           </li>
           <li class="nav-item">
             <a
-              class="nav-link ${this.selectedTab == "teams"
-                ? "active"
-                : "disabled"}"
+              class="nav-link ${this.selectedTab == 'teams' ? 'active' : 'disabled'}"
               data-toggle="tab"
-              disabled="${this.selectedTab !== "teams"}"
+              disabled="${this.selectedTab !== 'teams'}"
               role="tab"
               aria-controls="Teams"
               >Teams</a
@@ -272,4 +271,4 @@ class TeamDetails extends LitElement {
   }
 }
 
-customElements.define("app-team-details", TeamDetails);
+customElements.define('app-team-details', TeamDetails);

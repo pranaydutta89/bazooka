@@ -1,35 +1,40 @@
-export default {
+export default Object.freeze({
+  devMode: location.hostname === 'localhost',
   game: {
-    tapIt: "tapIt"
+    tapIt: 'tapIt',
+    tambola: 'tambola'
   },
-  serverUrl:
-    location.hostname === "localhost"
-      ? "http://localhost:3000"
-      : location.origin,
+  gameType: {
+    team: 'team',
+    individual: 'individual',
+    both: 'both'
+  },
+  serverUrl: location.hostname === 'localhost' ? 'http://localhost:3000' : location.origin,
   playAs: {
-    individual: "individual",
-    team: "team"
+    individual: 'individual',
+    team: 'team'
   },
   domEvents: {
-    triggerSpinner: "triggerSpinner",
-    triggerAlert: "triggerAlert"
+    triggerSpinner: 'triggerSpinner',
+    triggerAlert: 'triggerAlert'
   },
   socketEvents: {
-    api: "api",
-    joinRoom: "joinRoom",
-    msgToAdmin: "msgToAdmin",
-    msgFromClient: "msgFromClient",
-    msgToClient: "msgToClient",
-    msgFromAdmin: "msgFromAdmin"
+    api: 'api',
+    joinRoom: 'joinRoom',
+    msgToAdmin: 'msgToAdmin',
+    msgFromClient: 'msgFromClient',
+    msgToClient: 'msgToClient',
+    msgFromAdmin: 'msgFromAdmin'
   },
   socketDataEvents: {
-    decryptClientUrl: "decryptClientUrl",
-    encryptClientUrl: "encryptClientUrl",
-    tapSummary: "tapSummary",
-    startGame: "startGame",
-    userTapped: "userTapped",
-    userJoined: "userJoined",
-    userLeft: "userLeft",
-    endGame: "endGame"
+    decarledWinner: 'decarledWinner',
+    decryptClientUrl: 'decryptClientUrl',
+    encryptClientUrl: 'encryptClientUrl',
+    tapSummary: 'tapSummary',
+    startGame: 'startGame',
+    userTapped: 'userTapped',
+    userJoined: 'userJoined',
+    userLeft: 'userLeft',
+    endGame: 'endGame'
   }
-};
+});

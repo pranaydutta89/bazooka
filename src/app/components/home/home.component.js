@@ -1,12 +1,11 @@
-import { LitElement, html } from "lit-element";
-import staticData from "../../staticData/pages/home";
-import "../common/fabButton/fab.component";
-import router from "../routes";
+import { LitElement, html } from 'lit-element';
+import staticData from '../../staticData/pages/home';
+import '../common/fabButton/fab.component';
+import router from '../../services/routerService';
 class Home extends LitElement {
   constructor() {
     super();
-    document.title =
-      "Real-time,online,simple,collaborative,team mini gaming platform";
+    document.title = 'Real-time,online,simple,collaborative,team mini gaming platform';
   }
 
   render() {
@@ -18,10 +17,7 @@ class Home extends LitElement {
         }
       </style>
       <div class="home">
-        <app-fab-button
-          text="{+}"
-          @click=${() => router.navigate("/games")}
-        ></app-fab-button>
+        <app-fab-button text="{+}" @click=${() => router.navigate('/games')}></app-fab-button>
         <div class="row">
           ${staticData.intro.map(r => {
             return html`
@@ -45,4 +41,4 @@ class Home extends LitElement {
   }
 }
 
-customElements.define("app-home", Home);
+customElements.define('app-home', Home);
