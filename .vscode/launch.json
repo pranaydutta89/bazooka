@@ -9,6 +9,12 @@
       "request": "launch",
       "name": "Server",
       "program": "${workspaceFolder}\\src\\server\\app.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Prod Server",
+      "program": "${workspaceFolder}\\dist\\app.js"
     }
   ]
 }
