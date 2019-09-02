@@ -11,7 +11,7 @@
     "build": "npm run buildes5 && ncp build dist && npm run buildes6 && ncp build dist",
     "postbuild": "ncp beanstalk dist && ncp package.json dist/package.json && ncp src/server dist/server && npm run cleanDist",
     "cleanDist": "rimraf dist/es5-bundled/src/server && rimraf dist/uncompiled-unbundled/src/server",
-    "stopServer": "npm run forever stop app.js || npm run forever stop server/app.js",
+    "stopServer": "npm run forever stop server/app.js",
     "start": "npm run stopServer || npm run startServer",
     "startServer": "npm run forever start server/app.js",
     "forever": "forever"

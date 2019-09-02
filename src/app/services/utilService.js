@@ -35,12 +35,6 @@ class UtilsService {
     });
   }
 
-  async importComponents(path) {
-    eventDispatch.triggerSpinner();
-    await import(path);
-    eventDispatch.triggerSpinner(false);
-  }
-
   pickColor(str) {
     const hex = this.intToARGB(this.hashCode(str));
     return '#' + hex;
