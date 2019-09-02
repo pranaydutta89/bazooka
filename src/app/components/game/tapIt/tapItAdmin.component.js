@@ -123,15 +123,19 @@ class TapItAdmin extends LitElement {
 
     const val = chartData.map(r => r.value);
     if (this.gameStartedFlag) {
-      socketService.sendDataToClient(this.gameData.roomId, {
-        event: constants.socketDataEvents.tapSummary,
-        data: val.map(r => {
-          return {
-            teamName: r[0],
-            tapCount: r[1]
-          };
-        })
-      });
+      socketService.sendDataToClient(
+        this.gameData.roomId,
+        {
+          event: constants.socketDataEvents.tapSummary,
+          data: val.map(r => {
+            return {
+              teamName: r[0],
+              tapCount: r[1]
+            };
+          })
+        },
+        false
+      );
     }
     val.forEach(r => {
       r.push(this.teamColor[r[0]], r[0]);
@@ -156,7 +160,7 @@ class TapItAdmin extends LitElement {
   async startGame() {
     if (!this.gameStartedFlag) {
       await import('../../common/countdown/countDown.component');
-      if (this.userDetails.length > 1) {
+      if (constants.devMode || this.userDetails.length > 1) {
         await socketService.sendDataToClient(this.gameData.roomId, {
           event: constants.socketDataEvents.startGame
         });

@@ -91,7 +91,7 @@ class GameClient extends LitElement {
     const user = {
       id: this.userId,
       userName: this.userName,
-      team: this.team
+      team: this.gameData.playAs === constants.playAs.individual ? this.userName : this.teamSelected
     };
     await socketService.sendDataToAdmin(this.gameData.roomId, {
       event: constants.socketDataEvents.userJoined,
