@@ -145,8 +145,25 @@ class TambolaAdmin extends LitElement {
       }
       this.broadCastMessage(`Congratulations ${userData.userName} for winning ${prizeName}`);
       await utilService.setTimeoutAsync(3000);
-      this.winnerDetails.push(`${userData.userName} won ${prizeName}`);
+      this.winnerDetails.unshift(`${userData.userName} won ${prizeName}`);
       this.broadCastMessage('');
+      switch (data.type) {
+        case 'firstFive':
+          this.firstFivePrizeLeft -= 1;
+          break;
+        case 'topRow':
+          this.topRowPrizeLeft -= 1;
+          break;
+        case 'middleRow':
+          this.middlePrizeLeft -= 1;
+          break;
+        case 'bottomRow':
+          this.bottomPrizeLeft -= 1;
+          break;
+        case 'fullHouse':
+          this.fullHousePrizeLeft -= 1;
+          break;
+      }
       this.isGamePaused = false;
     } else {
       this.broadCastMessage(`No ${prizeName} prizes are left,resuming game in...`);
@@ -249,6 +266,7 @@ class TambolaAdmin extends LitElement {
         break;
       }
     }
+    eventDispatch.triggerAlert('Game has ended');
   }
   resetGame() {
     this.init();
@@ -264,7 +282,7 @@ class TambolaAdmin extends LitElement {
 
   generateGridHtml() {
     const arr = [];
-    for (let i of this.tambolaNumbers) {
+    for (let i = 1; i <= 90; i++) {
       arr.push({
         label: i < 10 ? '0' + i : i,
         value: i,

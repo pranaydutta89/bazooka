@@ -32,9 +32,12 @@ export default _this => {
               ${r.map(j => {
                 return html`
                   <div
+                    .disabled=${!_this.isGameStarted}
                     @click=${() => {
-                      !j.selected && _this.numberClicked(j.value);
-                      j.selected = true;
+                      if (_this.isGameStarted) {
+                        !j.selected && _this.numberClicked(j.value);
+                        j.selected = true;
+                      }
                     }}
                     style="cursor:pointer"
                     class="col-1 boxes mobile-format ${j.selected ? 'selected' : 'empty'}"

@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit-element";
+import { html, LitElement } from 'lit-element';
 
 export default class Css extends LitElement {
   createRenderRoot() {
@@ -7,10 +7,10 @@ export default class Css extends LitElement {
 
   static get colors() {
     return {
-      primaryColor: "#488aff",
-      primaryFontColor: "black",
-      secondaryColor: "#32db64",
-      dangerColor: "#f53d3d"
+      primaryColor: '#488aff',
+      primaryFontColor: 'black',
+      secondaryColor: '#32db64',
+      dangerColor: '#f53d3d'
     };
   }
 
@@ -22,17 +22,33 @@ export default class Css extends LitElement {
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous"
       />
-      <link
-        href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap"
-        rel="stylesheet"
-      />
+      <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet" />
       <style>
+        /* width */
+        ::-webkit-scrollbar {
+          width: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+          background: #f1f1f1;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+          background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #555;
+        }
         * {
-          font-family: "Ubuntu", sans-serif;
+          font-family: 'Ubuntu', sans-serif;
         }
       </style>
     `;
   }
 }
 
-customElements.define("css-ele", Css);
+customElements.define('css-ele', Css);

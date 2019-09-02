@@ -5,6 +5,7 @@ import constants from '../../../../services/constants';
 import numberGrid from './templates/numberGrid.template';
 import claimPrizes from './templates/claimPrizes.template';
 import gameService from '../../../../services/gameService';
+import eventDispatch from '../../../../services/eventDispatch';
 
 class TambolaClient extends LitElement {
   static get properties() {
@@ -15,7 +16,12 @@ class TambolaClient extends LitElement {
       gameData: { type: Object },
       isGameStarting: { type: Boolean },
       isGameStarted: { type: Boolean },
-      publicMessage: { type: String }
+      publicMessage: { type: String },
+      isEligibleForFirstFive: { type: Boolean },
+      isEligibleForTopRow: { type: Boolean },
+      isEligibleForMiddleRow: { type: Boolean },
+      isEligibleForBottomRow: { type: Boolean },
+      isEligibleForFullHouse: { type: Boolean }
     };
   }
 
@@ -26,6 +32,11 @@ class TambolaClient extends LitElement {
   }
 
   init() {
+    this.isEligibleForBottomRow = false;
+    this.isEligibleForFirstFive = false;
+    this.isEligibleForFullHouse = false;
+    this.isEligibleForMiddleRow = false;
+    this.isEligibleForTopRow = false;
     this.publicMessage = '';
     this.gridVal = [];
     this.isGameStarting = false;
@@ -79,6 +90,7 @@ class TambolaClient extends LitElement {
   }
 
   endGame() {
+    eventDispatch.triggerAlert('Game has ended');
     this.init();
     this.populateGridValues();
   }
@@ -160,6 +172,27 @@ class TambolaClient extends LitElement {
       false
     );
   }
+  checkPrizeEligibility() {
+    if (this.clickedNumbersSummary.numbers.length >= 5) {
+      this.isEligibleForFirstFive = true;
+    }
+
+    if (this.clickedNumbersSummary.numbers.length >= 15) {
+      this.isEligibleForFullHouse = true;
+    }
+
+    if (this.clickedNumbersSummary.row[0] >= 5) {
+      this.isEligibleForTopRow = true;
+    }
+
+    if (this.clickedNumbersSummary.row[1] >= 5) {
+      this.isEligibleForMiddleRow = true;
+    }
+
+    if (this.clickedNumbersSummary.row[2] >= 5) {
+      this.isEligibleForBottomRow = true;
+    }
+  }
 
   numberClicked(num) {
     let rowNumber;
@@ -171,6 +204,7 @@ class TambolaClient extends LitElement {
     }
     this.clickedNumbersSummary.numbers.push(num);
     this.clickedNumbersSummary.row[rowNumber] += 1;
+    this.checkPrizeEligibility();
     socketService.sendDataToAdmin(
       this.gameData.roomId,
       {

@@ -44,7 +44,7 @@ class PublicMessage extends LitElement {
               </div>
             </div>
           `
-        : ''};
+        : ''}
     `;
   }
 }
