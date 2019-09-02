@@ -33,8 +33,13 @@ export default Object.freeze({
     tapSummary: 'tapSummary',
     startGame: 'startGame',
     userTapped: 'userTapped',
+    claimPrize: 'claimPrize',
     userJoined: 'userJoined',
     userLeft: 'userLeft',
-    endGame: 'endGame'
+    endGame: 'endGame',
+    pauseGame: 'pauseGame',
+    resumeGame: 'resumeGame',
+    broadCastMessage: 'broadCastMessage',
+    kickOutUser: 'kickOutUser'
   }
 });

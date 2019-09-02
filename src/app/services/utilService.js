@@ -1,3 +1,5 @@
+import eventDispatch from './eventDispatch';
+
 class UtilsService {
   hashCode(str) {
     var hash = 0;
@@ -25,6 +27,20 @@ class UtilsService {
     return hex.substring(0, 6);
   }
 
+  setTimeoutAsync(time) {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res();
+      }, time);
+    });
+  }
+
+  async importComponents(path) {
+    eventDispatch.triggerSpinner();
+    await import(path);
+    eventDispatch.triggerSpinner(false);
+  }
+
   pickColor(str) {
     const hex = this.intToARGB(this.hashCode(str));
     return '#' + hex;
@@ -40,7 +56,8 @@ class UtilsService {
   }
 
   generateUniqueBrowserId() {
-    return Math.random().toString();
+    // eslint-disable-next-line no-undef
+    return uuid();
   }
 }
 

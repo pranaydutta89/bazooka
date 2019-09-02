@@ -23,7 +23,7 @@ class CountDown extends LitElement {
   }
 
   countdown() {
-    let counter = this.seconds();
+    let counter = this.seconds;
     const countdown = setInterval(() => {
       this.countDownText = --counter;
       if (counter === 0) {

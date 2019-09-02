@@ -27,7 +27,9 @@ class GameClient extends LitElement {
   }
 
   beforeUnload() {
-    gameService.leaveGame(this.gameData.roomId, this.userId);
+    if (this.userId) {
+      gameService.leaveGame(this.gameData.roomId, this.userId);
+    }
   }
 
   visibilityChange() {
@@ -135,7 +137,7 @@ class GameClient extends LitElement {
        <div>
        <div class="row" style="margin-bottom:0.6rem">
            <div class='col'>
-             <h3>Room { ${this.gameData.roomName} } for game { ${this.gameData.gameId} }</h3>
+             <h5>Room { ${this.gameData.roomName} } for game { ${this.gameData.gameId} }</h5>
            </div>
        </div>
          <div class="row" style="margin-bottom:0.6rem">
