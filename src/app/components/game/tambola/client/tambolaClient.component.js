@@ -111,6 +111,25 @@ class TambolaClient extends LitElement {
       gridVal[colNumber] = colData.sort(() => Math.random() - 0.5);
     });
 
+    //do correction
+    for (let i = 0; i <= 2; i++) {
+      const row = [];
+      for (let key in gridVal) {
+        if (row.filter(r => r.value).length < 5 || !gridVal[key][i]) {
+          row.push({ value: gridVal[key][i], selected: false });
+        } else {
+          row.push({ value: null, selected: false });
+          if (!gridVal[key][(i + 1) % 3]) {
+            gridVal[key][(i + 1) % 3] = gridVal[key][i];
+            gridVal[key][i] = null;
+          } else if (!gridVal[key][(i + 2) % 3]) {
+            gridVal[key][(i + 2) % 3] = gridVal[key][i];
+            gridVal[key][i] = null;
+          }
+        }
+      }
+    }
+
     const colToRowData = [];
     for (let i = 0; i <= 2; i++) {
       const row = [];
@@ -118,6 +137,11 @@ class TambolaClient extends LitElement {
         row.push({ value: gridVal[key][i], selected: false });
       }
       colToRowData.push(row);
+    }
+    for (let row of colToRowData) {
+      if (row.filter(r => r.value).length > 5) {
+        return this.populateGridValues();
+      }
     }
     this.gridVal = colToRowData;
   }

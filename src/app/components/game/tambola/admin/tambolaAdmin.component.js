@@ -39,7 +39,7 @@ class TambolaAdmin extends LitElement {
     this.firstFivePrizeLeft = 2;
     this.listeners = [];
     this.tambolaNumbers = [];
-    for (let i = 1; i <= 99; i++) {
+    for (let i = 1; i <= 90; i++) {
       this.tambolaNumbers.push(i);
     }
     this.init();
@@ -81,13 +81,13 @@ class TambolaAdmin extends LitElement {
   async broadCastMessage(message) {
     await import('../../../common/publicMessage/publicMessage.component');
     this.publicMsg = message;
-    socketService.sendDataToClient(this.gameDataroomId, {
+    socketService.sendDataToClient(this.gameData.roomId, {
       event: constants.socketDataEvents.broadCastMessage,
       data: message
     });
   }
 
-  kicOutUser(userId) {
+  kickOutUser(userId) {
     socketService.sendDataToClient(this.gameData.roomId, {
       event: constants.socketDataEvents.kickOutUser,
       data: userId
@@ -119,7 +119,7 @@ class TambolaAdmin extends LitElement {
         prizeLeftCount = this.bottomPrizeLeft;
         break;
       case 'fullHouse':
-        prizeName = 'Full Nouse';
+        prizeName = 'Full House';
         prizeLeftCount = this.fullHousePrizeLeft;
         break;
     }
@@ -133,17 +133,21 @@ class TambolaAdmin extends LitElement {
       await utilService.setTimeoutAsync(3000);
       this.broadCastMessage(`Checking for boogie call...`);
       await utilService.setTimeoutAsync(3000);
-      for (let number of data.type.summary.numbers) {
-        if (!this.drawnNumbers.some(number)) {
-          this.broadCastMessage(`It's a boogie call,user will be logged out now...`);
+      for (let number of data.summary.numbers) {
+        if (!this.drawnNumbers.some(r => r === number)) {
+          this.broadCastMessage(`It's a boogie call,user ${userData.userName} will be logged out now...`);
           await utilService.setTimeoutAsync(3000);
           this.kickOutUser(data.userId);
+          this.broadCastMessage('');
+          this.isGamePaused = false;
           return;
         }
       }
       this.broadCastMessage(`Congratulations ${userData.userName} for winning ${prizeName}`);
       await utilService.setTimeoutAsync(3000);
       this.winnerDetails.push(`${userData.userName} won ${prizeName}`);
+      this.broadCastMessage('');
+      this.isGamePaused = false;
     } else {
       this.broadCastMessage(`No ${prizeName} prizes are left,resuming game in...`);
       let countDown = 5;
@@ -151,10 +155,9 @@ class TambolaAdmin extends LitElement {
         this.broadCastMessage(countDown);
         await utilService.setTimeoutAsync(1000);
       }
+      this.broadCastMessage('');
+      this.isGamePaused = false;
     }
-
-    this.broadCastMessage('');
-    this.isGamePaused = false;
   }
 
   userTapped(data) {
@@ -165,6 +168,7 @@ class TambolaAdmin extends LitElement {
     userData.bottomLineCount = data.summary.row[2];
     userData.fullHouseCount = data.summary.numbers.length;
     this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
+    eventDispatch.triggerAlert(`${userData.userName} has checked one number`);
   }
 
   userLeft(userData) {
@@ -260,7 +264,7 @@ class TambolaAdmin extends LitElement {
 
   generateGridHtml() {
     const arr = [];
-    for (let i = 1; i <= 99; i++) {
+    for (let i of this.tambolaNumbers) {
       arr.push({
         label: i < 10 ? '0' + i : i,
         value: i,
