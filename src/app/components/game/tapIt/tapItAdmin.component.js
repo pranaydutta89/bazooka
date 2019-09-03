@@ -31,7 +31,7 @@ class TapItAdmin extends LitElement {
     this.gameSummaryMsg = 'Game not yet Started';
   }
 
-  async firstUpdated() {
+  firstUpdated() {
     this.chartOptions = {
       title: 'Live Tap Count',
       chartArea: { width: '100%' },
@@ -43,10 +43,10 @@ class TapItAdmin extends LitElement {
         title: this.gameData.playAs
       }
     };
-    await this.init();
+    this.init();
   }
 
-  async init() {
+  init() {
     this.gameData.team.forEach(r => {
       this.teamColor[r] = utilService.pickColor(r);
     });
@@ -83,6 +83,10 @@ class TapItAdmin extends LitElement {
   }
 
   userJoined(userData) {
+    if (this.gameData.playAs === constants.playAs.individual) {
+      this.teamColor[userData.team] = utilService.pickColor(userData.team);
+    }
+
     const user = this.userDetails.find(r => r.id === userData.id);
     if (!user) {
       this.userDetails.push({ ...userData, ...{ tapCount: 0 } });

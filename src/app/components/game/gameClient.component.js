@@ -23,7 +23,7 @@ class GameClient extends LitElement {
     this.startGameFlag = false;
     this.teamSelectedRow = -1;
     window.addEventListener('beforeunload', this.beforeUnload.bind(this));
-    document.addEventListener('visibilitychange', this.visibilityChange.bind(this), false);
+    // document.addEventListener('visibilitychange', this.visibilityChange.bind(this), false);
   }
 
   beforeUnload() {

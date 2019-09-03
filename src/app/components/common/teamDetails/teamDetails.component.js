@@ -36,6 +36,7 @@ class TeamDetails extends LitElement {
     if (this.gameStatic.gameType !== constants.gameType.both) {
       this.playAs = this.gameStatic.gameType;
     }
+    this.performUpdate();
   }
   get roomDetailsRender() {
     return html`
