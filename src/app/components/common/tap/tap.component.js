@@ -1,20 +1,31 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from 'lit-element';
 
 class Tap extends LitElement {
+  static get properties() {
+    return {
+      tapCount: { type: Number }
+    };
+  }
+
+  constructor() {
+    super();
+    this.tapCount = 0;
+  }
   tapped() {
-    const event = new CustomEvent("tapped", {
+    const event = new CustomEvent('tapped', {
       detail: {
         team: this.team,
         roomName: this.roomName
       }
     });
     this.dispatchEvent(event);
+    this.tapCount += 1;
   }
   render() {
     return html`
       <css-ele></css-ele>
       <style>
-        .loading {
+        .wrapper {
           position: absolute;
           top: 0;
           left: 0;
@@ -38,7 +49,7 @@ class Tap extends LitElement {
         }
       </style>
 
-      <div class="loading" @click=${this.tapped}>
+      <div class="wrapper" @click=${this.tapped}>
         <div class="tap">
           <div class="d-flex justify-content-center">
             <div class="spinner-grow text-danger" role="status">
@@ -46,9 +57,12 @@ class Tap extends LitElement {
             </div>
           </div>
         </div>
+        <div class="tap">
+          <h1>${this.tapCount}</h1>
+        </div>
       </div>
     `;
   }
 }
 
-customElements.define("app-tap", Tap);
+customElements.define('app-tap', Tap);
