@@ -54,7 +54,7 @@ class TapItClient extends LitElement {
         this.endGame();
         break;
 
-      case constants.socketDataEvents.tapSummary:
+      case constants.socketDataEvents.summary:
         this.tapDetails(msg.data);
         break;
     }
@@ -64,13 +64,13 @@ class TapItClient extends LitElement {
     if (topTeamDetails.teamName === this.team) {
       eventDispatch.triggerAlert(
         `${
-          this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'
+          this.gameData.playAs === constants.gameType.team ? 'Your team is' : 'You are'
         } leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`
       );
     } else {
       eventDispatch.triggerAlert(
         `${
-          this.gameData.playAs === constants.playAs.team ? 'Your team is' : 'You are'
+          this.gameData.playAs === constants.gameType.team ? 'Your team is' : 'You are'
         } trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading ${
           topTeamDetails.teamName
         }`,

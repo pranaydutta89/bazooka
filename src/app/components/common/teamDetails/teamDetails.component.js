@@ -36,6 +36,11 @@ class TeamDetails extends LitElement {
     if (this.gameStatic.gameType !== constants.gameType.both) {
       this.playAs = this.gameStatic.gameType;
     }
+
+    if (this.gameStatic.gameType === constants.gameType.dualTeam) {
+      this.team.push(constants.dualTeam.teamBlue);
+      this.team.push(constants.dualTeam.teamRed);
+    }
   }
   get roomDetailsRender() {
     return html`
@@ -71,7 +76,7 @@ class TeamDetails extends LitElement {
                       type="radio"
                       name="inlineRadioOptions"
                       id="inlineRadio1"
-                      .value=${constants.playAs.individual}
+                      .value=${constants.gameType.individual}
                       @click=${evt => (this.playAs = evt.target.value)}
                     />
                     <label class="form-check-label" for="inlineRadio1">Individual</label>
@@ -83,7 +88,7 @@ class TeamDetails extends LitElement {
                       type="radio"
                       name="inlineRadioOptions"
                       id="inlineRadio2"
-                      .value=${constants.playAs.team}
+                      .value=${constants.gameType.team}
                       @click=${evt => (this.playAs = evt.target.value)}
                     />
                     <label class="form-check-label" for="inlineRadio2">Team</label>
@@ -95,7 +100,7 @@ class TeamDetails extends LitElement {
 
         <div class="row">
           <div class="col">
-            ${this.playAs === constants.playAs.individual
+            ${this.playAs === constants.gameType.individual || this.playAs === constants.gameType.dualTeam
               ? html`
                   <button type="submit" @click="${this.startClicked}" class="btn btn-success">
                     Start
@@ -196,7 +201,7 @@ class TeamDetails extends LitElement {
   }
 
   startClicked() {
-    if (this.playAs == constants.playAs.team) {
+    if (this.playAs == constants.gameType.team) {
       if (this.team.length > 1) {
         const event = new CustomEvent('start', {
           detail: {

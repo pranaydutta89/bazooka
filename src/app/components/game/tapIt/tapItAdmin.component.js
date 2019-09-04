@@ -36,7 +36,7 @@ class TapItAdmin extends LitElement {
       title: 'Live Tap Count',
       chartArea: { width: '100%' },
       hAxis: {
-        title: `${this.gameData.playAs === constants.playAs.team ? 'Teams' : ''} Total Tap count`,
+        title: `${this.gameData.playAs === constants.gameType.team ? 'Teams' : ''} Total Tap count`,
         minValue: 0
       },
       vAxis: {
@@ -126,7 +126,7 @@ class TapItAdmin extends LitElement {
       socketService.sendDataToClient(
         this.gameData.roomId,
         {
-          event: constants.socketDataEvents.tapSummary,
+          event: constants.socketDataEvents.summary,
           data: val.map(r => {
             return {
               teamName: r[0],
@@ -277,7 +277,7 @@ class TapItAdmin extends LitElement {
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        ${this.gameData.playAs === constants.playAs.team
+                        ${this.gameData.playAs === constants.gameType.team
                           ? html`
                               <th scope="col">Team</th>
                             `
@@ -293,7 +293,7 @@ class TapItAdmin extends LitElement {
                             <tr>
                               <th scope="row">${idx + 1}</th>
                               <td>${r.userName}</td>
-                              ${this.gameData.playAs === constants.playAs.team
+                              ${this.gameData.playAs === constants.gameType.team
                                 ? html`
                                     <td>${r.team}</td>
                                   `
