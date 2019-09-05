@@ -77,7 +77,7 @@ class TapItAdmin extends LitElement {
     if (idx != -1) {
       const user = this.userDetails.find(r => r.id === userData.id);
       this.userDetails.splice(idx, 1);
-      this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
+      this.requestUpdate();
       eventDispatch.triggerAlert(`User ${user.userName} left`, 'error');
     }
   }

@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { LitElement } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 
 class GaugeChart extends LitElement {
   static get properties() {
@@ -16,30 +16,38 @@ class GaugeChart extends LitElement {
     this.label = 'Param';
   }
 
+  configureChart() {
+    return new Promise((res, rej) => {
+      this.options = {
+        ...{
+          redFrom: 90,
+          redTo: 100,
+          yellowFrom: 75,
+          yellowTo: 90,
+          minorTicks: 1
+        },
+        ...this.options
+      };
+      google.charts.load('current', { packages: ['gauge'] });
+      google.charts.setOnLoadCallback(() => {
+        this.data = google.visualization.arrayToDataTable([['Label', 'Value'], [this.label, 0]]);
+
+        //this.chart.draw(this.data, this.options);
+        res();
+      });
+    });
+  }
+
   firstUpdated() {
-    this.options = {
-      ...{
-        redFrom: 90,
-        redTo: 100,
-        yellowFrom: 75,
-        yellowTo: 90,
-        minorTicks: 1
-      },
-      ...this.options
-    };
-    google.charts.load('current', { packages: ['gauge'] });
-    google.charts.setOnLoadCallback(this.drawChart.bind(this));
-  }
-
-  drawChart() {
-    this.data = google.visualization.arrayToDataTable([['Label', 'Value'], [this.label, 0]]);
     this.chart = new google.visualization.Gauge(this.shadowRoot.getElementById('chartContainer'));
-    this.chart.draw(this.data, this.options);
   }
 
-  performUpdate() {
-    this.data.setValue(0, 1, this.val);
-    this.chart.draw(this.data, this.options);
+  async performUpdate() {
+    await this.configureChart();
+    if (this.chart) {
+      this.data.setValue(0, 1, this.val);
+      this.chart.draw(this.data, this.options);
+    }
     super.performUpdate();
   }
 

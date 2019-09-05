@@ -98,7 +98,7 @@ class TugOfWarClient extends LitElement {
     this.isGameStarted = false;
   }
   async startingGame() {
-    await import('../../common/countdown/countDown.component');
+    await import('../../../common/countdown/countDown.component');
     this.isGameStarting = true;
   }
 

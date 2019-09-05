@@ -23,7 +23,6 @@ class GameClient extends LitElement {
     this.startGameFlag = false;
     this.teamSelectedRow = -1;
     window.addEventListener('beforeunload', this.beforeUnload.bind(this));
-    document.addEventListener('visibilitychange', this.visibilityChange.bind(this), false);
   }
 
   beforeUnload() {
@@ -32,17 +31,8 @@ class GameClient extends LitElement {
     }
   }
 
-  visibilityChange() {
-    if (document.hidden) {
-      if (!constants.devMode) {
-        gameService.leaveGame(this.gameData.roomId, this.userId);
-      }
-    }
-  }
-
   disconnectedCallback() {
     window.removeEventListener('beforeunload', this.beforeUnload.bind(this));
-    document.removeEventListener('visibilitychange', this.visibilityChange.bind(this));
     super.disconnectedCallback();
   }
 
@@ -65,7 +55,10 @@ class GameClient extends LitElement {
       return;
     }
 
-    if (!this.teamSelected && this.gameData.playAs === constants.gameType.team) {
+    if (
+      !this.teamSelected &&
+      (this.gameData.playAs === constants.gameType.team || this.gameData.playAs === constants.gameType.dualTeam)
+    ) {
       eventDispatch.triggerAlert('Select Team', 'error');
       return;
     }
@@ -160,7 +153,7 @@ class GameClient extends LitElement {
          </div>
 
          ${
-           this.gameData.playAs === constants.gameType.team
+           this.gameData.playAs === constants.gameType.team || this.gameData.playAs === constants.gameType.dualTeam
              ? html`
                  <div class="row">
                    <div class="col">

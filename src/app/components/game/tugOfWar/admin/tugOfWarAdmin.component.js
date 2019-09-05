@@ -13,7 +13,9 @@ class TugOfWarAdmin extends LitElement {
       tapDifference: { type: Number },
       gameSummaryMsg: { type: String },
       currentDifference: { type: Number },
-      currentWidth: { type: Number }
+      currentWidth: { type: Number },
+      isGameStarting: { type: Boolean },
+      isGameStarted: { type: Boolean }
     };
   }
 
@@ -52,28 +54,53 @@ class TugOfWarAdmin extends LitElement {
     }
   }
 
-  userTapped(userId) {
-    const currentTimestamp = Date.now();
-    const user = this.userDetails.find(r => r.id === userId);
-    user.tapCount += 1;
-    user.tapSpeed = 1000 / (currentTimestamp - user.lastTapTimestamp);
-    user.lastTapTimestamp = currentTimestamp;
-    const teamBlueCount = this.userDetails
-      .filter(r => r.team === constants.dualTeam.teamBlue)
-      .map(z => z.tapCount)
-      .reduce((t, n) => t + n);
+  userLeft(userData) {
+    const idx = this.userDetails.findIndex(r => r.id === userData.id);
+    if (idx != -1) {
+      const user = this.userDetails.find(r => r.id === userData.id);
+      this.userDetails.splice(idx, 1);
+      this.userDetails = JSON.parse(JSON.stringify(this.userDetails));
+      this.requestUpdate();
+      eventDispatch.triggerAlert(`User ${user.userName} left`, 'error');
+    }
+  }
 
-    const teamRedCount = this.userDetails
-      .filter(r => r.team === constants.dualTeam.teamRed)
-      .map(z => z.tapCount)
-      .reduce((t, n) => t + n);
+  userTapped(userData) {
+    if (this.isGameStarted) {
+      const currentTimestamp = Date.now();
+      const user = this.userDetails.find(r => r.id === userData.id);
+      eventDispatch.triggerAlert(`${user.userName} Tapped..`);
+      user.tapCount += 1;
+      user.tapSpeed = 1000 / (currentTimestamp - user.lastTapTimestamp);
+      user.lastTapTimestamp = currentTimestamp;
+      const teamBlueCount = this.userDetails
+        .filter(r => r.team === constants.dualTeam.teamBlue)
+        .map(z => z.tapCount)
+        .reduce((t, n) => t + n);
 
-    this.currentDifference = teamBlueCount - teamRedCount;
-    this.currentWidth = (Math.abs(this.currentDifference) / this.tapDifference) * 100;
-    this.tapSummary(teamBlueCount, teamRedCount);
+      const teamRedCount = this.userDetails
+        .filter(r => r.team === constants.dualTeam.teamRed)
+        .map(z => z.tapCount)
+        .reduce((t, n) => t + n);
+
+      this.currentDifference = teamBlueCount - teamRedCount;
+
+      if (Math.abs(this.currentDifference) >= this.tapDifference) {
+        this.endGame();
+      } else {
+        this.currentWidth = (Math.abs(this.currentDifference) / this.tapDifference) * 100;
+        this.tapSummary(teamBlueCount, teamRedCount);
+      }
+    }
   }
 
   tapSummary(blueCount, redCount) {
+    if (this.currentDifference < 0) {
+      this.gameSummaryMsg = `${constants.dualTeam.teamRed} is leading with ${this.currentDifference} taps`;
+    } else {
+      this.gameSummaryMsg = `${constants.dualTeam.teamBlue} is leading with ${this.currentDifference} taps`;
+    }
+
     socketService.sendDataToClient(this.gameData.roomId, {
       event: constants.socketDataEvents.summary,
       data: {
@@ -87,51 +114,94 @@ class TugOfWarAdmin extends LitElement {
     const user = this.userDetails.find(r => r.id === userData.id);
     if (!user) {
       this.userDetails.push({ ...userData, ...{ tapCount: 0, lastTapTimestamp: Date.now() } });
+      this.requestUpdate();
       eventDispatch.triggerAlert(`User ${userData.userName} Joined`);
     } else {
       eventDispatch.triggerAlert(`User ${userData.userName} already joined`);
     }
   }
 
-  startGame() {}
-
-  resetGame() {}
+  async startGame() {
+    if (!this.isGameStarted) {
+      await import('../../../common/countdown/countDown.component');
+      if (constants.devMode || this.userDetails.length > 1) {
+        await socketService.sendDataToClient(this.gameData.roomId, {
+          event: constants.socketDataEvents.startGame
+        });
+        this.isGameStarting = true;
+      } else {
+        eventDispatch.triggerAlert('Minimum 2 users required to start the game.', 'error');
+      }
+    } else {
+      eventDispatch.triggerAlert('Game already in progress', 'error');
+    }
+  }
+  endGame() {
+    this.isGameStarted = false;
+    socketService.sendDataToClient(this.gameData.roomId, {
+      event: constants.socketDataEvents.endGame
+    });
+    if (this.currentDifference < 0) {
+      this.gameSummaryMsg = `${constants.dualTeam.teamBlue} won`;
+    } else {
+      this.gameSummaryMsg = `${constants.dualTeam.teamRed} won`;
+    }
+  }
+  resetGame() {
+    socketService.sendDataToClient(this.gameData.roomId, {
+      event: constants.socketDataEvents.endGame
+    });
+    this.init();
+  }
+  gameStarted() {
+    this.isGameStarted = true;
+    this.isGameStarting = false;
+  }
 
   init() {
     this.tapDifference = 30;
     this.currentWidth = 0;
     this.currentDifference = 0;
     this.gameSummaryMsg = 'Game not yet Started';
+    this.isGameStarted = false;
+    this.isGameStarted = false;
   }
 
   render() {
     return html`
       <css-ele></css-ele>
+      ${this.isGameStarting
+        ? html`
+            <app-countdown @ended=${this.gameStarted}></app-countdown>
+          `
+        : ''}
+      <app-alert keepOpen="true" .message=${this.gameSummaryMsg}></app-alert>
       <form
-        $submit=${evt => {
+        @submit=${evt => {
           this.startGame();
           evt.preventDefault();
         }}
       >
-        <div class="row">
+        <div class="row" style="margin-bottom:0.6rem">
           <div class="col-sm-2">
             <h6>Tap Difference</h6>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-6">
             <input
               type="number"
               required
               min="10"
+              class="form-control"
               max="100"
               .value=${this.tapDifference}
               @change=${evt => (this.tapDifference = evt.target.value)}
             />
           </div>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-block btn-primary">Start</button>
+            <button type="submit" class="btn btn-block btn-info">Start</button>
           </div>
           <div class="col-sm-2">
-            <button type="button" @click=${this.resetGame} class="btn btn-block btn-primary">Reset</button>
+            <button type="button" @click=${this.resetGame} class="btn btn-block btn-warning">Reset</button>
           </div>
         </div>
       </form>
