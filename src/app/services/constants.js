@@ -2,18 +2,20 @@ export default Object.freeze({
   devMode: location.hostname === 'localhost',
   game: {
     tapIt: 'tapIt',
-    tambola: 'tambola'
+    tambola: 'tambola',
+    tugOfWar: 'tugOfWar'
+  },
+  dualTeam: {
+    teamBlue: 'Team Blue',
+    teamRed: 'Team Red'
   },
   gameType: {
     team: 'team',
     individual: 'individual',
+    dualTeam: 'dualTeam',
     both: 'both'
   },
   serverUrl: location.hostname === 'localhost' ? 'http://localhost:3000' : location.origin,
-  playAs: {
-    individual: 'individual',
-    team: 'team'
-  },
   domEvents: {
     triggerSpinner: 'triggerSpinner',
     triggerAlert: 'triggerAlert'
@@ -30,7 +32,7 @@ export default Object.freeze({
     decarledWinner: 'decarledWinner',
     decryptClientUrl: 'decryptClientUrl',
     encryptClientUrl: 'encryptClientUrl',
-    tapSummary: 'tapSummary',
+    summary: 'summary',
     startGame: 'startGame',
     userTapped: 'userTapped',
     claimPrize: 'claimPrize',

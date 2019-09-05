@@ -23,7 +23,6 @@ class GameClient extends LitElement {
     this.startGameFlag = false;
     this.teamSelectedRow = -1;
     window.addEventListener('beforeunload', this.beforeUnload.bind(this));
-    // document.addEventListener('visibilitychange', this.visibilityChange.bind(this), false);
   }
 
   beforeUnload() {
@@ -32,17 +31,8 @@ class GameClient extends LitElement {
     }
   }
 
-  visibilityChange() {
-    if (document.hidden) {
-      if (!constants.devMode) {
-        gameService.leaveGame(this.gameData.roomId, this.userId);
-      }
-    }
-  }
-
   disconnectedCallback() {
     window.removeEventListener('beforeunload', this.beforeUnload.bind(this));
-    document.removeEventListener('visibilitychange', this.visibilityChange.bind(this));
     super.disconnectedCallback();
   }
 
@@ -54,6 +44,9 @@ class GameClient extends LitElement {
       case constants.game.tambola:
         await import('./tambola/client/tambolaClient.component');
         break;
+      case constants.game.tugOfWar:
+        await import('./tugOfWar/client/tugOfWarClient.component');
+        break;
     }
   }
   async startGame() {
@@ -62,12 +55,15 @@ class GameClient extends LitElement {
       return;
     }
 
-    if (!this.teamSelected && this.gameData.playAs === constants.playAs.team) {
+    if (
+      !this.teamSelected &&
+      (this.gameData.playAs === constants.gameType.team || this.gameData.playAs === constants.gameType.dualTeam)
+    ) {
       eventDispatch.triggerAlert('Select Team', 'error');
       return;
     }
 
-    if (this.gameData.playAs === constants.playAs.individual) {
+    if (this.gameData.playAs === constants.gameType.individual) {
       this.teamSelected = this.userName;
     }
     await Promise.all([this.joinRoom(), this.importCurrentGame()]);
@@ -91,7 +87,7 @@ class GameClient extends LitElement {
     const user = {
       id: this.userId,
       userName: this.userName,
-      team: this.gameData.playAs === constants.playAs.individual ? this.userName : this.teamSelected
+      team: this.gameData.playAs === constants.gameType.individual ? this.userName : this.teamSelected
     };
     await socketService.sendDataToAdmin(this.gameData.roomId, {
       event: constants.socketDataEvents.userJoined,
@@ -117,6 +113,15 @@ class GameClient extends LitElement {
             .userName=${this.userName}
             .gameData=${this.gameData}
           ></app-tambola-client>
+        `;
+      case constants.game.tugOfWar:
+        return html`
+          <app-tugofwar-client
+            .userId=${this.userId}
+            .userName=${this.userName}
+            .gameData=${this.gameData}
+            .team=${this.teamSelected}
+          ></app-tugofwar-client>
         `;
       default:
         return eventDispatch.triggerAlert('Invalid Game', 'error');
@@ -148,7 +153,7 @@ class GameClient extends LitElement {
          </div>
 
          ${
-           this.gameData.playAs === constants.playAs.team
+           this.gameData.playAs === constants.gameType.team || this.gameData.playAs === constants.gameType.dualTeam
              ? html`
                  <div class="row">
                    <div class="col">

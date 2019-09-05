@@ -1,12 +1,12 @@
 import { LitElement, html } from 'lit-element';
-import socketService from '../../../services/socketService';
-import '../../common/tap/tap.component';
-import '../../common/alert/alert.component';
-import constants from '../../../services/constants';
-import eventDispatch from '../../../services/eventDispatch';
-import gameService from '../../../services/gameService';
+import socketService from '../../../../services/socketService';
+import '../../../common/tap/tap.component';
+import '../../../common/alert/alert.component';
+import constants from '../../../../services/constants';
+import eventDispatch from '../../../../services/eventDispatch';
+import gameService from '../../../../services/gameService';
 
-class TapItClient extends LitElement {
+class TugOfWarClient extends LitElement {
   static get properties() {
     return {
       userId: { type: String },
@@ -60,30 +60,37 @@ class TapItClient extends LitElement {
     }
   }
 
-  generateSummaryMessage(myTeamDetails, topTeamDetails, secondTeam) {
-    if (topTeamDetails.teamName === this.team) {
-      eventDispatch.triggerAlert(
-        `${
-          this.gameData.playAs === constants.gameType.team ? 'Your team is' : 'You are'
-        } leading, second position is ${myTeamDetails.tapCount - secondTeam.tapCount} behind`
-      );
-    } else {
-      eventDispatch.triggerAlert(
-        `${
-          this.gameData.playAs === constants.gameType.team ? 'Your team is' : 'You are'
-        } trailing with ${topTeamDetails.tapCount - myTeamDetails.tapCount} taps from leading ${
-          topTeamDetails.teamName
-        }`,
-        'error'
-      );
-    }
-  }
-
   tapDetails(teamDetails) {
     if (this.isGameStarted) {
-      teamDetails.sort((a, b) => b.tapCount - a.tapCount);
-      const myTeam = teamDetails.find(r => r.teamName === this.team);
-      this.generateSummaryMessage(myTeam, teamDetails[0], teamDetails[1]);
+      if (teamDetails[constants.dualTeam.teamRed] > teamDetails[constants.dualTeam.teamBlue]) {
+        if (this.team === constants.dualTeam.teamRed) {
+          eventDispatch.triggerAlert(
+            `Your team is ahead with ${teamDetails[constants.dualTeam.teamRed] -
+              teamDetails[constants.dualTeam.teamBlue]} taps`,
+            'success'
+          );
+        } else {
+          eventDispatch.triggerAlert(
+            `Your team is trailing with ${teamDetails[constants.dualTeam.teamRed] -
+              teamDetails[constants.dualTeam.teamBlue]} taps`,
+            'error'
+          );
+        }
+      } else {
+        if (this.team === constants.dualTeam.teamBlue) {
+          eventDispatch.triggerAlert(
+            `Your team is ahead with ${teamDetails[constants.dualTeam.teamBlue] -
+              teamDetails[constants.dualTeam.teamRed]} taps`,
+            'success'
+          );
+        } else {
+          eventDispatch.triggerAlert(
+            `Your team is trailing with ${teamDetails[constants.dualTeam.teamBlue] -
+              teamDetails[constants.dualTeam.teamRed]} taps`,
+            'error'
+          );
+        }
+      }
     }
   }
 
@@ -91,7 +98,7 @@ class TapItClient extends LitElement {
     this.isGameStarted = false;
   }
   async startingGame() {
-    await import('../../common/countdown/countDown.component');
+    await import('../../../common/countdown/countDown.component');
     this.isGameStarting = true;
   }
 
@@ -136,4 +143,4 @@ class TapItClient extends LitElement {
   }
 }
 
-customElements.define('app-tapit-client', TapItClient);
+customElements.define('app-tugofwar-client', TugOfWarClient);
