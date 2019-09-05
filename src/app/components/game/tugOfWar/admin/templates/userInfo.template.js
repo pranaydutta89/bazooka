@@ -10,7 +10,7 @@ export default _this => {
           <div>
             <div class="row">
               <div class="col">
-                <h5>Players Speedometer</h5>
+                <h6>Players Speedometer</h6>
               </div>
             </div>
             <div class="row">

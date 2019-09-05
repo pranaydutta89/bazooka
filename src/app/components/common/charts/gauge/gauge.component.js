@@ -41,10 +41,11 @@ class GaugeChart extends LitElement {
   }
 
   async performUpdate() {
-    await this.configureChart();
     if (this.chart) {
       this.data.setValue(0, 1, this.val);
       this.chart.draw(this.data, this.options);
+    } else {
+      await this.configureChart();
     }
     super.performUpdate();
   }

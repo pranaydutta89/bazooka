@@ -7,10 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="language" content="en" />
     <meta name="revisit" content="1 days" />
-    <meta
-      name="Keywords"
-      content="real-time, collaborative, team, simple, mini, online gaming portal"
-    />
+    <meta name="Keywords" content="real-time, collaborative, team, simple, mini, online gaming portal" />
     <meta
       name="description"
       content="A real-time, collaborative, team, simple online gaming portal with multiple mini gaming options. Play with your friends, family or any stranger. Its simple gaming concept makes it easy children or elders."
@@ -21,23 +18,9 @@
       content="initial-scale=1, shrink-to-fit=no,user-scalable=no, width=device-width, maximum-scale=1"
     />
 
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="src/app/resources/favicon/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="src/app/resources/favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="src/app/resources/favicon/favicon-16x16.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="src/app/resources/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="src/app/resources/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="src/app/resources/favicon/favicon-16x16.png" />
 
     <style>
       body {
@@ -58,6 +41,20 @@
         text-align: center;
       }
     </style>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').then(
+          function(response) {
+            // Service worker registration done
+            console.log('Registration Successful', response);
+          },
+          function(error) {
+            // Service worker registration failed
+            console.log('Registration Failed', error);
+          }
+        );
+      }
+    </script>
   </head>
 
   <body>
@@ -100,22 +97,16 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous"
   />
-  <link
-    href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap"
-    rel="stylesheet"
-  />
-  <script
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=UA-60522635-2"
-  ></script>
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-60522635-2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
       dataLayer.push(arguments);
     }
-    gtag("js", new Date());
+    gtag('js', new Date());
 
-    gtag("config", "UA-60522635-2");
+    gtag('config', 'UA-60522635-2');
   </script>
 
   <script
@@ -133,18 +124,9 @@
     integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s="
     crossorigin="anonymous"
   ></script>
-  <script
-    type="text/javascript"
-    src="https://www.gstatic.com/charts/loader.js"
-  ></script>
-  <script
-    type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
-  ></script>
-  <script
-    type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.8/uuid.min.js"
-  ></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.8/uuid.min.js"></script>
   <script src="https://unpkg.com/navigo@6.0.2/lib/navigo.min.js"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/2.2.10/webcomponents-bundle.js"

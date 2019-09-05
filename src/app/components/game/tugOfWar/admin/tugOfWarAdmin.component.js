@@ -25,13 +25,13 @@ class TugOfWarAdmin extends LitElement {
     this.listeners = [];
     this.userDetails = [];
     this.gaugeOption = {
-      redFrom: 11,
-      redTo: 20,
+      redFrom: 10,
+      redTo: 15,
       yellowFrom: 5,
       yellowTo: 10,
       minorTicks: 1,
       min: 0,
-      max: 20
+      max: 15
     };
     this.init();
   }
@@ -145,7 +145,7 @@ class TugOfWarAdmin extends LitElement {
     socketService.sendDataToClient(this.gameData.roomId, {
       event: constants.socketDataEvents.endGame
     });
-    if (this.currentDifference < 0) {
+    if (this.currentDifference > 0) {
       this.gameSummaryMsg = `${constants.dualTeam.teamBlue} won`;
     } else {
       this.gameSummaryMsg = `${constants.dualTeam.teamRed} won`;
