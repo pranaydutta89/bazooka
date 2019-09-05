@@ -101,19 +101,23 @@ class TugOfWarAdmin extends LitElement {
       this.gameSummaryMsg = `${constants.dualTeam.teamBlue} is leading with ${this.currentDifference} taps`;
     }
 
-    socketService.sendDataToClient(this.gameData.roomId, {
-      event: constants.socketDataEvents.summary,
-      data: {
-        [constants.dualTeam.teamBlue]: blueCount,
-        [constants.dualTeam.teamRed]: redCount
-      }
-    });
+    socketService.sendDataToClient(
+      this.gameData.roomId,
+      {
+        event: constants.socketDataEvents.summary,
+        data: {
+          [constants.dualTeam.teamBlue]: blueCount,
+          [constants.dualTeam.teamRed]: redCount
+        }
+      },
+      false
+    );
   }
 
   userJoined(userData) {
     const user = this.userDetails.find(r => r.id === userData.id);
     if (!user) {
-      this.userDetails.push({ ...userData, ...{ tapCount: 0, lastTapTimestamp: Date.now() } });
+      this.userDetails.push({ ...userData, ...{ tapCount: 0, lastTapTimestamp: Date.now(), tapSpeed: 0 } });
       this.requestUpdate();
       eventDispatch.triggerAlert(`User ${userData.userName} Joined`);
     } else {
@@ -150,6 +154,11 @@ class TugOfWarAdmin extends LitElement {
   resetGame() {
     socketService.sendDataToClient(this.gameData.roomId, {
       event: constants.socketDataEvents.endGame
+    });
+    this.userDetails.forEach(r => {
+      r.tapCount = 0;
+      r.lastTapTimestamp = Date.now();
+      r.tapSpeed = 0;
     });
     this.init();
   }
@@ -205,7 +214,7 @@ class TugOfWarAdmin extends LitElement {
           </div>
         </div>
       </form>
-      <div>
+      <div style="margin-bottom:0.6rem">
         ${graphStats(this)}
       </div>
       <div>

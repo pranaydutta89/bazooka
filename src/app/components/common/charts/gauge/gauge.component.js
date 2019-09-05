@@ -17,7 +17,7 @@ class GaugeChart extends LitElement {
   }
 
   configureChart() {
-    return new Promise((res, rej) => {
+    return new Promise(res => {
       this.options = {
         ...{
           redFrom: 90,
@@ -31,8 +31,6 @@ class GaugeChart extends LitElement {
       google.charts.load('current', { packages: ['gauge'] });
       google.charts.setOnLoadCallback(() => {
         this.data = google.visualization.arrayToDataTable([['Label', 'Value'], [this.label, 0]]);
-
-        //this.chart.draw(this.data, this.options);
         res();
       });
     });
@@ -55,8 +53,8 @@ class GaugeChart extends LitElement {
     return html`
       <css-ele></css-ele>
       <div class="row">
-        <div class="col">
-          <div style="width: 10vw; height: 10vh;" id="chartContainer"></div>
+        <div class="col" style="text-align:center">
+          <div style="width: 20vw; height: 20vh;margin:0 auto" id="chartContainer"></div>
         </div>
       </div>
     `;

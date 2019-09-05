@@ -32,7 +32,8 @@ export default _this => {
         right: 0;
       }
 
-      h6 {
+      .teamBlue h6,
+      .teamRed h6 {
         position: absolute;
         text-align: center;
         width: 100%;
@@ -45,20 +46,39 @@ export default _this => {
       <div class="row">
         <div class="col teamRed">
           <div style="position:relative;">
-            <div class="colorDiv" .style=${`width:${_this.currentDifference < 0 ? _this.currentWidth : 100}%`}></div>
+            ${!_this.isGameStarted && _this.currentDifference === 0
+              ? html`
+                  <div class="colorDiv" style="width:100%" }></div>
+                `
+              : ''}
+            ${_this.currentDifference < 0
+              ? html`
+                  <div class="colorDiv" .style=${`width:${_this.currentWidth}%`}></div>
+                `
+              : ''}
           </div>
 
-          <h6>${constants.dualTeam.teamRed} (+${Math.abs(_this.currentDifference)})</h6>
+          <h6>
+            ${constants.dualTeam.teamRed} (${_this.currentDifference < 0 ? '+' : '-'}
+            ${Math.abs(_this.currentDifference)})
+          </h6>
         </div>
         <div class="headerDivider"></div>
         <div class="col teamBlue">
-          <div style="position:relative;">
-            <div class="colorDiv" .style=${`width:${_this.currentDifference > 0 ? _this.currentWidth : 100}%`}></div>
-          </div>
-          <div style="position:relative;">
-            <div class="colorDiv" .style=${`width:${_this.currentWidth}%`}></div>
-          </div>
-          <h6>${constants.dualTeam.teamBlue} (+${Math.abs(_this.currentDifference)})</h6>
+          ${!_this.isGameStarted && _this.currentDifference === 0
+            ? html`
+                <div class="colorDiv" style="width:100%" }></div>
+              `
+            : ''}
+          ${_this.currentDifference > 0
+            ? html`
+                <div class="colorDiv" .style=${`width:${_this.currentWidth}%`}></div>
+              `
+            : ''}
+          <h6>
+            ${constants.dualTeam.teamBlue}
+            (${_this.currentDifference > 0 ? '+' : '-'}${Math.abs(_this.currentDifference)})
+          </h6>
         </div>
       </div>
     </div>
