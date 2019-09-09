@@ -13,10 +13,6 @@ class Tap extends LitElement {
   }
   tapped() {
     const event = new CustomEvent('task', {
-      detail: {
-        team: this.team,
-        roomName: this.roomName
-      },
       bubbles: true,
       composed: true
     });

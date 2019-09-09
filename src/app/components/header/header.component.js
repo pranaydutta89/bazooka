@@ -30,8 +30,8 @@ class Header extends LitElement {
           margin-bottom: 0.5rem;
         }
       </style>
-      <div class="heading">
-        <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
+      <div class="heading sticky-top">
+        <nav class="navbar  navbar-expand-lg navbar-dark bg-primary">
           <a class="navbar-brand" href="/home" @click="${evt => this.linkClick(evt, '/home')}">{ Bazooka }</a>
           <button
             class="navbar-toggler"
