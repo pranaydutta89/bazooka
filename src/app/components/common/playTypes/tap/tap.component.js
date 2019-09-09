@@ -12,11 +12,13 @@ class Tap extends LitElement {
     this.tapCount = 0;
   }
   tapped() {
-    const event = new CustomEvent('tapped', {
+    const event = new CustomEvent('task', {
       detail: {
         team: this.team,
         roomName: this.roomName
-      }
+      },
+      bubbles: true,
+      composed: true
     });
     this.dispatchEvent(event);
     this.tapCount += 1;
@@ -65,4 +67,4 @@ class Tap extends LitElement {
   }
 }
 
-customElements.define('app-tap', Tap);
+customElements.define('app-play-tap', Tap);

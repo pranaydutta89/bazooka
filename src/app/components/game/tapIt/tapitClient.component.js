@@ -1,6 +1,5 @@
 import { LitElement, html } from 'lit-element';
 import socketService from '../../../services/socketService';
-import '../../common/tap/tap.component';
 import '../../common/alert/alert.component';
 import constants from '../../../services/constants';
 import eventDispatch from '../../../services/eventDispatch';

@@ -9,6 +9,11 @@ export default Object.freeze({
     teamBlue: 'Team Blue',
     teamRed: 'Team Red'
   },
+  playType: {
+    tap: 'Tap',
+    grid: 'Grid',
+    scroll: 'Scroll'
+  },
   gameType: {
     team: 'team',
     individual: 'individual',

@@ -5,6 +5,7 @@ import socketService from '../../../../services/socketService';
 import constants from '../../../../services/constants';
 import '../../../common/charts/gauge/gauge.component';
 import eventDispatch from '../../../../services/eventDispatch';
+import '../../../common/playTypes/playTypeSelection/playTypeSelection.component';
 class TugOfWarAdmin extends LitElement {
   static get properties() {
     return {
@@ -130,7 +131,10 @@ class TugOfWarAdmin extends LitElement {
       await import('../../../common/countdown/countDown.component');
       if (constants.devMode || this.userDetails.length > 1) {
         await socketService.sendDataToClient(this.gameData.roomId, {
-          event: constants.socketDataEvents.startGame
+          event: constants.socketDataEvents.startGame,
+          data: {
+            playType: this.currentPlayType
+          }
         });
         this.isGameStarting = true;
       } else {
@@ -191,6 +195,13 @@ class TugOfWarAdmin extends LitElement {
           evt.preventDefault();
         }}
       >
+        <div style="margin-bottom:0.6rem">
+          <app-play-selection
+            @select=${evt => {
+              this.currentPlayType = evt.detail;
+            }}
+          ></app-play-selection>
+        </div>
         <div class="row" style="margin-bottom:0.6rem">
           <div class="col-sm-2">
             <h6>Tap Difference</h6>

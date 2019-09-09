@@ -1,6 +1,5 @@
 import { LitElement, html } from 'lit-element';
 import socketService from '../../../../services/socketService';
-import '../../../common/tap/tap.component';
 import '../../../common/alert/alert.component';
 import constants from '../../../../services/constants';
 import eventDispatch from '../../../../services/eventDispatch';
@@ -14,7 +13,8 @@ class TugOfWarClient extends LitElement {
       gameData: { type: Object },
       isGameStarted: { type: Boolean },
       isGameStarting: { type: Boolean },
-      userName: { type: String }
+      userName: { type: String },
+      playType: { type: String }
     };
   }
   constructor() {
@@ -47,7 +47,7 @@ class TugOfWarClient extends LitElement {
   receiveData(msg) {
     switch (msg.event) {
       case constants.socketDataEvents.startGame:
-        this.startingGame();
+        this.startingGame(msg.data);
         break;
 
       case constants.socketDataEvents.endGame:
@@ -97,8 +97,12 @@ class TugOfWarClient extends LitElement {
   endGame() {
     this.isGameStarted = false;
   }
-  async startingGame() {
-    await import('../../../common/countdown/countDown.component');
+  async startingGame(data) {
+    await Promise.all([
+      import('../../../common/countdown/countDown.component'),
+      import('../../../common/playTypes/wrapper.component')
+    ]);
+    this.playType = data.playType;
     this.isGameStarting = true;
   }
 
@@ -122,7 +126,7 @@ class TugOfWarClient extends LitElement {
       ${this.isGameStarted
         ? html`
             <div>
-              <app-tap @tapped=${this.userTapped}></app-tap>
+              <app-play-wrapper .playType=${this.playType} @task=${this.userTapped}></app-play-wrapper>
             </div>
           `
         : html`
