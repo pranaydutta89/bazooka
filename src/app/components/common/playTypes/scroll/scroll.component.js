@@ -10,23 +10,49 @@ class ScrollComponents extends LitElement {
 
   constructor() {
     super();
+    this.clickedWindow = [];
     this.divArr = [];
-    this.pageCount = 10000;
+    this.pageCount = 100000;
+  }
+
+  scrollEventTrack() {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (this.divArr.length < this.pageCount) {
+        for (let i = 1; i <= 10; i++) {
+          this.divArr.push(i);
+        }
+      }
+    }
+    this.requestUpdate();
+  }
+
+  connectedCallback() {
+    document.addEventListener('scroll', this.scrollEventTrack.bind(this));
+    super.connectedCallback();
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('scroll', this.scrollEventTrack.bind(this));
+    super.disconnectedCallback();
   }
 
   firstUpdated() {
-    for (let i = 1; i <= this.pageCount; i++) {
+    for (let i = 1; i <= 10; i++) {
       this.divArr.push(i);
     }
     this.requestUpdate();
   }
 
-  scrolled() {
-    const event = new CustomEvent('task', {
-      bubbles: true,
-      composed: true
-    });
-    this.dispatchEvent(event);
+  scrolled(tapNum) {
+    const max = this.clickedWindow.length !== 0 ? this.clickedWindow.reduce((m, x) => (m > x ? m : x)) : 0;
+    if (tapNum > max) {
+      const event = new CustomEvent('task', {
+        bubbles: true,
+        composed: true
+      });
+      this.dispatchEvent(event);
+      this.clickedWindow.push(tapNum);
+    }
   }
 
   render() {
@@ -47,10 +73,15 @@ class ScrollComponents extends LitElement {
       <css-ele></css-ele>
       ${this.divArr.map((r, idx) => {
         return html`
-          <div class="row" @click=${this.scrolled}>
+          <div
+            class="row"
+            @click=${() => {
+              this.scrolled(r);
+            }}
+          >
             <div class="col">
               <div class="textData">
-                ${idx}
+                ${idx + 1}
               </div>
             </div>
           </div>
