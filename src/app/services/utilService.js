@@ -1,5 +1,3 @@
-import eventDispatch from './eventDispatch';
-
 class UtilsService {
   hashCode(str) {
     var hash = 0;
@@ -15,6 +13,14 @@ class UtilsService {
       return this.randomIntFromInterval(min, max, exceptNumbers);
     }
     return rndNum;
+  }
+
+  randomNumberCount(min, max, count) {
+    const selectedNumbers = [];
+    while (count--) {
+      selectedNumbers.push(this.randomIntFromInterval(min, max, selectedNumbers));
+    }
+    return selectedNumbers;
   }
 
   intToARGB(i) {
