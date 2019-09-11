@@ -55,9 +55,14 @@ class UtilsService {
     );
   }
 
-  generateUniqueBrowserId() {
-    // eslint-disable-next-line no-undef
-    return uuid();
+  randomString(length = 10) {
+    var result = '';
+    var characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 }
 

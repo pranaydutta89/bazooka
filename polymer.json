@@ -1,0 +1,16 @@
+{
+  "builds": [
+    {
+      "preset": "es5-bundled",
+      "stripComments": true,
+      "addServiceWorker": true,
+      "addPushManifest": true
+    },
+    {
+      "preset": "uncompiled-bundled",
+      "addServiceWorker": true,
+      "addPushManifest": true,
+      "stripComments": true
+    }
+  ]
+}

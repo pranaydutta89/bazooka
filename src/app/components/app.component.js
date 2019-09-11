@@ -1,3 +1,6 @@
+import 'jquery';
+import 'popper.js';
+import 'bootstrap';
 import { LitElement, html } from 'lit-element';
 import './common/css/css.component';
 import './header/header.component';

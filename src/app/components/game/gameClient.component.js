@@ -83,7 +83,7 @@ class GameClient extends LitElement {
   }
 
   async joinUser() {
-    this.userId = utilService.generateUniqueBrowserId();
+    this.userId = utilService.randomString();
     const user = {
       id: this.userId,
       userName: this.userName,

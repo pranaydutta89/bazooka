@@ -7,6 +7,7 @@ import staticGames from '../../staticData/games';
 import '../common/clientUrl/clientUrl.component';
 import eventDispatch from '../../services/eventDispatch';
 import socketService from '../../services/socketService';
+import utilService from '../../services/utilService';
 
 class GameAdmin extends LitElement {
   static get properties() {
@@ -44,7 +45,7 @@ class GameAdmin extends LitElement {
   async startGame(data) {
     this.gameData = data.detail;
     // eslint-disable-next-line no-undef
-    this.gameData.roomId = uuid();
+    this.gameData.roomId = utilService.randomString();
     this.gameData.gameId = this.gameId;
     await socketService.joinRoom(true, this.gameData.roomId);
     eventDispatch.triggerAlert('Room Created...');
