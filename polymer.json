@@ -1,4 +1,5 @@
 {
+  "moduleResolution": "node",
   "builds": [
     {
       "preset": "es5-bundled",
