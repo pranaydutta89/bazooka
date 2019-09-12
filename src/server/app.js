@@ -35,9 +35,9 @@ app.get('*', (req, res) => {
     }
   } else {
     if (req.path == '/') {
-      res.sendFile(path.resolve(__dirname, 'uncompiled-unbundled', 'index.html'));
+      res.sendFile(path.resolve(__dirname, 'uncompiled-bundled', 'index.html'));
     } else {
-      res.sendFile(__dirname + '/uncompiled-unbundled' + req.path);
+      res.sendFile(__dirname + '/uncompiled-bundled' + req.path);
     }
   }
 });
