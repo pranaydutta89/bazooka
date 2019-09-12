@@ -152,7 +152,7 @@ class TapItAdmin extends LitElement {
     if (this.gameStartedFlag) {
       const user = this.userDetails.find(r => r.id === data.id);
       if (user) {
-        user.tapCount += 1;
+        user.tapCount = data.count;
         this.userDetails = this.userDetails;
         this.checkTapCount();
         eventDispatch.triggerAlert(`User ${user.userName} Tapped`);

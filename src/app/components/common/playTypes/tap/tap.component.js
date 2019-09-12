@@ -12,12 +12,15 @@ class Tap extends LitElement {
     this.tapCount = 0;
   }
   tapped() {
+    this.tapCount += 1;
     const event = new CustomEvent('task', {
+      detail: {
+        count: this.tapCount
+      },
       bubbles: true,
       composed: true
     });
     this.dispatchEvent(event);
-    this.tapCount += 1;
   }
   render() {
     return html`

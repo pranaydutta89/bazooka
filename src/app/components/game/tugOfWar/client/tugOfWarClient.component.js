@@ -32,13 +32,14 @@ class TugOfWarClient extends LitElement {
     super.disconnectedCallback();
   }
 
-  userTapped() {
+  userTapped(evt) {
     socketService.sendDataToAdmin(
       this.gameData.roomId,
       {
         event: constants.socketDataEvents.userTapped,
         data: {
-          id: this.userId
+          id: this.userId,
+          count: evt.detail.count
         }
       },
       false

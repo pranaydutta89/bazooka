@@ -11,6 +11,7 @@ class GridComponent extends LitElement {
   constructor() {
     super();
     this.count = 5;
+    this.totalGridDone = 0;
     this.divArr = [];
   }
 
@@ -44,7 +45,9 @@ class GridComponent extends LitElement {
       this.requestUpdate();
     }
     if (this.numbers.length === 0) {
+      this.totalGridDone += 1;
       const event = new CustomEvent('task', {
+        detail: { count: this.totalGridDone },
         bubbles: true,
         composed: true
       });

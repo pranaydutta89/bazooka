@@ -71,7 +71,7 @@ class TugOfWarAdmin extends LitElement {
       const currentTimestamp = Date.now();
       const user = this.userDetails.find(r => r.id === userData.id);
       eventDispatch.triggerAlert(`${user.userName} Tapped..`);
-      user.tapCount += 1;
+      user.tapCount = userData.count;
       user.tapSpeed = 1000 / (currentTimestamp - user.lastTapTimestamp);
       user.lastTapTimestamp = currentTimestamp;
       const teamBlueCount = this.userDetails
@@ -212,7 +212,7 @@ class TugOfWarAdmin extends LitElement {
               required
               min="10"
               class="form-control"
-              max="100"
+              max="1000"
               .value=${this.tapDifference}
               @change=${evt => (this.tapDifference = evt.target.value)}
             />

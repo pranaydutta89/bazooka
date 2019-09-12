@@ -16,14 +16,14 @@ class ScrollComponents extends LitElement {
   }
 
   scrollEventTrack() {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
       if (this.divArr.length < this.pageCount) {
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 0; i < 10; i++) {
           this.divArr.push(i);
         }
+        this.requestUpdate();
       }
     }
-    this.requestUpdate();
   }
 
   connectedCallback() {
@@ -37,7 +37,7 @@ class ScrollComponents extends LitElement {
   }
 
   firstUpdated() {
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 0; i < 10; i++) {
       this.divArr.push(i);
     }
     this.requestUpdate();
@@ -47,6 +47,10 @@ class ScrollComponents extends LitElement {
     const max = this.clickedWindow.length !== 0 ? this.clickedWindow.reduce((m, x) => (m > x ? m : x)) : 0;
     if (tapNum > max) {
       const event = new CustomEvent('task', {
+        detail: {
+          count: tapNum
+        },
+
         bubbles: true,
         composed: true
       });
@@ -75,13 +79,13 @@ class ScrollComponents extends LitElement {
         return html`
           <div
             class="row"
-            @click=${() => {
-              this.scrolled(r);
+            @touchstart=${() => {
+              this.scrolled(idx);
             }}
           >
             <div class="col">
               <div class="textData">
-                ${idx + 1}
+                ${idx}
               </div>
             </div>
           </div>
