@@ -46,7 +46,7 @@ class TapItClient extends LitElement {
   receiveData(msg) {
     switch (msg.event) {
       case constants.socketDataEvents.startGame:
-        this.startingGame();
+        this.startingGame(msg.data);
         break;
 
       case constants.socketDataEvents.endGame:
@@ -89,8 +89,12 @@ class TapItClient extends LitElement {
   endGame() {
     this.isGameStarted = false;
   }
-  async startingGame() {
-    await import('../../common/countdown/countDown.component');
+  async startingGame(data) {
+    await Promise.all([
+      import('../../common/countdown/countDown.component'),
+      import('../../common/playTypes/wrapper.component')
+    ]);
+    this.playType = data.playType;
     this.isGameStarting = true;
   }
 
@@ -114,7 +118,7 @@ class TapItClient extends LitElement {
       ${this.isGameStarted
         ? html`
             <div>
-              <app-tap @tapped=${this.userTapped}></app-tap>
+              <app-play-wrapper .playType=${this.playType} @task=${this.userTapped}></app-play-wrapper>
             </div>
           `
         : html`

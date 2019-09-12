@@ -6,6 +6,7 @@ import utilService from '../../../services/utilService';
 import constants from '../../../services/constants';
 import '../../common/alert/alert.component';
 import eventDispatch from '../../../services/eventDispatch';
+import '../../common/playTypes/playTypeSelection/playTypeSelection.component';
 class TapItAdmin extends LitElement {
   static get properties() {
     return {
@@ -83,7 +84,7 @@ class TapItAdmin extends LitElement {
   }
 
   userJoined(userData) {
-    if (this.gameData.playAs === constants.playAs.individual) {
+    if (this.gameData.playAs === constants.gameType.individual) {
       this.teamColor[userData.team] = utilService.pickColor(userData.team);
     }
 
@@ -166,7 +167,10 @@ class TapItAdmin extends LitElement {
       await import('../../common/countdown/countDown.component');
       if (constants.devMode || this.userDetails.length > 1) {
         await socketService.sendDataToClient(this.gameData.roomId, {
-          event: constants.socketDataEvents.startGame
+          event: constants.socketDataEvents.startGame,
+          data: {
+            playType: this.currentPlayType
+          }
         });
         this.gameStartCountDown = true;
       } else {
@@ -232,34 +236,50 @@ class TapItAdmin extends LitElement {
         </div>
 
         <app-alert keepOpen="true" status="show" type="info" .message=${this.gameSummaryMsg}></app-alert>
+        <form
+          @submit=${evt => {
+            this.startGame();
+            evt.preventDefault();
+          }}
+        >
+          <div style="margin-bottom:0.6rem">
+            <app-play-selection
+              @select=${evt => {
+                this.currentPlayType = evt.detail;
+              }}
+            ></app-play-selection>
+          </div>
+          <div class="row" style="margin-bottom:0.6rem">
+            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label text-truncate"
+              >Play Time(Seconds)</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="number"
+                .value=${this.gameTime}
+                .disabled=${this.gameStartedFlag}
+                @change=${evt => (this.gameTime = evt.target.value)}
+                class="form-control form-control-xs"
+                id="colFormLabelSm"
+                placeholder="Enter Seconds"
+                required
+                min="20"
+                max="300"
+              />
+            </div>
 
-        <div class="row" style="margin-bottom:0.6rem">
-          <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label text-truncate"
-            >Play Time(Seconds)</label
-          >
-          <div class="col-sm-6">
-            <input
-              type="number"
-              .value=${this.gameTime}
-              .disabled=${this.gameStartedFlag}
-              @change=${evt => (this.gameTime = evt.target.value)}
-              class="form-control form-control-xs"
-              id="colFormLabelSm"
-              placeholder="Enter Seconds"
-            />
+            <div class="col-sm-2">
+              <button type="submit" class="btn btn-block btn-info">
+                Start
+              </button>
+            </div>
+            <div class="col-sm-2">
+              <button type="button" @click=${this.resetData} class="btn btn-block btn-secondary">
+                Reset
+              </button>
+            </div>
           </div>
-
-          <div class="col-sm-2">
-            <button type="button" @click=${this.startGame} class="btn btn-block btn-info">
-              Start
-            </button>
-          </div>
-          <div class="col-sm-2">
-            <button type="button" @click=${this.resetData} class="btn btn-block btn-secondary">
-              Reset
-            </button>
-          </div>
-        </div>
+        </form>
 
         <app-chart-bar
           xLabel="Team tap Count"
