@@ -1,6 +1,3 @@
-import 'jquery';
-import 'popper.js';
-import 'bootstrap';
 import { LitElement, html } from 'lit-element';
 import './common/css/css.component';
 import './header/header.component';
@@ -21,7 +18,7 @@ class App extends LitElement {
     super();
     this.currentRoute = 'home';
     // eslint-disable-next-line no-undef
-    const loadingNode = $('#loadingInit');
+    const loadingNode = document.getElementById('loadingInit');
     if (loadingNode) {
       loadingNode.remove();
     }

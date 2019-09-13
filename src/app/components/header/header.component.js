@@ -3,12 +3,14 @@ import routes from '../../services/routerService';
 class Header extends LitElement {
   static get properties() {
     return {
-      currentRoute: { type: String }
+      currentRoute: { type: String },
+      collapse: { type: Boolean }
     };
   }
 
   constructor() {
     super();
+    this.collapse = true;
     this.currentRoute = '/home';
   }
 
@@ -20,6 +22,7 @@ class Header extends LitElement {
     event.preventDefault();
     this.currentRoute = route;
     routes.navigate(route);
+    this.collapse = true;
   }
 
   render() {
@@ -34,6 +37,7 @@ class Header extends LitElement {
         <nav class="navbar  navbar-expand-lg navbar-dark bg-primary">
           <a class="navbar-brand" href="/home" @click="${evt => this.linkClick(evt, '/home')}">{ Bazooka }</a>
           <button
+            @click=${() => (this.collapse = !this.collapse)}
             class="navbar-toggler"
             type="button"
             data-toggle="collapse"
@@ -45,7 +49,7 @@ class Header extends LitElement {
             <span class="navbar-toggler-icon"></span>
           </button>
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <div class="navbar-collapse ${this.collapse ? 'collapse' : 'empty'}" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item ${this.currentRoute === '/home' ? 'active' : 'empty'}">
                 <a class="nav-link" href="/home" @click="${evt => this.linkClick(evt, '/home')}">Home</a>
