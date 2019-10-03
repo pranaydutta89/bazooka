@@ -1,9 +1,8 @@
 import constants from './constants';
 import eventDispatch from './eventDispatch';
-
+import * as io from 'socket.io-client';
 class socketService {
   constructor() {
-    // eslint-disable-next-line no-undef
     this.socket = io.connect(constants.serverUrl);
   }
 
