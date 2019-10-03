@@ -1,6 +1,5 @@
 import { LitElement, html } from 'lit-element';
 import './header/header.component';
-import './game/gameClient.component';
 import './footer/footer.component';
 import router from '../services/routerService';
 import socketService from '../services/socketService';
