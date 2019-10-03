@@ -10,7 +10,6 @@ class Home extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .home {
           position: relative;

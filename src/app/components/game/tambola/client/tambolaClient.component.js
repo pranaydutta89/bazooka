@@ -221,7 +221,7 @@ class TambolaClient extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
+       
       <app-public-message .message=${this.publicMessage}></app-public-message>
           ${
             this.isGameStarting

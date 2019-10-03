@@ -15,7 +15,6 @@ class Games extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <div class="row">
         <div class="col">
           ${gamesStatic.map(r => {

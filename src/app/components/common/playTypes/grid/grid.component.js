@@ -57,7 +57,6 @@ class GridComponent extends LitElement {
   }
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .boxes {
           height: 5vh;

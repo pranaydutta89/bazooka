@@ -74,7 +74,7 @@ class ScrollComponents extends LitElement {
           margin-bottom: 0.6rem;
         }
       </style>
-      <css-ele></css-ele>
+
       ${this.divArr.map((r, idx) => {
         return html`
           <div

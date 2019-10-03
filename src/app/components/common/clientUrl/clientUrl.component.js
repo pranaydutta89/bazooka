@@ -1,7 +1,7 @@
-import { LitElement, html } from "lit-element";
-import socketService from "../../../services/socketService";
-import constants from "../../../services/constants";
-import eventDispatch from "../../../services/eventDispatch";
+import { LitElement, html } from 'lit-element';
+import socketService from '../../../services/socketService';
+import constants from '../../../services/constants';
+import eventDispatch from '../../../services/eventDispatch';
 
 class ClientUrl extends LitElement {
   static get properties() {
@@ -16,10 +16,10 @@ class ClientUrl extends LitElement {
   }
 
   copyClientUrl() {
-    const copyText = this.shadowRoot.getElementById("clientUrl");
+    const copyText = this.shadowRoot.getElementById('clientUrl');
     copyText.select();
-    document.execCommand("copy");
-    eventDispatch.triggerAlert("Copied URL,share this with players");
+    document.execCommand('copy');
+    eventDispatch.triggerAlert('Copied URL,share this with players');
   }
 
   async firstUpdated() {
@@ -31,27 +31,15 @@ class ClientUrl extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <div class="row">
         <div class="col">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon3">Game Link</span>
             </div>
-            <input
-              type="text"
-              class="form-control"
-              id="clientUrl"
-              .value=${this.clientUrl}
-              readonly
-            />
+            <input type="text" class="form-control" id="clientUrl" .value=${this.clientUrl} readonly />
             <div class="input-group-append" style="cursor:pointer">
-              <span
-                class="input-group-text"
-                id="basic-addon2"
-                @click=${this.copyClientUrl}
-                >Click here to copy</span
-              >
+              <span class="input-group-text" id="basic-addon2" @click=${this.copyClientUrl}>Click here to copy</span>
             </div>
           </div>
         </div>
@@ -60,4 +48,4 @@ class ClientUrl extends LitElement {
   }
 }
 
-customElements.define("app-client-url", ClientUrl);
+customElements.define('app-client-url', ClientUrl);

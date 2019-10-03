@@ -24,7 +24,6 @@ class Tap extends LitElement {
   }
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .wrapper {
           position: absolute;

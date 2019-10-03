@@ -1,0 +1,24 @@
+header {
+  nav {
+    padding: 0 2rem 0 2rem !important;
+    .navbar-brand {
+      font-family: 'grand-hotel';
+      font-size: 4rem;
+      color: $primary;
+    }
+    .navbar-nav {
+      font-family: 'gotham-medium';
+      font-size: 1.6rem;
+      .nav-item {
+        cursor: pointer;
+        margin-right: 21px;
+        &.active {
+          color: $primary;
+        }
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

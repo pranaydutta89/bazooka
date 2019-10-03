@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from 'lit-element';
 class BarChart extends LitElement {
   static get properties() {
     return {
@@ -13,15 +13,15 @@ class BarChart extends LitElement {
   constructor() {
     super();
     this.data = this.data || [];
-    this.xLabel = this.xLabel || "x-axis";
-    this.yLabel = this.yLabel || "y-axis";
+    this.xLabel = this.xLabel || 'x-axis';
+    this.yLabel = this.yLabel || 'y-axis';
     this.options = this.options || {
-      title: "Live Chart",
-      chartArea: { width: "100%" }
+      title: 'Live Chart',
+      chartArea: { width: '100%' }
     };
   }
   firstUpdated() {
-    google.charts.load("current", { packages: ["corechart", "bar"] });
+    google.charts.load('current', { packages: ['corechart', 'bar'] });
     google.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 
@@ -33,13 +33,11 @@ class BarChart extends LitElement {
   drawChart() {
     if (this.data.length != 0) {
       const data = google.visualization.arrayToDataTable([
-        [this.yLabel, this.xLabel, { role: "style" }, { role: "annotation" }],
+        [this.yLabel, this.xLabel, { role: 'style' }, { role: 'annotation' }],
         ...this.data
       ]);
       if (!this.chart) {
-        this.chart = new google.visualization.BarChart(
-          this.shadowRoot.getElementById("chart_div")
-        );
+        this.chart = new google.visualization.BarChart(this.shadowRoot.getElementById('chart_div'));
       }
       this.chart.draw(data, this.options);
     }
@@ -47,7 +45,6 @@ class BarChart extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <div class="row">
         <div class="col">
           <div id="chart_div"></div>
@@ -57,4 +54,4 @@ class BarChart extends LitElement {
   }
 }
 
-customElements.define("app-chart-bar", BarChart);
+customElements.define('app-chart-bar', BarChart);

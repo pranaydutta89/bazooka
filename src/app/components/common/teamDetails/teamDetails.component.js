@@ -231,7 +231,6 @@ class TeamDetails extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .teamDetails ul {
           margin-bottom: 0.6rem;

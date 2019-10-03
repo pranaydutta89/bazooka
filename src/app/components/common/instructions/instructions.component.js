@@ -1,5 +1,5 @@
-import { LitElement, html } from "lit-element";
-import gameStatic from "../../../staticData/games";
+import { LitElement, html } from 'lit-element';
+import gameStatic from '../../../staticData/games';
 
 class Instructions extends LitElement {
   static get properties() {
@@ -18,7 +18,6 @@ class Instructions extends LitElement {
   }
   render() {
     return html`
-      <css-ele></css-ele>
       <div class="row" style="margin-top:0.6rem">
         <div class="col">
           <div class="card">
@@ -39,4 +38,4 @@ class Instructions extends LitElement {
   }
 }
 
-customElements.define("app-game-instruction", Instructions);
+customElements.define('app-game-instruction', Instructions);

@@ -48,7 +48,6 @@ class CountDown extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .loading {
           position: fixed;

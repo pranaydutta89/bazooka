@@ -14,7 +14,6 @@ class PublicMessage extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .wrapper {
           position: fixed;

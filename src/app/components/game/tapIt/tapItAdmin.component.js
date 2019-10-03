@@ -220,7 +220,6 @@ class TapItAdmin extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       ${this.gameStartCountDown
         ? html`
             <app-countdown @ended=${this.gameStarted}></app-countdown>

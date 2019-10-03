@@ -1,4 +1,6 @@
-$blue: #007bff;
+//bootstrap variables
+
+$blue: #07689f;
 $indigo: #6610f2;
 $purple: #6f42c1;
 $pink: #e83e8c;
@@ -8,6 +10,7 @@ $yellow: #ffc107;
 $green: #28a745;
 $teal: #20c997;
 $cyan: #17a2b8;
+$gray: #4e4e4e;
 
 $white: #fff;
 $gray-100: #f8f9fa;
@@ -22,7 +25,7 @@ $gray-900: #212529;
 $black: #000;
 
 $primary: $blue;
-$secondary: $gray-600;
+$secondary: $white;
 $success: $green;
 $info: $cyan;
 $warning: $yellow;

@@ -101,7 +101,6 @@ class Alert extends LitElement {
   }
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .posFixed {
           position: fixed !important;

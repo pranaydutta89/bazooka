@@ -294,7 +294,6 @@ class TambolaAdmin extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <app-public-message .message=${this.publicMsg}></app-public-message>
       ${this.isGameStarting
         ? html`

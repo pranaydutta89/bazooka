@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from 'lit-element';
 
 class Spinner extends LitElement {
   static get properties() {
@@ -11,12 +11,11 @@ class Spinner extends LitElement {
 
   constructor() {
     super();
-    this.isStarted = "hide";
+    this.isStarted = 'hide';
   }
 
   render() {
     return html`
-      <css-ele></css-ele>
       <style>
         .loading {
           position: fixed;
@@ -41,7 +40,7 @@ class Spinner extends LitElement {
           font-size: 10px;
         }
       </style>
-      ${this.isStarted == "show"
+      ${this.isStarted == 'show'
         ? html`
             <div class="loading">
               <div class="spinner-cus">
@@ -53,9 +52,9 @@ class Spinner extends LitElement {
               </div>
             </div>
           `
-        : ""}
+        : ''}
     `;
   }
 }
 
-customElements.define("app-spinner", Spinner);
+customElements.define('app-spinner', Spinner);

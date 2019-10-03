@@ -105,7 +105,6 @@ class TapItClient extends LitElement {
   }
   render() {
     return html`
-      <css-ele></css-ele>
       <div class="row" style="margin-top:0.6rem">
         <div class="col" style="text-align:center">
           <h5>Hello!! Player ${this.userName}</h5>

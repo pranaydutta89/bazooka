@@ -135,7 +135,7 @@ class GameClient extends LitElement {
           background-color: grey !important;
         }
       </style>
-      <css-ele></css-ele>
+
       ${this.startGameFlag
         ? this.renderGameClient
         : html`

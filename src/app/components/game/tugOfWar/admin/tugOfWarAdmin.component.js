@@ -182,7 +182,6 @@ class TugOfWarAdmin extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       ${this.isGameStarting
         ? html`
             <app-countdown @ended=${this.gameStarted}></app-countdown>

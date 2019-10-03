@@ -52,7 +52,6 @@ class GaugeChart extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <div class="row">
         <div class="col" style="text-align:center">
           <div style="width: 20vw; height: 20vh;margin:0 auto" id="chartContainer"></div>

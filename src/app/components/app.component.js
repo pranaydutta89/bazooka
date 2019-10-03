@@ -1,5 +1,4 @@
 import { LitElement, html } from 'lit-element';
-import './common/css/css.component';
 import './header/header.component';
 import './game/gameClient.component';
 import './footer/footer.component';
@@ -105,10 +104,9 @@ class App extends LitElement {
 
   render() {
     return html`
-      <css-ele></css-ele>
       <div>
         <app-header></app-header>
-        <div class="container">
+        <div class="container-fluid">
           ${this.renderRoute}
         </div>
       </div>
