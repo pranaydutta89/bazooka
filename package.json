@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "scss": "node-sass src/app/scss/_core.scss src/app/css/styles.css",
+    "scss": "node-sass src/app/scss/_core.scss src/app/resources/css/styles.css",
     "scss:watch": "npm run scss && node-sass src/app/scss/_core.scss -wo src/app/css/_styles.css",
     "ui:watch": "polymer serve",
     "prebuild": "rimraf dist",
@@ -19,6 +19,7 @@
   "author": "Pranay Dutta",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "bootstrap": "^4.3.1",
     "compression": "^1.7.4",
