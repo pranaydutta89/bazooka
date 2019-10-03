@@ -23,30 +23,7 @@ export default class Css extends LitElement {
         crossorigin="anonymous"
       />
       <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet" />
-      <style>
-        /* width */
-        ::-webkit-scrollbar {
-          width: 5px;
-        }
-
-        /* Track */
-        ::-webkit-scrollbar-track {
-          background: #f1f1f1;
-        }
-
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-          background: #888;
-        }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-          background: #555;
-        }
-        * {
-          font-family: 'Ubuntu', sans-serif;
-        }
-      </style>
+      <style></style>
     `;
   }
 }

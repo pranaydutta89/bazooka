@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build", // <-- Bind this task to a key
+      "dependsOn": ["build scss", "serve site"]
+    },
+    {
+      "label": "build scss",
+      "command": "gulp",
+      "type": "shell",
+      "group": "build"
+    },
+    {
+      "label": "serve site",
+      "command": "npm run ui:watch",
+      "type": "shell",
+      "group": "build"
+    }
+  ]
+}
