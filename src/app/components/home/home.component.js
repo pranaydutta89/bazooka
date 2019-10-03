@@ -8,13 +8,12 @@ class Home extends LitElement {
     document.title = 'Real-time,online,simple,collaborative,team mini gaming platform';
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   render() {
     return html`
-      <style>
-        .home {
-          position: relative;
-        }
-      </style>
       <div class="home">
         <app-fab-button text="{+}" @click=${() => router.navigate('/games')}></app-fab-button>
         <div class="row">
