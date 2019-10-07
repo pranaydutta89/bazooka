@@ -5,6 +5,19 @@ html {
   font-size: 62.5%;
 }
 
+@font-face {
+  font-family: 'gotham-bold';
+  src: url('../resources/fonts/gotham/Gotham-Bold.otf');
+}
+@font-face {
+  font-family: 'gotham-medium';
+  src: url('../resources/fonts/gotham/GothamMedium.ttf');
+}
+@font-face {
+  font-family: 'grand-hotel';
+  src: url('../resources/fonts/grand_hotel/GrandHotel-Regular.ttf');
+}
+
 a {
   color: $gray;
 }
