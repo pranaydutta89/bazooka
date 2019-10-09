@@ -1,0 +1,16 @@
+footer {
+  background-color: $gray;
+  border: 1px solid #707070;
+  padding: 0 2rem 0 2rem;
+  width: 100%;
+  color: $secondary;
+  height: 7rem;
+  line-height: 7rem;
+  .rights {
+    font-family: 'gotham-medium';
+    font-size: 2rem;
+  }
+  .social {
+    font-size: 5rem;
+  }
+}

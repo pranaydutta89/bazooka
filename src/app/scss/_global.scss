@@ -1,8 +1,28 @@
+@import './elements/a';
+@import './elements/button';
+@import './elements/scroller';
+@import './elements/cards';
+
 body {
   margin: 0;
 }
 html {
-  font-size: 62.5%;
+  @include media-breakpoint-up(xs) {
+    font-size: 30%;
+  }
+
+  @include media-breakpoint-up(sm) {
+    font-size: 45%;
+  }
+  @include media-breakpoint-up(md) {
+    font-size: 50%;
+  }
+  @include media-breakpoint-up(lg) {
+    font-size: 62.5%;
+  }
+  @include media-breakpoint-up(xl) {
+    font-size: 62.5%;
+  }
 }
 
 @font-face {
@@ -17,23 +37,7 @@ html {
   font-family: 'grand-hotel';
   src: url('../resources/fonts/grand_hotel/GrandHotel-Regular.ttf');
 }
-
-a {
-  color: $gray;
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #333;
+@font-face {
+  font-family: 'gotham-book';
+  src: url('../resources/fonts/gotham/GothamBook.ttf');
 }

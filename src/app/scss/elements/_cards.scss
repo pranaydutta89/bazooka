@@ -1,0 +1,50 @@
+.card-vertical {
+  &.card {
+    .card-header {
+      color: $secondary;
+      background-color: $primary;
+      font-family: 'gotham-bold';
+      font-size: 9.6rem;
+      text-align: center;
+    }
+    .card-body {
+      background-color: $secondary;
+      box-shadow: 0px 3px 6px $whiteShadow;
+      border: 1px solid #dddddd;
+      border-radius: 0 0 4px 4px;
+      .card-title {
+        color: $primary;
+        font-family: 'gotham-bold';
+        font-size: 2.5rem;
+      }
+      .card-text {
+        color: $black;
+        font-family: 'gotham-book';
+        font-size: 1.6rem;
+      }
+    }
+  }
+}
+
+.card-horizontal {
+  background-color: $primary;
+  &.card {
+    .card-header {
+      color: $secondary;
+      font-size: 15rem;
+      text-align: center;
+    }
+    .card-body {
+      .card-title {
+        color: $secondary;
+        font-family: 'gotham-bold';
+        font-size: 6rem;
+      }
+      .card-text {
+        color: $secondary;
+        font-family: 'gotham-book';
+        font-size: 2rem;
+      }
+    }
+  }
+}

@@ -1,2 +1,64 @@
 .home {
+  margin-left: -15px;
+  margin-right: -15px;
+  position: relative;
+  .imageDiv {
+    position: absolute;
+    z-index: -1;
+  }
+  .pageText {
+    padding: 4.7rem 2rem 4.7rem 2rem;
+    .buttonsDiv {
+      margin-top: 2rem;
+    }
+    .mainText {
+      h1 {
+        font-size: 7.9rem;
+        font-family: 'gotham-bold';
+        color: $secondary;
+        span {
+          color: $yellow;
+        }
+      }
+    }
+
+    .secondaryText {
+      margin-top: 5.3rem;
+      color: $secondary;
+      font-family: 'gotham-book';
+      font-size: 2rem;
+    }
+  }
+
+  .intro {
+    padding: 4rem 2rem 4rem 2rem;
+    width: 100%;
+    top: 34rem;
+    background-color: $secondary;
+    .setUp {
+      padding-left: 5.7rem;
+      padding-right: 5.7rem;
+      .steps {
+        margin-bottom: 4rem;
+      }
+      .specs {
+      }
+    }
+    h3 {
+      font-family: 'gotham-bold';
+      color: $primary;
+      font-size: 6.1rem;
+      margin-bottom: 4rem;
+    }
+  }
+
+  .card-horizontal {
+    margin-bottom: 2.5rem;
+
+    .card-title {
+      span {
+        color: $yellow;
+      }
+    }
+  }
 }

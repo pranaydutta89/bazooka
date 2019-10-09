@@ -103,12 +103,11 @@ class App extends LitElement {
 
   render() {
     return html`
-      <div>
-        <app-header></app-header>
-        <div class="container-fluid">
-          ${this.renderRoute}
-        </div>
+      <app-header></app-header>
+      <div class="container-fluid">
+        ${this.renderRoute}
       </div>
+
       <app-footer></app-footer>
     `;
   }

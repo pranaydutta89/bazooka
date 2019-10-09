@@ -27,8 +27,8 @@ class Header extends LitElement {
 
   render() {
     return html`
-      <header>
-        <div class="sticky-top">
+      <header class="sticky-top">
+        <div>
           <nav class="navbar navbar-expand-lg bg-secondary">
             <a class="navbar-brand" href="/home" @click="${evt => this.linkClick(evt, '/home')}">Bazooka</a>
             <button
