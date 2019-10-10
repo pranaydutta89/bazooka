@@ -48,7 +48,7 @@ class Home extends LitElement {
           <div class="setUp">
             <div class="steps">
               <div class="row">
-                <div class="col">
+                <div class="col-12 col-md-4">
                   <div class="card-vertical card">
                     <div class="card-header">1</div>
                     <div class="card-body">
@@ -60,7 +60,7 @@ class Home extends LitElement {
                   </div>
                 </div>
 
-                <div class="col">
+                <div class="col-12 col-md-4">
                   <div class="card-vertical card">
                     <div class="card-header">2</div>
                     <div class="card-body">
@@ -72,7 +72,7 @@ class Home extends LitElement {
                   </div>
                 </div>
 
-                <div class="col">
+                <div class="col-12 col-md-4">
                   <div class="card-vertical card">
                     <div class="card-header">3</div>
                     <div class="card-body">

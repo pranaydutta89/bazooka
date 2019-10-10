@@ -23,7 +23,7 @@ class Games extends LitElement {
         <h1>Gaming <span>options</span></h1>
         <div class="gameList">
           <div class="row">
-            <div class="col">
+            <div class="col-12 col-md-4">
               <div class="card-vertical card">
                 <div class="card-header"><i class="far fa-hand-point-up"></i></div>
                 <div class="card-body">
@@ -41,7 +41,7 @@ class Games extends LitElement {
               </div>
             </div>
 
-            <div class="col">
+            <div class="col-12 col-md-4">
               <div class="card-vertical card">
                 <div class="card-header"><i class="fas fa-ticket-alt"></i></div>
                 <div class="card-body">
@@ -59,7 +59,7 @@ class Games extends LitElement {
               </div>
             </div>
 
-            <div class="col">
+            <div class="col-12 col-md-4">
               <div class="card-vertical card">
                 <div class="card-header"><i class="fas fa-arrows-alt-h"></i></div>
                 <div class="card-body">

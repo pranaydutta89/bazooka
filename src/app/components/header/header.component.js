@@ -41,7 +41,9 @@ class Header extends LitElement {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              <span class="navbar-toggler-icon"></span>
+              <div class="burgerIcon">
+                <i class="fas fa-bars"></i>
+              </div>
             </button>
 
             <div class="navbar-collapse ${this.collapse ? 'collapse' : 'empty'}" id="navbarSupportedContent">

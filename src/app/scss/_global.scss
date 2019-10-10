@@ -8,11 +8,11 @@ body {
 }
 html {
   @include media-breakpoint-up(xs) {
-    font-size: 30%;
+    font-size: 47%;
   }
 
   @include media-breakpoint-up(sm) {
-    font-size: 45%;
+    font-size: 50%;
   }
   @include media-breakpoint-up(md) {
     font-size: 50%;
@@ -21,7 +21,7 @@ html {
     font-size: 62.5%;
   }
   @include media-breakpoint-up(xl) {
-    font-size: 62.5%;
+    font-size: 70%;
   }
 }
 

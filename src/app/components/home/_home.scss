@@ -38,6 +38,14 @@
     .setUp {
       padding-left: 5.7rem;
       padding-right: 5.7rem;
+      @include media-breakpoint-up(xs) {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      @include media-breakpoint-up(sm) {
+        padding-left: 0;
+        padding-right: 0;
+      }
       .steps {
         margin-bottom: 4rem;
       }
