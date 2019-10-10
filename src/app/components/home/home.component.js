@@ -34,14 +34,12 @@ class Home extends LitElement {
             </h2>
           </div>
           <div class="buttonsDiv">
-            <div class="row">
-              <div class="col-md-1">
-                <button class="btn btn-lg btn-primary">Explore Games</button>
-              </div>
-              <div class="col-md-1">
-                <button class="btn btn-lg btn-secondary">Read More</button>
-              </div>
-            </div>
+            <a href="#/game/tapIt" @click="${evt => this.linkClick(evt, `/game/tapIt`)}" class="btn btn-primary"
+              >Explore Games</a
+            >
+            <a href="#/game/tapIt" @click="${evt => this.linkClick(evt, `/game/tapIt`)}" class="btn btn-secondary"
+              >Read More</a
+            >
           </div>
         </div>
 
