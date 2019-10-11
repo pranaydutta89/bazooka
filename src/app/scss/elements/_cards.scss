@@ -1,10 +1,8 @@
 .card-vertical {
-  @include media-breakpoint-up(xs) {
+  @include media-breakpoint-between(xs, sm) {
     margin-bottom: 2.5rem;
   }
-  @include media-breakpoint-up(sm) {
-    margin-bottom: 2.5rem;
-  }
+
   &.last-child {
     margin-bottom: 0;
   }

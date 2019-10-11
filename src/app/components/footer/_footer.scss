@@ -9,20 +9,14 @@ footer {
   .rights {
     font-family: 'gotham-medium';
     font-size: 2rem;
-    @include media-breakpoint-up(xs) {
+    @include media-breakpoint-between(xs, sm) {
       font-size: 1.2rem;
-    }
-    @include media-breakpoint-up(sm) {
-      margin-bottom: 1.2rem;
     }
   }
   .social {
     font-size: 5rem;
-    @include media-breakpoint-up(xs) {
+    @include media-breakpoint-between(xs, sm) {
       font-size: 3rem;
-    }
-    @include media-breakpoint-up(sm) {
-      margin-bottom: 3rem;
     }
   }
 }
