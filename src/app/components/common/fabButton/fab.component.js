@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html } from 'lit-element';
 
 class Fab extends LitElement {
   static get properties() {
@@ -8,7 +8,7 @@ class Fab extends LitElement {
   }
 
   buttonClicked() {
-    const event = new CustomEvent("click", {
+    const event = new CustomEvent('click', {
       detail: {
         teamName: this.teamName,
         team: this.team
@@ -30,8 +30,7 @@ class Fab extends LitElement {
           outline: none;
           color: #fff;
           font-size: 36px;
-          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16),
-            0 3px 6px rgba(0, 0, 0, 0.23);
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
           transition: 0.3s;
           -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
           position: fixed;
@@ -47,4 +46,4 @@ class Fab extends LitElement {
   }
 }
 
-customElements.define("app-fab-button", Fab);
+customElements.define('app-fab-button', Fab);

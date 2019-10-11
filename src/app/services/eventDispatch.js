@@ -1,7 +1,7 @@
-import constants from "./constants";
+import constants from './constants';
 
 export default {
-  triggerAlert: (message, type = "info") => {
+  triggerAlert: (message, type = 'info') => {
     const event = new CustomEvent(constants.domEvents.triggerAlert, {
       detail: {
         message,
