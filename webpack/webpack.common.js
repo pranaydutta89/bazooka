@@ -1,24 +1,22 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
-const webpack = require('webpack'); //to access built-in plugins
 const path = require('path');
 module.exports = {
   entry: './src/app/entry.js',
-  mode: 'development',
-  devtool: 'eval-source-map',
+
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../dist'),
     filename: 'bundle.js'
   },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 1234
-  },
+
   module: {
     rules: [
       {
-        test: /\.m?js$/,
-        include: path.resolve(__dirname, 'node_modules/lit-element'),
+        test: /\.js$/,
+        include: [
+          path.resolve(__dirname, '..', 'node_modules/lit-element'),
+          path.resolve(__dirname, '..', 'node_modules/lit-html'),
+          path.resolve(__dirname, '..', 'src/app')
+        ],
         use: {
           loader: 'babel-loader'
         }
