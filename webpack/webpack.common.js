@@ -1,11 +1,12 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 module.exports = {
   entry: './src/app/entry.js',
 
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'bundle.js'
+    filename: '[name].[contenthash].js'
   },
 
   module: {
@@ -42,7 +43,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [new HtmlWebpackPlugin({ template: './src/app/index.html' })],
+  plugins: [new CleanWebpackPlugin(), new HtmlWebpackPlugin({ template: './src/app/index.html' })],
   optimization: {
     splitChunks: {
       chunks: 'all'
