@@ -42,5 +42,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [new HtmlWebpackPlugin({ template: './src/app/index.html' })]
+  plugins: [new HtmlWebpackPlugin({ template: './src/app/index.html' })],
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 };
