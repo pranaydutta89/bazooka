@@ -95,6 +95,10 @@ class GameClient extends LitElement {
     });
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   get renderGameClient() {
     switch (this.gameData.gameId) {
       case constants.game.tapIt:

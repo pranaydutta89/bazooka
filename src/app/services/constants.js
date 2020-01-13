@@ -1,9 +1,9 @@
 export default Object.freeze({
   devMode: location.hostname === 'localhost',
   game: {
-    tapIt: 'tapIt',
-    tambola: 'tambola',
-    tugOfWar: 'tugOfWar'
+    tapIt: 'Tap It',
+    tambola: 'Tambola',
+    tugOfWar: 'Tug Of War'
   },
   dualTeam: {
     teamBlue: 'Team Blue',

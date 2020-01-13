@@ -45,9 +45,14 @@ class App extends LitElement {
 
     router
       .on('/game/:id', async params => {
-        await import('./game/gameAdmin.component');
+        await import('./game/gameAdmin/gameAdmin.component');
         this.currentRoute = 'game';
         this.params = params;
+        switch (this.params.id) {
+          case 'tapIt':
+            this.params.id = constants.game.tapIt;
+            break;
+        }
       })
       .resolve();
     router

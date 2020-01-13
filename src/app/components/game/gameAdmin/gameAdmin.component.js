@@ -1,13 +1,13 @@
 import { LitElement, html } from 'lit-element';
-import '../common/instructions/instructions.component';
-import constants from '../../services/constants';
-import '../common/teamDetails/teamDetails.component';
-import '../common/instructions/instructions.component';
-import staticGames from '../../staticData/games';
-import '../common/clientUrl/clientUrl.component';
-import eventDispatch from '../../services/eventDispatch';
-import socketService from '../../services/socketService';
-import utilService from '../../services/utilService';
+import '../../common/instructions/instructions.component';
+import constants from '../../../services/constants';
+import '../../common/teamDetails/teamDetails.component';
+import '../../common/instructions/instructions.component';
+import staticGames from '../../../staticData/games';
+import '../../common/clientUrl/clientUrl.component';
+import eventDispatch from '../../../services/eventDispatch';
+import socketService from '../../../services/socketService';
+import utilService from '../../../services/utilService';
 
 class GameAdmin extends LitElement {
   static get properties() {
@@ -31,13 +31,13 @@ class GameAdmin extends LitElement {
   async importGame() {
     switch (this.gameId) {
       case constants.game.tapIt:
-        await import('./tapIt/tapItAdmin.component');
+        await import('../tapIt/tapItAdmin.component');
         break;
       case constants.game.tambola:
-        await import('./tambola/admin/tambolaAdmin.component');
+        await import('../tambola/admin/tambolaAdmin.component');
         break;
       case constants.game.tugOfWar:
-        await import('./tugOfWar/admin/tugOfWarAdmin.component');
+        await import('../tugOfWar/admin/tugOfWarAdmin.component');
         break;
     }
   }
@@ -72,6 +72,10 @@ class GameAdmin extends LitElement {
     }
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   render() {
     return html`
       ${this.isGameStarted
@@ -82,7 +86,8 @@ class GameAdmin extends LitElement {
             </div>
           `
         : html`
-            <div>
+            <div class="game-admin">
+              <h1><span>${this.gameId}! - </span>Setup</h1>
               <app-team-details .gameId=${this.gameId} @start=${this.startGame}></app-team-details>
               <app-game-instruction .gameId=${this.gameId}></app-game-instruction>
             </div>

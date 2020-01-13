@@ -51,54 +51,6 @@ class TeamDetails extends LitElement {
           evt.preventDefault();
         }}"
       >
-        <div class="row" style="margin-bottom:0.6rem">
-          <div class="col">
-            <input
-              type="text"
-              @change=${evt => (this.roomName = evt.target.value)}
-              class="form-control"
-              maxlength="20"
-              required
-              placeholder="Enter Room Name"
-            />
-          </div>
-        </div>
-        ${this.gameStatic && this.gameStatic.gameType === constants.gameType.both
-          ? html`
-              <div class="row">
-                <div class="col-3">
-                  <h6>Play As</h6>
-                </div>
-                <div class="col">
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      required
-                      type="radio"
-                      name="inlineRadioOptions"
-                      id="inlineRadio1"
-                      .value=${constants.gameType.individual}
-                      @click=${evt => (this.playAs = evt.target.value)}
-                    />
-                    <label class="form-check-label" for="inlineRadio1">Individual</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      required
-                      type="radio"
-                      name="inlineRadioOptions"
-                      id="inlineRadio2"
-                      .value=${constants.gameType.team}
-                      @click=${evt => (this.playAs = evt.target.value)}
-                    />
-                    <label class="form-check-label" for="inlineRadio2">Team</label>
-                  </div>
-                </div>
-              </div>
-            `
-          : ''}
-
         <div class="row">
           <div class="col">
             ${this.playAs === constants.gameType.individual || this.playAs === constants.gameType.dualTeam
@@ -229,13 +181,12 @@ class TeamDetails extends LitElement {
     }
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   render() {
     return html`
-      <style>
-        .teamDetails ul {
-          margin-bottom: 0.6rem;
-        }
-      </style>
       <app-alert
         @close=${() => (this.alertStatus = 'hide')}
         .status=${this.alertStatus}
@@ -243,32 +194,56 @@ class TeamDetails extends LitElement {
         .message=${this.alertMessage}
       ></app-alert>
 
-      <div class="teamDetails">
-        <ul class="nav nav-tabs" role="tablist">
-          <li class="nav-item">
-            <a
-              class="nav-link ${this.selectedTab == 'room' ? 'active' : 'disabled'}"
-              data-toggle="tab"
-              disabled="${this.selectedTab !== 'room'}"
-              role="tab"
-              aria-controls="Room"
-              >Room</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link ${this.selectedTab == 'teams' ? 'active' : 'disabled'}"
-              data-toggle="tab"
-              disabled="${this.selectedTab !== 'teams'}"
-              role="tab"
-              aria-controls="Teams"
-              >Teams</a
-            >
-          </li>
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane fade show active" role="tabpanel">
-            ${this.selectedTabRender}
+      <div class="team-details">
+        <a class="how-to">How to play?</a>
+        <div class="details">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label for="roomName">Room Name</label>
+                <input
+                  id="roomName"
+                  type="text"
+                  @change=${evt => (this.roomName = evt.target.value)}
+                  class="form-control form-control-lg"
+                  maxlength="20"
+                  required
+                  placeholder="Enter Game Room Name"
+                />
+              </div>
+              <div class="form-group">
+                ${this.gameStatic && this.gameStatic.gameType === constants.gameType.both
+                  ? html`
+                      <label for="roomName">Play Mode</label>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          required
+                          type="radio"
+                          name="inlineRadioOptions"
+                          id="inlineRadio1"
+                          .value=${constants.gameType.individual}
+                          @click=${evt => (this.playAs = evt.target.value)}
+                        />
+                        <label class="form-check-label" for="inlineRadio1">Individual</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          required
+                          type="radio"
+                          name="inlineRadioOptions"
+                          id="inlineRadio2"
+                          .value=${constants.gameType.team}
+                          @click=${evt => (this.playAs = evt.target.value)}
+                        />
+                        <label class="form-check-label" for="inlineRadio2">Team</label>
+                      </div>
+                    `
+                  : ''}
+              </div>
+            </div>
+            <div class="col-12 col-md-6"></div>
           </div>
         </div>
       </div>
